@@ -261,6 +261,9 @@ The physical, sellable item, with price and stock.
 | `product_id` | `INT UNSIGNED` | FK to `Products.id`. |
 | `sku` | `VARCHAR(100)`| Unique, Not Null. |
 | `price` | `DECIMAL(10, 2)`| Not Null. |
+| `sale_price` | `DECIMAL(10,2)` | Nullable. |
+| `sale_start_date` | `TIMESTAMP` | Nullable. |
+| `sale_end_date` | `TIMESTAMP` | Nullable. |
 | `stock_quantity`| `INT` | Not Null, Default: 0. |
 | `is_default` | `BOOLEAN` | Default: `FALSE`. |
 
