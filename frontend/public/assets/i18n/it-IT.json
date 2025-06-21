@@ -1,0 +1,16 @@
+{
+    "NAV": {
+        "NEWS": "Novità",
+        "OFFERS": "Offerte",
+        "CATEGORIES": "Categorie",
+        "SEARCH": "Cerca",
+        "LANGUAGE": "Lingua",
+        "WISHLIST": "Salvati",
+        "CART": "Carrello"
+    },
+    "USERS": {
+        "LOGIN": "Accedi",
+        "LOGOUT": "Esci",
+        "REGISTER": "Registrati"
+    }
+}

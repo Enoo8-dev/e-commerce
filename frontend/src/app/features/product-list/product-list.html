@@ -1,0 +1,61 @@
+<!-- This container adds some padding and centers the content -->
+<div class="container mx-auto px-4 py-8">
+  <h1 class="text-3xl font-bold text-gray-800 mb-2">Our Products</h1>
+  <p class="text-lg text-gray-600 mb-8">Discover the latest in tech, curated for you.</p>
+
+  <!-- 1. Loading State: Shown while the data is being fetched from the API -->
+  @if (isLoading) {
+    <div class="text-center py-16">
+      <p class="text-gray-500">Loading products, please wait...</p>
+      <!-- You can add a spinner icon here later -->
+    </div>
+  }
+
+  <!-- 2. Error State: Shown if the API call fails -->
+  @if (error) {
+    <div class="text-center py-16 bg-red-50 border border-red-200 rounded-lg">
+      <p class="text-red-600 font-semibold">An Error Occurred</p>
+      <p class="text-red-500 mt-2">{{ error }}</p>
+    </div>
+  }
+
+  <!-- 3. Success State: The product grid is shown only when data is loaded successfully -->
+  @if (!isLoading && !error && products.length > 0) {
+    <div class="product-grid">
+      
+      <!-- 
+        This is the new Angular syntax for loops.
+        It iterates over the 'products' array from our .ts file.
+        For each 'product' in the array, it creates a product card.
+      -->
+      @for (product of products; track product.productId) {
+        <div class="product-card">
+          <a routerLink="/product/{{ product.productId }}" class="block">
+            <div class="image-container">
+              <!-- Using a placeholder image for now -->
+              <img src="https://placehold.co/300/F4F0F0/181111?text={{ product.productName }}" alt="Image of {{ product.productName }}">
+            </div>
+          </a>
+          <div class="card-content">
+            <p class="brand">{{ product.brandName }}</p>
+            <h3 class="product-name">
+              <a routerLink="/product/{{ product.productId }}">{{ product.productName }}</a>
+            </h3>
+            <p class="price">{{ product.variantPrice | currency:'EUR' }}</p>
+            <button class="add-to-cart-btn">
+              Aggiungi al carrello
+            </button>
+          </div>
+        </div>
+      }
+    </div>
+  }
+
+  <!-- Optional: Message shown if there are no products to display -->
+  @if (!isLoading && !error && products.length === 0) {
+    <div class="text-center py-16">
+      <p class="text-gray-500">No products found at the moment.</p>
+    </div>
+  }
+  
+</div>

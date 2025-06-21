@@ -1,0 +1,16 @@
+{
+    "NAV": {
+        "NEWS": "News",
+        "OFFERS": "Offers",
+        "CATEGORIES": "Categories",
+        "SEARCH": "Search",
+        "LANGUAGE": "Language",
+        "WISHLIST": "Wishlist",
+        "CART": "Cart"
+    },
+    "USERS": {
+        "LOGIN": "Login",
+        "LOGOUT": "Logout",
+        "REGISTER": "Sign Up"
+    }
+}

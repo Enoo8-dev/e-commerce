@@ -34,3 +34,4 @@ yarn-error.log*
 # Angular specific
 /coverage
 /browserslist
+**/.angular/
