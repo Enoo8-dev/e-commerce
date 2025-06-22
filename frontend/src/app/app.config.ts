@@ -4,6 +4,7 @@ import { provideHttpClient, HttpClient } from '@angular/common/http';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { provideAnimations } from '@angular/platform-browser/animations';
+import { ReactiveFormsModule } from '@angular/forms';
 
 import { routes } from './app.routes';
 
@@ -21,6 +22,7 @@ export const appConfig: ApplicationConfig = {
 
 
     importProvidersFrom(
+      ReactiveFormsModule,
       TranslateModule.forRoot({
         loader: {
           provide: TranslateLoader,

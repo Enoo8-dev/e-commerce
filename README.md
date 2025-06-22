@@ -63,6 +63,7 @@ DB_USER=your_user
 DB_PASSWORD=your_password
 DB_NAME=ecommerce_db
 DB_PORT=3306
+JWT_SECRET=your_jwt_secret
 ```
 
 Make sure the `.env` file is included in your `.gitignore` to avoid committing your credentials to GitHub.

@@ -46,13 +46,15 @@
       @if (isUserLoggedIn) {
         <div class="flex items-center gap-2">
             <!-- wishlist -->
-            <button routerLink="/wishlist" class="flex items-center justify-center rounded-lg h-10 bg-[#f4f0f0] text-[#181111] px-2.5 cursor-pointer"><svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" fill="currentColor" viewBox="0 0 256 256"><path d="M178,32c-20.65,0-38.73,8.88-50,23.89C116.73,40.88,98.65,32,78,32A62.07,62.07,0,0,0,16,94c0,70,103.79,126.66,108.21,129a8,8,0,0,0,7.58,0C136.21,220.66,240,164,240,94A62.07,62.07,0,0,0,178,32ZM128,206.8C109.74,196.16,32,147.69,32,94A46.06,46.06,0,0,1,78,48c19.45,0,35.78,10.36,42.6,27a8,8,0,0,0,14.8,0c6.82-16.67,23.15-27,42.6-27a46.06,46.06,0,0,1,46,46C224,147.61,146.24,196.15,128,206.8Z"></path></svg></button>
+            <button routerLink="/wishlist" [title]="'NAV.WISHLIST' | translate" class="flex items-center justify-center rounded-lg h-10 bg-[#f4f0f0] text-[#181111] px-2.5 cursor-pointer"><svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" fill="currentColor" viewBox="0 0 256 256"><path d="M178,32c-20.65,0-38.73,8.88-50,23.89C116.73,40.88,98.65,32,78,32A62.07,62.07,0,0,0,16,94c0,70,103.79,126.66,108.21,129a8,8,0,0,0,7.58,0C136.21,220.66,240,164,240,94A62.07,62.07,0,0,0,178,32ZM128,206.8C109.74,196.16,32,147.69,32,94A46.06,46.06,0,0,1,78,48c19.45,0,35.78,10.36,42.6,27a8,8,0,0,0,14.8,0c6.82-16.67,23.15-27,42.6-27a46.06,46.06,0,0,1,46,46C224,147.61,146.24,196.15,128,206.8Z"></path></svg></button>
             <!-- cart -->
-            <button routerLink="/cart" class="flex items-center justify-center rounded-lg h-10 bg-[#f4f0f0] text-[#181111] px-2.5 cursor-pointer"><svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" fill="currentColor" viewBox="0 0 256 256"><path d="M216,40H40A16,16,0,0,0,24,56V200a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V56A16,16,0,0,0,216,40Zm0,160H40V56H216V200ZM176,88a48,48,0,0,1-96,0,8,8,0,0,1,16,0,32,32,0,0,0,64,0,8,8,0,0,1,16,0Z"></path></svg></button>
+            <button routerLink="/cart" [title]="'NAV.CART' | translate" class="flex items-center justify-center rounded-lg h-10 bg-[#f4f0f0] text-[#181111] px-2.5 cursor-pointer"><svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" fill="currentColor" viewBox="0 0 256 256"><path d="M216,40H40A16,16,0,0,0,24,56V200a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V56A16,16,0,0,0,216,40Zm0,160H40V56H216V200ZM176,88a48,48,0,0,1-96,0,8,8,0,0,1,16,0,32,32,0,0,0,64,0,8,8,0,0,1,16,0Z"></path></svg></button>
             <!-- user -->
             <a routerLink="/profile" class="flex items-center justify-center size-10 rounded-full bg-gray-700 text-white font-bold text-sm hover:bg-gray-600 transition-colors">
               <span>{{ userInitials }}</span>
             </a>
+            <!-- logout -->
+            <button (click)="logout()" [title]="'USERS.LOGOUT' | translate" class="flex items-center justify-center rounded-lg h-10 bg-[#f4f0f0] text-[#181111] px-2.5 ms-5 cursor-pointer transition-colors duration-200 hover:bg-red-600/60 hover:text-white"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M21 12L13 12" stroke="#323232" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M18 15L20.913 12.087V12.087C20.961 12.039 20.961 11.961 20.913 11.913V11.913L18 9" stroke="#323232" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M16 5V4.5V4.5C16 3.67157 15.3284 3 14.5 3H5C3.89543 3 3 3.89543 3 5V19C3 20.1046 3.89543 21 5 21H14.5C15.3284 21 16 20.3284 16 19.5V19.5V19" stroke="#323232" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>    
         </div>
       } @else {
         <button routerLink="/register" class="flex items-center justify-center rounded-lg h-10 bg-[#f4f0f0] text-[#181111] text-sm font-bold px-4 cursor-pointer">{{ 'USERS.REGISTER' | translate }}</button>
@@ -92,9 +94,25 @@
         <a class="text-[#181111] text-base font-medium leading-normal block px-2 py-2 rounded-md hover:bg-[#f4f0f0]" routerLink="/categories">{{ 'NAV.CATEGORIES' | translate }}</a>
         <hr/>
         @if (isUserLoggedIn) {
-          <a class="text-[#181111] text-base font-medium leading-normal block px-2 py-2 rounded-md hover:bg-[#f4f0f0]" routerLink="/wishlist">{{ 'NAV.WISHLIST' | translate }}</a>
-          <a class="text-[#181111] text-base font-medium leading-normal block px-2 py-2 rounded-md hover:bg-[#f4f0f0]" routerLink="/cart">{{ 'NAV.CART' | translate }}</a>
-          <a class="text-[#181111] text-base font-medium leading-normal block px-2 py-2 rounded-md hover:bg-[#f4f0f0]" routerLink="/profile">{{ userFullName }}</a>
+          <a class="flex items-center gap-3 text-[#181111] text-base font-medium leading-normal px-2 py-3 rounded-md hover:bg-[#f4f0f0]" routerLink="/wishlist">
+            <svg class="text-[#181111]" xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" fill="currentColor" viewBox="0 0 256 256"><path d="M178,32c-20.65,0-38.73,8.88-50,23.89C116.73,40.88,98.65,32,78,32A62.07,62.07,0,0,0,16,94c0,70,103.79,126.66,108.21,129a8,8,0,0,0,7.58,0C136.21,220.66,240,164,240,94A62.07,62.07,0,0,0,178,32ZM128,206.8C109.74,196.16,32,147.69,32,94A46.06,46.06,0,0,1,78,48c19.45,0,35.78,10.36,42.6,27a8,8,0,0,0,14.8,0c6.82-16.67,23.15-27,42.6-27a46.06,46.06,0,0,1,46,46C224,147.61,146.24,196.15,128,206.8Z"></path></svg>
+            <span>{{ 'NAV.WISHLIST' | translate }}</span>
+          </a>
+          <a class="flex items-center gap-3 text-[#181111] text-base font-medium leading-normal px-2 py-3 rounded-md hover:bg-[#f4f0f0]" routerLink="/cart">
+            <svg class="text-[#181111]" xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" fill="currentColor" viewBox="0 0 256 256"><path d="M216,40H40A16,16,0,0,0,24,56V200a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V56A16,16,0,0,0,216,40Zm0,160H40V56H216V200ZM176,88a48,48,0,0,1-96,0,8,8,0,0,1,16,0,32,32,0,0,0,64,0,8,8,0,0,1,16,0Z"></path></svg>
+            <span>{{ 'NAV.CART' | translate }}</span>
+          </a>
+          <a routerLink="/profile" class="flex items-center gap-3 text-[#181111] text-base font-medium leading-normal px-2 py-3 rounded-md hover:bg-[#f4f0f0]">
+            <div class="flex items-center justify-center size-8 rounded-full bg-gray-700 text-white font-bold text-xs">
+              <span>{{ userInitials }}</span>
+            </div>
+            <span>{{ userFullName }}</span>
+          </a>
+          <hr class="my-2"/>
+          <a (click)="logout()" class="flex items-center gap-3 text-[#181111] text-base font-medium leading-normal px-2 py-3 rounded-md hover:bg-[#f4f0f0] cursor-pointer">
+            <svg class="text-red-600" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M21 12L13 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M18 15L20.913 12.087V12.087C20.961 12.039 20.961 11.961 20.913 11.913V11.913L18 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M16 5V4.5V4.5C16 3.67157 15.3284 3 14.5 3H5C3.89543 3 3 3.89543 3 5V19C3 20.1046 3.89543 21 5 21H14.5C15.3284 21 16 20.3284 16 19.5V19.5V19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <span class="text-red-600">{{ 'USERS.LOGOUT' | translate }}</span>
+          </a>
         } @else {
           <a class="text-[#181111] text-base font-medium leading-normal block px-2 py-2 rounded-md hover:bg-[#f4f0f0]" routerLink="/register">{{ 'USERS.REGISTER' | translate }}</a>
         }

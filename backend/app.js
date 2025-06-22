@@ -6,6 +6,8 @@ const cors = require('cors');
 // Import our database connection pool
 const dbPool = require('./config/database');
 // Import the product routes we just created
+const authRoutes = require('./routes/auth.routes');
+const userRoutes = require('./routes/user.routes');
 const productRoutes = require('./routes/product.routes');
 
 const app = express();
@@ -13,12 +15,17 @@ const app = express();
 // =========== Middleware Configuration ===========
 // Enable Cross-Origin Resource Sharing (CORS)
 app.use(cors({ origin: 'http://localhost:4200' }));
-
 // Enable the Express app to parse JSON-formatted request bodies
 app.use(express.json());
 
 
 // =========== API Routes ===========
+// Mount the authentication routes on the /api/auth path.
+// All routes defined in auth.routes.js will now be prefixed with /api/auth.
+app.use('/api/auth', authRoutes);
+// Mount the user routes on the /api/users path.
+// All routes defined in user.routes.js will now be prefixed with /api/users.
+app.use('/api/users', userRoutes);
 // Mount the product routes on the /api path.
 // All routes defined in product.routes.js will now be prefixed with /api.
 app.use('/api', productRoutes);

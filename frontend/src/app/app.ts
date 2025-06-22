@@ -1,21 +1,19 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core'; // Aggiungi OnDestroy
 import { RouterOutlet, RouterLink } from '@angular/router';
-import { TranslateService, TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { trigger, state, style, transition, animate } from '@angular/animations';
-
+import { AuthService, User } from './services/auth.service';
+import { Subscription } from 'rxjs'; // Importa Subscription
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, TranslateModule, RouterLink],
+  imports: [RouterOutlet, RouterLink, TranslateModule],
   templateUrl: './app.html',
   styleUrl: './app.css',
   animations: [
     trigger('slideInOut', [
-      state('in', style({
-        transform: 'translateY(0)',
-        opacity: 1
-      })),
+      state('in', style({ transform: 'translateY(0)', opacity: 1 })),
       transition(':enter', [
         style({ transform: 'translateY(-10%)', opacity: 0 }),
         animate('200ms ease-in')
@@ -26,43 +24,65 @@ import { trigger, state, style, transition, animate } from '@angular/animations'
     ])
   ]
 })
-
-export class App {
+export class App implements OnInit, OnDestroy {
   isUserLoggedIn: boolean = false;
+  user: User | null = null;
   isMobileMenuOpen: boolean = false;
   isLangMenuOpen: boolean = false;
 
-  // update soon to be replaced with a real user service
-  user = {
-    firstName: 'Mario',
-    lastName: 'Rossi'
-  };
+  private authSubscription!: Subscription;
+
+  constructor(
+    public translate: TranslateService, 
+    private authService: AuthService
+  ) {
+    translate.setDefaultLang('en-US');
+    translate.use('en-US');
+  }
+
+  ngOnInit(): void {
+    const sub1 = this.authService.isLoggedIn$.subscribe(status => this.isUserLoggedIn = status);
+    const sub2 = this.authService.currentUser$.subscribe(user => this.user = user);
+    
+    this.authSubscription = sub1;
+    this.authSubscription.add(sub2);
+  }
+
+  ngOnDestroy(): void {
+    if (this.authSubscription) {
+      this.authSubscription.unsubscribe();
+    }
+  }
 
   get userInitials(): string {
-    const first = this.user.firstName ? this.user.firstName.charAt(0) : '';
-    const last = this.user.lastName ? this.user.lastName.charAt(0) : '';
+    if (!this.user) return '';
+    const first = this.user.first_name ? this.user.first_name.charAt(0) : '';
+    const last = this.user.last_name ? this.user.last_name.charAt(0) : '';
     return `${first}${last}`.toUpperCase();
   }
 
   get userFullName(): string {
-    return `${this.user.firstName} ${this.user.lastName}`.trim();
+    if (!this.user) return '';
+    const first = this.user.first_name
+      ? this.user.first_name.charAt(0).toUpperCase() + this.user.first_name.slice(1)
+      : '';
+    const last = this.user.last_name
+      ? this.user.last_name.charAt(0).toUpperCase() + this.user.last_name.slice(1)
+      : '';
+    return `${first} ${last}`.trim();
   }
-
-  constructor(public translate: TranslateService) {
-    // default language
-    translate.setDefaultLang('en-US');
-    // set the current language to English
-    translate.use('en-US');
+  
+  logout(): void {
+    this.authService.logout();
   }
 
   toggleLangMenu(): void {
     this.isLangMenuOpen = !this.isLangMenuOpen;
   }
 
-  // Method to switch the language dynamically
   switchLanguage(language: string): void {
     this.translate.use(language);
-    this.isLangMenuOpen = false; // close the language menu after selection
+    this.isLangMenuOpen = false;
   }
 
   switchAndCloseMenu(language: string): void {
@@ -72,11 +92,5 @@ export class App {
 
   toggleMobileMenu(): void {
     this.isMobileMenuOpen = !this.isMobileMenuOpen;
-  }
-
-  logout() {
-    // Logic to handle user logout
-    this.isUserLoggedIn = false;
-    console.log('User logged out');
   }
 }
