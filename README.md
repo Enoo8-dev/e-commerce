@@ -68,6 +68,21 @@ JWT_SECRET=your_jwt_secret
 
 Make sure the `.env` file is included in your `.gitignore` to avoid committing your credentials to GitHub.
 
+**5. Product Image Setup (Important)**
+
+For copyright and repository size reasons, the product images are not included in this Git repository. To make the application display correctly, you need to add the images manually after cloning.
+
+- Create the necessary folders: In the `backend/` directory, create the following folder structure: `public/images/products/`
+- Add Product Images: Place your product images inside the `backend/public/images/products/` folder.
+- Naming Convention:  The images must be named according to the `sku` of the product variant defined in the `database/seeding.sql` script. It is recommended to add a suffix for multiple images of the same variant.
+    - Example for SKU `DEL-XPS13-16-512`:
+        - Primary image: `DEL-XPS13-16-512_1.png`
+        - Second image: `DEL-XPS13-16-512_2.png`
+    - Example for SKU `SONY-XM5-BLK`:
+        - Primary image: `SONY-XM5-BLK_1.png`
+
+The seeding script already contains the correct paths to these files. Once you place the images with the correct names in the correct folder, the application will display them automatically.
+
 ---
 
 ### 🏛️ Database Architecture (Schema)
@@ -241,6 +256,16 @@ The "conceptual" or "parent" product.
 | `brand_id` | `INT UNSIGNED` | Nullable, FK to `Brands.id`. |
 | `is_active` | `BOOLEAN` | Default: `TRUE`. |
 | `is_featured` | `BOOLEAN` | Default: `FALSE`. |
+
+#### Table: `Product_Images`
+
+| Column Name | Data Type | Description and Constraints |
+| :--- | :--- | :--- |
+| `id` | `INT UNSIGNED` | PK, Auto-incrementing. |
+| `variant_id` | `INT UNSIGNED` | Nullable, FK to `Product_Variants.id`. |
+| `image_url` | `varchar(255)` | Not Null. |
+| `alt_text` | `varchar(255)` | Nullable. |
+| `is_primary` | `BOOLEAN` | Default: `FALSE` |
 
 #### Table: `Product_Translations`
 Translations for products.

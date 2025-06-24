@@ -3,7 +3,8 @@ export interface Product {
   productName: string;
   productDescription: string;
   brandName: string;
-  variantPrice: number;
+  originalPrice: number;
+  currentSalePrice: number | null; // it can be a number or null if not on sale
   variantSku: string;
-  // We can add more fields here later, like imageUrl.
+  imageUrl?: string; // ? because it might not always be present
 }

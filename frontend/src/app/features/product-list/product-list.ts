@@ -1,47 +1,62 @@
-import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common'; // Needed for pipes like 'currency'
-import { RouterLink } from '@angular/router'; // Import RouterLink for navigation
-
-import { ProductService } from '../../services/product.service'; // CORRECTED PATH: ../ goes up one level to 'app'
-import { Product } from '../../models/product.model';       // CORRECTED PATH: ../ goes up one level to 'app'
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { RouterLink } from '@angular/router';
+import { Product } from '../../models/product.model';
+import { ProductService } from '../../services/product.service';
+import { TranslateService, TranslateModule } from '@ngx-translate/core';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-product-list',
   standalone: true,
-  imports: [CommonModule, RouterLink], // Added RouterLink to imports
+  imports: [CommonModule, RouterLink, TranslateModule],
   templateUrl: './product-list.html',
   styleUrls: ['./product-list.css']
 })
-export class ProductListComponent implements OnInit {
-  // An array to hold the products fetched from the API
+export class ProductListComponent implements OnInit, OnDestroy {
   products: Product[] = [];
-  // A state to handle the loading screen
-  isLoading: boolean = true;
-  // A state to handle potential errors
+  isLoading = true;
   error: string | null = null;
+  private langChangeSub!: Subscription;
 
-  // Inject the ProductService through the constructor
-  constructor(private productService: ProductService) {}
+  constructor(
+    private productService: ProductService,
+    private translate: TranslateService
+  ) {}
 
-  // This method is part of the component lifecycle and runs on initialization
   ngOnInit(): void {
-    // We'll use 'it-IT' for now. This could be made dynamic later.
-    const currentLanguage = 'it-IT'; 
+    this.fetchAllProducts();
 
+    this.langChangeSub = this.translate.onLangChange.subscribe(() => {
+      this.fetchAllProducts();
+    });
+  }
+
+  fetchAllProducts(): void {
+    this.isLoading = true;
+    this.error = null;
+    const currentLanguage = this.translate.currentLang || this.translate.defaultLang;
     this.productService.getProducts(currentLanguage).subscribe({
-      // CORRECTED: Added explicit type for 'data'
-      next: (data: Product[]) => { 
-        // If the API call is successful, update the products array
+      next: (data) => {
         this.products = data;
-        this.isLoading = false; // Turn off loading
+        this.isLoading = false;
       },
-      // CORRECTED: Added explicit type for 'err'
-      error: (err: any) => { 
-        // If an error occurs, store the error message
+      error: (err) => {
         this.error = 'Failed to load products. Please try again later.';
-        this.isLoading = false; // Turn off loading
+        this.isLoading = false;
         console.error('API Error:', err);
       }
     });
+  }
+
+  encodeURIComponent(str: string): string {
+    return encodeURIComponent(str);
+  }
+
+
+  ngOnDestroy(): void {
+    if (this.langChangeSub) {
+      this.langChangeSub.unsubscribe();
+    }
   }
 }

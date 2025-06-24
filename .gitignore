@@ -35,3 +35,6 @@ yarn-error.log*
 /coverage
 /browserslist
 **/.angular/
+
+# Private assets
+/backend/public/images/products/

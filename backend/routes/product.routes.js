@@ -6,6 +6,40 @@ const productService = require('../services/productService');
 // Create a new router instance
 const router = express.Router();
 
+router.get('/products/newest', async (req, res) => {
+  try {
+    const languageCode = req.query.lang || 'en-US';
+    const limit = parseInt(req.query.limit, 10) || 8;
+    const products = await productService.getNewestProducts(languageCode, limit);
+    res.status(200).json(products);
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching newest products' });
+  }
+});
+
+router.get('/products/offers', async (req, res) => {
+  try {
+    const languageCode = req.query.lang || 'en-US';
+    const limit = parseInt(req.query.limit, 10) || 4;
+    const products = await productService.getLatestOffers(languageCode, limit);
+    res.status(200).json(products);
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching latest offers' });
+  }
+});
+
+router.get('/products/featured', async (req, res) => {
+    try {
+        const languageCode = req.query.lang || 'en-US';
+        const limit = parseInt(req.query.limit, 10) || 9; // Default to 9 if not specified
+        const products = await productService.getFeaturedProducts(languageCode, limit);
+        res.status(200).json(products);
+    } catch (error) {
+        console.error('Error in featured products route:', error);
+        res.status(500).json({ message: 'Error fetching featured products' });
+    }
+});
+
 // Define the route for GET /api/products
 router.get('/products', async (req, res) => {
     try {

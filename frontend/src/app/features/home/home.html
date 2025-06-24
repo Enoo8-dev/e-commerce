@@ -1,0 +1,202 @@
+
+<div class="px-4 sm:px-6 lg:px-8 flex flex-1 justify-center py-5">
+  <div class="layout-content-container flex flex-col w-full max-w-6xl flex-1">
+
+    <!-- Hero Section -->
+    <div class="w-full">
+      <div class="p-0 md:p-4">
+        <div class="flex min-h-[400px] md:min-h-[480px] flex-col gap-6 bg-cover bg-center bg-no-repeat rounded-lg items-start justify-end p-6 md:p-10"
+             style='background-image: linear-gradient(rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.4) 100%), url("/images/heroPhoto.jpg");'>
+          <div class="flex flex-col gap-2 text-left max-w-2xl">
+            <h1 class="text-white text-4xl md:text-5xl font-black leading-tight tracking-tighter">{{ 'HOME.TITLE' | translate }}</h1>
+            <h2 class="text-white text-base md:text-lg font-normal leading-normal">{{ 'HOME.SUBTITLE' | translate }}</h2>
+          </div>
+          <button routerLink="/products" class="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 md:h-12 md:px-5 bg-red-600 hover:bg-red-700 transition-colors text-white text-sm md:text-base font-bold">
+            <span class="truncate">{{ 'HOME.CTA' | translate }}</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Featured Products Section  -->
+    <h2 class="text-[#181111] text-2xl font-bold tracking-tight px-4 pb-3 pt-5 mt-10">{{ 'HOME.FEATURED_PRODUCTS' | translate }}</h2>
+    @if(!isLoadingFeatured && featuredProducts.length > 0) {
+      <div class="relative px-4">
+        <div #carouselContainer class="flex overflow-x-auto gap-4 py-4 snap-x snap-mandatory [-ms-scrollbar-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+
+          @for (product of featuredProducts; track product.productId; let i = $index) {
+            <a routerLink="/product/{{ product.productId }}" class="product-card-link flex-shrink-0 w-60 snap-start" [attr.data-index]="i">
+              <div class="flex flex-col gap-3 group h-full">
+                <div class="w-full bg-gray-200 aspect-square rounded-lg flex flex-col overflow-hidden">
+                  <img 
+                    [src]="product.imageUrl || 'https://placehold.co/300/F4F0F0/181111?text=' + encodeURIComponent(product.productName)"
+                    alt="{{ product.productName }}" 
+                    class="w-full h-full object-contain transition-transform duration-300 group-hover:scale-105">
+                </div>
+                <div>
+                  <p class="text-[#181111] text-base font-medium leading-normal truncate">{{ product.productName }}</p>
+                  <p class="text-gray-500 text-sm font-normal leading-normal">{{ product.brandName }}</p>
+                </div>
+              </div>
+            </a>
+          }
+
+          <!-- Card "Discover More" -->
+          @if (showDiscoverMoreCard) {
+            <a routerLink="/products" class="product-card-link flex-shrink-0 w-60 snap-start" [attr.data-index]="featuredProducts.length">
+              <div class="flex flex-col gap-3 h-full items-center justify-center bg-gray-100 rounded-lg p-4 text-center hover:bg-gray-200 transition-colors">
+                <div class="text-[#181111]">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="48px" height="48px" fill="currentColor" viewBox="0 0 256 256"><path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm40,112H136v32a8,8,0,0,1-16,0V136H88a8,8,0,0,1,0-16h32V88a8,8,0,0,1,16,0v32h32a8,8,0,0,1,0,16Z"></path></svg>
+                </div>
+                <p class="text-[#181111] text-base font-medium leading-normal">{{ 'PRODUCTS.HOME.DISCOVER_MORE' | translate }}</p>
+                <p class="text-gray-500 text-sm font-normal leading-normal">{{ 'PRODUCTS.HOME.VIEW_ALL' | translate }}</p>
+              </div>
+            </a>
+          }
+        </div>
+
+        <!-- nav dots -->
+        @if (featuredTotalPages > 1) {
+          <div class="flex justify-center gap-2 mt-4">
+            @for(page of [].constructor(featuredTotalPages); track page; let i = $index) {
+              <button (click)="goToPage('featured', i)" 
+                      class="h-2 w-2 rounded-full transition-colors"
+                      [ngClass]="{'bg-gray-800': currentFeaturedPage === i, 'bg-gray-300': currentFeaturedPage !== i}"></button>
+            }
+          </div>
+        }
+      </div>
+      } @else if (isLoadingFeatured) {
+        <p class="px-4">{{ 'PRODUCTS.LOADING' | translate }}</p>
+      } @else {
+        <p class="px-4">{{ 'PRODUCTS.HOME.FEATURED' | translate }}</p>
+      }
+
+
+    <!-- Special Offers Section -->
+    <h2 class="text-[#181111] text-2xl font-bold tracking-tight px-4 pb-3 pt-5 mt-5">{{ 'HOME.LATEST_OFFERS' | translate }}</h2>
+    @if(!isLoadingOffers && latestOffers.length > 0) {
+      <div class="relative px-4">
+        <div #offersCarousel class="flex overflow-x-auto gap-4 py-4 snap-x snap-mandatory [-ms-scrollbar-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          @for (offer of latestOffers; track offer.productId; let i = $index) {
+            <a routerLink="/product/{{ offer.productId }}" class="carousel-item flex-shrink-0 w-full sm:w-1/2 lg:w-1/4 snap-start" [attr.data-index]="i">
+              <div class="flex flex-col gap-3 pb-3 group">
+                <div class="w-full bg-gray-200 aspect-video bg-cover bg-center rounded-lg overflow-hidden">
+                  <img 
+                    [src]="offer.imageUrl || 'https://placehold.co/400x225/F4F0F0/181111?text=Offer'" 
+                    alt="{{ offer.productName }}" 
+                    class="w-full h-full object-contain transition-transform duration-300 group-hover:scale-105">
+                </div>
+                <div>
+                  <p class="text-[#181111] text-base font-medium leading-normal truncate">{{ offer.productName }}</p>
+                  <div class="flex items-baseline gap-2">
+                     <p class="text-red-600 font-bold text-lg">{{ offer.currentSalePrice | currency:'EUR' }}</p>
+                     <p class="text-gray-500 text-sm line-through">{{ offer.originalPrice | currency:'EUR' }}</p>
+                  </div>
+                </div>
+              </div>
+            </a>
+          }
+        </div>
+         @if (offersTotalPages > 1) {
+          <div class="flex justify-center gap-2 mt-4">
+            @for(page of [].constructor(offersTotalPages); track page; let i = $index) {
+              <button (click)="goToPage('offers', i)" class="h-2 w-2 rounded-full transition-colors"
+                      [ngClass]="{'bg-gray-800': currentOffersPage === i, 'bg-gray-300': currentOffersPage !== i}"></button>
+            }
+          </div>
+        }
+      </div>
+      } @else if(isLoadingOffers) {
+        <p class="px-4">{{ 'PRODUCTS.LOADING' | translate }}</p>
+      } @else {
+        <p class="px-4">{{ 'PRODUCTS.HOME.OFFERS' | translate }}</p>
+      }
+
+    <!-- New Arrivals Section -->
+    <h2 class="text-[#181111] text-2xl font-bold tracking-tight px-4 pb-3 pt-5 mt-5">{{ 'HOME.NEW_ARRIVALS' | translate }}</h2>
+    @if(!isLoadingNewest && newestProducts.length > 0) {
+      <div class="relative px-4">
+        <div #newestCarousel class="flex overflow-x-auto gap-4 py-4 snap-x snap-mandatory [-ms-scrollbar-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          @for (product of newestProducts; track product.productId; let i = $index) {
+            <a routerLink="/product/{{ product.productId }}" class="carousel-item flex-shrink-0 w-60 snap-start" [attr.data-index]="i">
+              <div class="flex flex-col gap-3 group h-full">
+                <div class="w-full bg-gray-200 aspect-square rounded-lg flex flex-col overflow-hidden">
+                  <img 
+                    [src]="product.imageUrl || 'https://placehold.co/300x300/F4F0F0/181111?text=' + product.productName" 
+                    alt="{{ product.productName }}" 
+                    class="w-full h-full object-contain transition-transform duration-300 group-hover:scale-105">
+                </div>
+                <div>
+                  <p class="text-[#181111] text-base font-medium leading-normal truncate">{{ product.productName }}</p>
+                  <p class="text-gray-500 text-sm font-normal leading-normal">{{ product.brandName }}</p>
+                </div>
+              </div>
+            </a>
+          }
+          @if (showDiscoverMoreNewest) {
+            <a routerLink="/products" class="carousel-item flex-shrink-0 w-60 snap-start" [attr.data-index]="newestProducts.length">
+              <div class="flex flex-col gap-3 h-full items-center justify-center bg-gray-100 rounded-lg p-4 text-center hover:bg-gray-200 transition-colors">
+                 <div class="text-[#181111]">
+                   <svg xmlns="http://www.w3.org/2000/svg" width="48px" height="48px" fill="currentColor" viewBox="0 0 256 256"><path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm40,112H136v32a8,8,0,0,1-16,0V136H88a8,8,0,0,1,0-16h32V88a8,8,0,0,1,16,0v32h32a8,8,0,0,1,0,16Z"></path></svg>
+                 </div>
+                 <p class="text-[#181111] text-base font-medium leading-normal">Scopri di più</p>
+              </div>
+            </a>
+          }
+        </div>
+        @if (newestTotalPages > 1) {
+          <div class="flex justify-center gap-2 mt-4">
+            @for(page of [].constructor(newestTotalPages); track page; let i = $index) {
+              <button (click)="goToPage('newest', i)" class="h-2 w-2 rounded-full transition-colors"
+                      [ngClass]="{'bg-gray-800': currentNewestPage === i, 'bg-gray-300': currentNewestPage !== i}"></button>
+            }
+          </div>
+        }
+      </div>
+      } @else if(isLoadingNewest) {
+        <p class="px-4">{{ 'PRODUCTS.LOADING' | translate }}</p>
+      } @else {
+        <p class="px-4">{{ 'PRODUCTS.HOME.NEW_ARRIVALS' | translate }}</p>
+      }
+
+    <!-- Main Categories Section  -->
+    <h2 class="text-[#181111] text-2xl font-bold tracking-tight px-4 pb-3 pt-5 mt-5">{{ 'HOME.MAIN_CATEGORIES' | translate }}</h2>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 p-4 ">
+       <!-- Computer -->
+       <a routerLink="computer" class="relative flex items-end justify-start p-4 aspect-square rounded-lg text-white font-bold text-lg overflow-hidden group transition-all duration-300 hover:shadow-xl">
+         <div class="absolute inset-0 bg-cover bg-center transition-transform duration-300 group-hover:scale-110" 
+              style='background-image: url("/images/computer.png");'>
+         </div>
+         <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+         <p class="relative z-10">{{ 'PRODUCTS.CATEGORY.COMPUTERS' | translate }}</p>
+       </a>
+       <!-- Audio -->
+       <a routerLink="headphone" class="relative flex items-end justify-start p-4 aspect-square rounded-lg text-white font-bold text-lg overflow-hidden group transition-all duration-300 hover:shadow-xl">
+         <div class="absolute inset-0 bg-cover bg-center transition-transform duration-300 group-hover:scale-110" 
+              style='background-image: url("/images/headphoneLight.png");'>
+         </div>
+         <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+         <p class="relative z-10">{{ 'PRODUCTS.CATEGORY.AUDIO' | translate }}</p>
+       </a>
+       <!-- Smartphone -->
+       <a routerLink="smartphone" class="relative flex items-end justify-start p-4 aspect-square rounded-lg text-white font-bold text-lg overflow-hidden group transition-all duration-300 hover:shadow-xl">
+         <div class="absolute inset-0 bg-cover bg-center transition-transform duration-300 group-hover:scale-110" 
+              style='background-image: url("/images/smartphoneLight.png");'>
+         </div>
+         <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+         <p class="relative z-10">{{ 'PRODUCTS.CATEGORY.SMARTPHONE' | translate }}</p>
+       </a>
+       <!-- Accessories -->
+       <a routerLink="/accessories" class="relative flex items-end justify-start p-4 aspect-square rounded-lg text-white font-bold text-lg overflow-hidden group transition-all duration-300 hover:shadow-xl">
+         <div class="absolute inset-0 bg-cover bg-center transition-transform duration-300 group-hover:scale-110" 
+              style='background-image: url("/images/accessories.jpg");'>
+         </div>
+         <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+         <p class="relative z-10">{{ 'PRODUCTS.CATEGORY.ACCESSORIES' | translate }}</p>
+       </a>
+    </div>
+
+
+  </div>
+</div>

@@ -24,9 +24,31 @@ const productService = {
             console.error('Error in productService.getAllProducts:', error);
             throw error;
         }
+    },
+    async getFeaturedProducts(languageCode, limit) {
+        try {
+            return await productDAO.getFeaturedProducts(languageCode, limit);
+        } catch (error) {
+            console.error('Error in productService.getFeaturedProducts:', error);
+            throw error;
+        }
+    },
+    async getLatestOffers(languageCode, limit) {
+        try {
+            return await productDAO.getLatestOffers(languageCode, limit);
+        } catch (error) {
+            console.error('Error in productService.getLatestOffers:', error);
+            throw error;
+        }
+    },
+    async getNewestProducts(languageCode, limit) {
+        try {
+            return await productDAO.getNewestProducts(languageCode, limit);
+        } catch (error) {
+            console.error('Error in productService.getNewestProducts:', error);
+            throw error;
+        }
     }
-
-    // ... other service functions will be added here.
 };
 
 // Export the service object

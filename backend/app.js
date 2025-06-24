@@ -3,6 +3,7 @@ require('dotenv').config();
 
 const express = require('express');
 const cors = require('cors');
+const path = require('path');
 // Import our database connection pool
 const dbPool = require('./config/database');
 // Import the product routes we just created
@@ -18,6 +19,7 @@ app.use(cors({ origin: 'http://localhost:4200' }));
 // Enable the Express app to parse JSON-formatted request bodies
 app.use(express.json());
 
+app.use(express.static(path.join(__dirname, 'public'))); // Serve static files from the 'public' directory
 
 // =========== API Routes ===========
 // Mount the authentication routes on the /api/auth path.

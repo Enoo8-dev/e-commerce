@@ -28,8 +28,8 @@
         </button>
         @if(isLangMenuOpen) {
           <div class="absolute top-full right-0 mt-2 w-40 bg-white rounded-lg shadow-lg border z-30">
-            <a (click)="switchLanguage('it-IT')" class="flex items-center px-4 py-2 text-sm text-[#181111] hover:bg-[#f4f0f0] cursor-pointer"><span class="fi fi-it mr-3"></span> Italiano</a>
-            <a (click)="switchLanguage('en-US')" class="flex items-center px-4 py-2 text-sm text-[#181111] hover:bg-[#f4f0f0] cursor-pointer"><span class="fi fi-gb mr-3"></span> English</a>
+            <a (click)="switchLanguage('it-IT')" class="flex rounded-lg items-center px-4 py-2 text-sm text-[#181111] hover:bg-[#f4f0f0] cursor-pointer"><span class="fi fi-it mr-3"></span> Italiano</a>
+            <a (click)="switchLanguage('en-US')" class="flex rounded-lg items-center px-4 py-2 text-sm text-[#181111] hover:bg-[#f4f0f0] cursor-pointer"><span class="fi fi-gb mr-3"></span> English</a>
           </div>
         }
       </div>
@@ -50,11 +50,11 @@
             <!-- cart -->
             <button routerLink="/cart" [title]="'NAV.CART' | translate" class="flex items-center justify-center rounded-lg h-10 bg-[#f4f0f0] text-[#181111] px-2.5 cursor-pointer"><svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" fill="currentColor" viewBox="0 0 256 256"><path d="M216,40H40A16,16,0,0,0,24,56V200a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V56A16,16,0,0,0,216,40Zm0,160H40V56H216V200ZM176,88a48,48,0,0,1-96,0,8,8,0,0,1,16,0,32,32,0,0,0,64,0,8,8,0,0,1,16,0Z"></path></svg></button>
             <!-- user -->
-            <a routerLink="/profile" class="flex items-center justify-center size-10 rounded-full bg-gray-700 text-white font-bold text-sm hover:bg-gray-600 transition-colors">
+            <a routerLink="/profile" class="flex items-center justify-center size-10 rounded-full bg-gray-700 text-white font-bold text-sm hover:bg-gray-600 transition-colors ms-5">
               <span>{{ userInitials }}</span>
             </a>
             <!-- logout -->
-            <button (click)="logout()" [title]="'USERS.LOGOUT' | translate" class="flex items-center justify-center rounded-lg h-10 bg-[#f4f0f0] text-[#181111] px-2.5 ms-5 cursor-pointer transition-colors duration-200 hover:bg-red-600/60 hover:text-white"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M21 12L13 12" stroke="#323232" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M18 15L20.913 12.087V12.087C20.961 12.039 20.961 11.961 20.913 11.913V11.913L18 9" stroke="#323232" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M16 5V4.5V4.5C16 3.67157 15.3284 3 14.5 3H5C3.89543 3 3 3.89543 3 5V19C3 20.1046 3.89543 21 5 21H14.5C15.3284 21 16 20.3284 16 19.5V19.5V19" stroke="#323232" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>    
+            <button (click)="logout()" [title]="'USERS.LOGOUT' | translate" class="flex items-center justify-center rounded-lg h-10 bg-[#f4f0f0] text-[#181111] px-2.5 cursor-pointer transition-colors duration-200 hover:bg-red-600/60 hover:text-white"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M21 12L13 12" stroke="#323232" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M18 15L20.913 12.087V12.087C20.961 12.039 20.961 11.961 20.913 11.913V11.913L18 9" stroke="#323232" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M16 5V4.5V4.5C16 3.67157 15.3284 3 14.5 3H5C3.89543 3 3 3.89543 3 5V19C3 20.1046 3.89543 21 5 21H14.5C15.3284 21 16 20.3284 16 19.5V19.5V19" stroke="#323232" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>    
         </div>
       } @else {
         <button routerLink="/register" class="flex items-center justify-center rounded-lg h-10 bg-[#f4f0f0] text-[#181111] text-sm font-bold px-4 cursor-pointer">{{ 'USERS.REGISTER' | translate }}</button>

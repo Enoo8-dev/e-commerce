@@ -1,12 +1,16 @@
 <!-- This container adds some padding and centers the content -->
 <div class="container mx-auto px-4 py-8">
-  <h1 class="text-3xl font-bold text-gray-800 mb-2">Our Products</h1>
-  <p class="text-lg text-gray-600 mb-8">Discover the latest in tech, curated for you.</p>
+  <h1 class="text-3xl font-bold text-gray-800 mb-2">{{ 'PRODUCTS.TITLE' | translate }}</h1>
+  <p class="text-lg text-gray-600 mb-8">{{ 'PRODUCTS.SUBTITLE' | translate }}</p>
 
   <!-- 1. Loading State: Shown while the data is being fetched from the API -->
   @if (isLoading) {
-    <div class="text-center py-16">
-      <p class="text-gray-500">Loading products, please wait...</p>
+    <div class="flex flex-col items-center justify-center text-center py-16">
+      <svg class="animate-spin h-8 w-8 text-gray-600 mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+      </svg>
+      <p class="text-gray-500">{{ 'PRODUCTS.LOADING' | translate }}</p>
       <!-- You can add a spinner icon here later -->
     </div>
   }
@@ -14,7 +18,7 @@
   <!-- 2. Error State: Shown if the API call fails -->
   @if (error) {
     <div class="text-center py-16 bg-red-50 border border-red-200 rounded-lg">
-      <p class="text-red-600 font-semibold">An Error Occurred</p>
+      <p class="text-red-600 font-semibold">{{ 'PRODUCTS.ERROR' | translate }}</p>
       <p class="text-red-500 mt-2">{{ error }}</p>
     </div>
   }
@@ -22,18 +26,14 @@
   <!-- 3. Success State: The product grid is shown only when data is loaded successfully -->
   @if (!isLoading && !error && products.length > 0) {
     <div class="product-grid">
-      
-      <!-- 
-        This is the new Angular syntax for loops.
-        It iterates over the 'products' array from our .ts file.
-        For each 'product' in the array, it creates a product card.
-      -->
       @for (product of products; track product.productId) {
         <div class="product-card">
           <a routerLink="/product/{{ product.productId }}" class="block">
             <div class="image-container">
-              <!-- Using a placeholder image for now -->
-              <img src="https://placehold.co/300/F4F0F0/181111?text={{ product.productName }}" alt="Image of {{ product.productName }}">
+              <img 
+                [src]="product.imageUrl || 'https://placehold.co/300/F4F0F0/181111?text=' + encodeURIComponent(product.productName)" 
+                alt="{{ product.productName }}"
+                class="w-full h-full">
             </div>
           </a>
           <div class="card-content">
@@ -41,9 +41,21 @@
             <h3 class="product-name">
               <a routerLink="/product/{{ product.productId }}">{{ product.productName }}</a>
             </h3>
-            <p class="price">{{ product.variantPrice | currency:'EUR' }}</p>
+            
+            <!-- *** LOGICA PREZZI CORRETTA *** -->
+            <div class="price-container">
+              @if (product.currentSalePrice) {
+                <!-- Mostra entrambi i prezzi se c'è uno sconto -->
+                <p class="sale-price">{{ product.currentSalePrice | currency:'EUR' }}</p>
+                <p class="original-price-striked">{{ product.originalPrice | currency:'EUR' }}</p>
+              } @else {
+                <!-- Altrimenti, mostra solo il prezzo originale -->
+                <p class="original-price">{{ product.originalPrice | currency:'EUR' }}</p>
+              }
+            </div>
+
             <button class="add-to-cart-btn">
-              Aggiungi al carrello
+              {{ 'PRODUCTS.ADD_TO_CART' | translate }}
             </button>
           </div>
         </div>
@@ -51,10 +63,11 @@
     </div>
   }
 
+
   <!-- Optional: Message shown if there are no products to display -->
   @if (!isLoading && !error && products.length === 0) {
     <div class="text-center py-16">
-      <p class="text-gray-500">No products found at the moment.</p>
+      <p class="text-gray-500">{{ 'PRODUCTS.NO_PRODUCTS' | translate }}</p>
     </div>
   }
   

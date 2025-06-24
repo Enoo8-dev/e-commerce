@@ -1,29 +1,79 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, map } from 'rxjs';
 import { Product } from '../models/product.model'; // We use the model we just created
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProductService {
+  private backendUrl = 'http://localhost:3000'; 
   // The base URL of our backend API
-  private apiUrl = 'http://localhost:3000/api';
+  private apiUrl = `${this.backendUrl}/api`;
 
   constructor(private http: HttpClient) { }
 
-  /**
-   * Fetches all products from the backend.
-   * @param languageCode The desired language for product data (e.g., 'it-IT').
-   * @returns An Observable containing an array of products.
-   */
-  getProducts(languageCode: string = 'it-IT'): Observable<Product[]> {
-    // We use HttpParams to safely add query parameters to the URL
-    const params = new HttpParams().set('lang', languageCode);
-    
-    // The final URL will be http://localhost:3000/api/products?lang=it-IT
-    return this.http.get<Product[]>(`${this.apiUrl}/products`, { params });
+  private transformProductData(products: Product[]): Product[] {
+    return products.map(product => ({
+      ...product,
+      imageUrl: product.imageUrl ? `${this.backendUrl}${product.imageUrl}` : undefined
+    }));
   }
 
-  // In the future, we will add more methods here, like getProductById(id), etc.
+  /**
+   * Fetches all products and transforms image paths to full URLs.
+   * @param languageCode The desired language.
+   * @returns An observable of the products array.
+   */
+  getProducts(languageCode: string): Observable<Product[]> {
+    const params = new HttpParams().set('lang', languageCode);
+    return this.http.get<Product[]>(`${this.apiUrl}/products`, { params }).pipe(
+      map(this.transformProductData.bind(this))
+    );
+  }
+
+  /**
+   * Fetches a single product by its ID and transforms image paths to full URLs.
+   * @param languageCode The desired language.
+   * @param limit The maximum number of products to fetch.
+   * @returns An observable of the product.
+   */
+  getFeaturedProducts(languageCode: string, limit: number = 8): Observable<Product[]> {
+    const params = new HttpParams()
+      .set('lang', languageCode)
+      .set('limit', limit.toString());
+    return this.http.get<Product[]>(`${this.apiUrl}/products/featured`, { params }).pipe(
+      map(this.transformProductData.bind(this))
+    );
+  }
+
+  /**
+   * Fetches the latest products on sale.
+   * @param languageCode The desired language.
+   * @param limit The maximum number of products to fetch.
+   * @returns An observable of the products on sale.
+   */
+  getLatestOffers(languageCode: string, limit: number = 4): Observable<Product[]> {
+    const params = new HttpParams()
+      .set('lang', languageCode)
+      .set('limit', limit.toString());
+    return this.http.get<Product[]>(`${this.apiUrl}/products/offers`, { params }).pipe(
+      map(this.transformProductData.bind(this))
+    );
+  }
+
+  /**
+   * Fetches the newest products from the backend.
+   * @param languageCode The desired language.
+   * @param limit The maximum number of products to fetch.
+   */
+  getNewestProducts(languageCode: string, limit: number = 8): Observable<Product[]> {
+    const params = new HttpParams()
+      .set('lang', languageCode)
+      .set('limit', limit.toString());
+    return this.http.get<Product[]>(`${this.apiUrl}/products/newest`, { params }).pipe(
+      map(this.transformProductData.bind(this))
+    );
+  }
+
 }

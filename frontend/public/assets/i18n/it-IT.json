@@ -12,5 +12,35 @@
         "LOGIN": "Accedi",
         "LOGOUT": "Esci",
         "REGISTER": "Registrati"
+    },
+    "HOME": {
+        "TITLE": "Scopri le ultime novità",
+        "SUBTITLE": "Esplora la nosra vasta gamma di prodotti e trova il dispositivo perfetto per te.",
+        "CTA": "Acquista ora",
+        "FEATURED_PRODUCTS": "Prodotti in evidenza",
+        "LATEST_OFFERS": "Ultime offerte",
+        "NEW_ARRIVALS": "Nuovi arrivi",
+        "MAIN_CATEGORIES": "Categorie principali"
+    },
+    "PRODUCTS": {
+        "HOME": {
+            "FEATURED": "Nessun prodotto in evidenza al momento.",
+            "OFFERS": "Nessuna offerta disponibile al momento.",
+            "NEW_ARRIVALS": "Nessun nuovo arrivo al momento.",
+            "DISCOVER_MORE": "Scopri di più",
+            "VIEW_ALL": "Visualizza tutti i prodotti"
+        },
+        "CATEGORY": {
+            "COMPUTERS": "Computers",
+            "SMARTPHONE": "Telefoni",
+            "AUDIO": "Audio",
+            "ACCESSORIES": "Accessori"
+        },
+        "TITLE": "I nostri prodotti",
+        "SUBTITLE": "Scopri le nostre ultime tecnologie scelte per te",
+        "ADD_TO_CART": "Aggiungi al carrello",
+        "LOADING": "Caricamento prodotti in corso, attendere prego...",
+        "ERROR": "Si è verificato un errore!",
+        "NO_PRODUCTS": "Al momento non sono presenti prodotti."
     }
 }

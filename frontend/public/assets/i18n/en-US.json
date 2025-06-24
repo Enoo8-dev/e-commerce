@@ -12,5 +12,35 @@
         "LOGIN": "Login",
         "LOGOUT": "Logout",
         "REGISTER": "Sign Up"
+    },
+    "HOME": {
+        "TITLE": "Discover the latest news",
+        "SUBTITLE": "Explore our wide range of products and find the perfect device for you.",
+        "CTA": "Shop Now",
+        "FEATURED_PRODUCTS": "Featured Products",
+        "LATEST_OFFERS": "Latest Offers",
+        "NEW_ARRIVALS": "New Arrivals",
+        "MAIN_CATEGORIES": "Main Categories"
+    },
+    "PRODUCTS": {
+        "HOME": {
+            "FEATURED": "Any featured products at the moment.",
+            "OFFERS": "Any offers available at the moment.",
+            "NEW_ARRIVALS": "Any new arrivals at the moment.",
+            "DISCOVER_MORE": "Discover More",
+            "VIEW_ALL": "View all products"
+        },
+        "CATEGORY": {
+            "COMPUTERS": "Computers",
+            "SMARTPHONE": "Smartphones",
+            "AUDIO": "Audio",
+            "ACCESSORIES": "Accessories"
+        },
+        "TITLE": "Our Products",
+        "SUBTITLE": "Discover our latest tech, curated for you",
+        "ADD_TO_CART": "Add to Cart",
+        "LOADING": "Loading products, please wait...",
+        "ERROR": "An error occurred!",
+        "NO_PRODUCTS": "No products found at the moment."
     }
 }
