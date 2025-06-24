@@ -36,6 +36,11 @@
             "AUDIO": "Audio",
             "ACCESSORIES": "Accessories"
         },
+        "DETAILS": {
+            "AVAILABLE_VARIANTS": "Available Variants",
+            "DESCRIPTION": "Description",
+            "TECHNICAL_SPECIFICATIONS": "Technical Specifications"
+        },
         "TITLE": "Our Products",
         "SUBTITLE": "Discover our latest tech, curated for you",
         "ADD_TO_CART": "Add to Cart",

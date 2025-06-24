@@ -183,6 +183,86 @@ const productDAO = {
             console.error('Error in getNewestProducts DAO:', error);
             throw error;
         }
+    },
+
+    /**
+     * Fetches detailed information about a specific product by its ID.
+     * This includes product details, variants, images, and attributes.
+     * @param {number} productId - The ID of the product to fetch.
+     * @param {string} languageCode - The language code for translations (default is 'en-US').
+     * @returns {Promise<Object|null>} A promise that resolves to the product object or null if not found.
+     */
+    async getProductById (productId, languageCode = 'en-US') {
+        // get main product infos
+        const productSql = `
+            SELECT
+                p.id, 
+                pt.name, 
+                pt.description, 
+                pt.features, 
+                bt.name AS brandName
+            FROM Products AS p
+            JOIN Product_Translations AS pt ON p.id = pt.product_id
+            JOIN Brands AS b ON p.brand_id = b.id
+            JOIN Brand_Translations AS bt ON b.id = bt.brand_id
+            WHERE 
+                p.id = ? AND 
+                pt.language_code = ? AND 
+                bt.language_code = ?;
+        `;
+        const [productRows] = await dbPool.query(productSql, [productId, languageCode, languageCode]);
+        if (productRows.length === 0) return null; // Product not found
+
+        const product = productRows[0];
+
+        // Query 2: Get all variants for this product
+        const variantsSql = `SELECT 
+                                id, 
+                                sku, 
+                                price, 
+                                sale_price, 
+                                stock_quantity 
+                            FROM Product_Variants 
+                            WHERE product_id = ?`;
+        const [variants] = await dbPool.query(variantsSql, [productId]);
+        if (variants.length === 0) {
+            product.variants = [];
+            return product;
+        }
+
+        // Query 3: Get all images for all variants of this product
+        const variantIds = variants.map(v => v.id);
+        const imagesSql = 'SELECT variant_id, image_url, alt_text, is_primary FROM Product_Images WHERE variant_id IN (?)';
+        const [images] = await dbPool.query(imagesSql, [variantIds]);
+
+        // Query 4: Get all attributes for all variants of this product
+        const attributesSql = `
+            SELECT
+                va.variant_id, 
+                a.id AS attribute_id, 
+                at.name AS attribute_name, 
+                av.id AS value_id, 
+                avt.value AS attribute_value, 
+                av.hex_code
+            FROM Variant_Attributes AS va
+            JOIN Attribute_Values AS av ON va.attribute_value_id = av.id
+            JOIN Attribute_Value_Translations AS avt ON av.id = avt.attribute_value_id
+            JOIN Attributes AS a ON av.attribute_id = a.id
+            JOIN Attribute_Translations AS at ON a.id = at.attribute_id
+            WHERE va.variant_id IN (?) AND 
+                avt.language_code = ? 
+                AND at.language_code = ?;
+        `;
+        const [attributes] = await dbPool.query(attributesSql, [variantIds, languageCode, languageCode]);
+
+        // Assemble the final object in JavaScript
+        variants.forEach(variant => {
+            variant.images = images.filter(img => img.variant_id === variant.id);
+            variant.attributes = attributes.filter(attr => attr.variant_id === variant.id);
+        });
+
+        product.variants = variants;
+        return product;
     }
 
 };

@@ -48,6 +48,20 @@ const productService = {
             console.error('Error in productService.getNewestProducts:', error);
             throw error;
         }
+    },
+    async getProductById(productId, languageCode) {
+        try {
+            const product = await productDAO.getProductById(productId, languageCode);
+            if (!product) {
+                const error = new Error('Product not found');
+                error.statusCode = 404;
+                throw error;
+            }
+            return product;
+        } catch (error) {
+            console.error('Error in productService.getProductById:', error);
+            throw error;
+        }
     }
 };
 

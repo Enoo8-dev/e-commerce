@@ -40,6 +40,17 @@ router.get('/products/featured', async (req, res) => {
     }
 });
 
+router.get('/products/:id', async (req, res) => {
+  try {
+    const languageCode = req.query.lang || 'en-US';
+    const productId = req.params.id;
+    const product = await productService.getProductById(productId, languageCode);
+    res.status(200).json(product);
+  } catch (error) {
+    res.status(error.statusCode || 500).json({ message: error.message });
+  }
+});
+
 // Define the route for GET /api/products
 router.get('/products', async (req, res) => {
     try {

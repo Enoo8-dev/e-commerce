@@ -1,0 +1,87 @@
+<div class="container mx-auto px-4 py-8">
+  @if(isLoading) { <p class="text-center py-16">{{ 'PRODUCTS.LOADING' | translate }}</p> }
+  @if(error) { <p class="text-center text-red-600 py-16">{{ error }}</p> }
+
+  @if(product) {
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
+      <!-- Sezione Galleria Immagini (semplice) -->
+      <div>
+        <div class="main-image-wrapper">
+          <img [src]="mainImage" [alt]="product.name" class="main-image">
+        </div>
+
+        <!-- Galleria Miniature -->
+        @if(selectedVariant && selectedVariant.images.length > 1) {
+          <div class="thumbnail-gallery">
+            @for(image of selectedVariant.images; track image.id) {
+              <button (click)="changeMainImage(image.image_url)" 
+                      class="thumbnail-button"
+                      [ngClass]="{'active': mainImage === image.image_url}">
+                <img [src]="image.image_url" [alt]="image.alt_text || product.name" class="thumbnail-image">
+              </button>
+            }
+          </div>
+        }
+      </div>
+
+      <!-- Sezione Dettagli Prodotto -->
+      <div>
+        <p class="text-sm font-semibold text-gray-500 uppercase">{{ product.brandName }}</p>
+        <h1 class="text-3xl lg:text-4xl font-bold text-gray-900 mt-2">{{ product.name }}</h1>
+
+        <!-- Selettore Varianti -->
+        <div class="mt-6">
+          <h3 class="text-sm font-medium text-gray-900">{{ 'PRODUCTS.DETAILS.AVAILABLE_VARIANTS' | translate }}</h3>
+          <div class="flex flex-wrap gap-2 mt-2">
+            @for(variant of product.variants; track variant.id) {
+              <button (click)="selectVariant(variant)" 
+                      [ngClass]="{'ring-2 ring-offset-2 ring-blue-500': selectedVariant.id === variant.id, 'ring-1 ring-gray-300': selectedVariant.id !== variant.id}"
+                      class="px-4 py-2 rounded-md text-sm transition-all focus:outline-none bg-white hover:bg-gray-50">
+                @for(attr of variant.attributes; track attr.value_id) {
+                  <span>{{ attr.attribute_value }} </span>
+                }
+              </button>
+            }
+          </div>
+        </div>
+
+        <!-- Prezzo e Aggiungi al Carrello -->
+        @if(selectedVariant) {
+          <div class="mt-8 flex items-center justify-between">
+            <div class="flex items-baseline gap-2">
+              <p class="text-3xl font-bold text-gray-900">{{ selectedVariant.price | currency:'EUR' }}</p>
+            </div>
+          </div>
+          <div class="mt-4">
+            <button class="w-full bg-gray-800 text-white font-bold py-3 px-6 rounded-lg hover:bg-gray-700 transition-colors">
+                {{ 'PRODUCTS.ADD_TO_CART' | translate }}
+            </button>
+          </div>
+        }
+
+        <!-- Descrizione -->
+        <div class="mt-8">
+          <h3 class="text-lg font-semibold text-gray-900">{{ 'PRODUCTS.DETAILS.DESCRIPTION' | translate }}</h3>
+          <p class="mt-2 text-gray-600 leading-relaxed">{{ product.description }}</p>
+        </div>
+
+        @if(product.features) {
+        <div class="mt-8">
+            <h3 class="text-lg font-semibold text-gray-900">{{ 'PRODUCTS.DETAILS.TECHNICAL_SPECIFICATIONS' | translate }}</h3>
+            <div class="mt-4 border-t border-gray-200">
+            <dl class="divide-y divide-gray-200">
+                <!-- La pipe viene applicata solo se 'product.features' esiste, evitando l'errore. -->
+                @for(feature of product.features | keyvalue; track feature.key) {
+                <div class="py-3 grid grid-cols-3 gap-4 text-sm">
+                    <dt class="font-medium text-gray-500">{{ feature.key }}</dt>
+                    <dd class="text-gray-900 col-span-2">{{ feature.value }}</dd>
+                </div>
+                }
+            </dl>
+            </div>
+        </div>
+        }
+      </div>
+    </div>
+  }
+</div>

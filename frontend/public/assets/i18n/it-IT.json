@@ -36,11 +36,16 @@
             "AUDIO": "Audio",
             "ACCESSORIES": "Accessori"
         },
+        "DETAILS": {
+            "AVAILABLE_VARIANTS": "Varianti disponibili",
+            "DESCRIPTION": "Descrizione",
+            "TECHNICAL_SPECIFICATIONS": "Specifiche tecniche"
+        },
         "TITLE": "I nostri prodotti",
         "SUBTITLE": "Scopri le nostre ultime tecnologie scelte per te",
         "ADD_TO_CART": "Aggiungi al carrello",
         "LOADING": "Caricamento prodotti in corso, attendere prego...",
         "ERROR": "Si è verificato un errore!",
-        "NO_PRODUCTS": "Al momento non sono presenti prodotti."
+        "NO_PRODUCTS": "Al momento non sono presenti prodotti."        
     }
 }

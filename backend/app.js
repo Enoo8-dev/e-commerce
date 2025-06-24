@@ -4,6 +4,7 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
+const morgan = require('morgan');
 // Import our database connection pool
 const dbPool = require('./config/database');
 // Import the product routes we just created
@@ -15,9 +16,11 @@ const app = express();
 
 // =========== Middleware Configuration ===========
 // Enable Cross-Origin Resource Sharing (CORS)
-app.use(cors({ origin: 'http://localhost:4200' }));
+app.use(cors({ origin: ['http://localhost:4200', 'http://192.168.178.135:4200'] }));
 // Enable the Express app to parse JSON-formatted request bodies
 app.use(express.json());
+
+app.use(morgan('dev')); // Use morgan for logging HTTP requests in development mode
 
 app.use(express.static(path.join(__dirname, 'public'))); // Serve static files from the 'public' directory
 

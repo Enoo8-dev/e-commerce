@@ -76,4 +76,29 @@ export class ProductService {
     );
   }
 
+  /** * Fetches a product by its ID and transforms image paths to full URLs.
+   * @param id The ID of the product.
+   * @param languageCode The desired language.
+   * @returns An observable of the product.
+   */
+  getProductById(id: string, languageCode: string): Observable<any> {
+    const params = new HttpParams().set('lang', languageCode);
+    return this.http.get<any>(`${this.apiUrl}/products/${id}`, { params }).pipe(
+      // Trasforma tutti gli URL delle immagini
+      map(product => {
+        if (product && product.variants) {
+          product.variants.forEach((variant: any) => {
+            if (variant.images) {
+              variant.images = variant.images.map((image: any) => ({
+                ...image,
+                image_url: `${this.backendUrl}${image.image_url}`
+              }));
+            }
+          });
+        }
+        return product;
+      })
+    );
+  }
+
 }
