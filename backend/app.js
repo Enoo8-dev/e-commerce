@@ -7,10 +7,14 @@ const path = require('path');
 const morgan = require('morgan');
 // Import our database connection pool
 const dbPool = require('./config/database');
+const autenticateToken = require('./middleware/auth.middleware');
+
+
+
 // Import the product routes we just created
 const authRoutes = require('./routes/auth.routes');
 const userRoutes = require('./routes/user.routes');
-const productRoutes = require('./routes/product.routes');
+const {publicRouter, adminRouter} = require('./routes/product.routes');
 
 const app = express();
 
@@ -28,12 +32,18 @@ app.use(express.static(path.join(__dirname, 'public'))); // Serve static files f
 // Mount the authentication routes on the /api/auth path.
 // All routes defined in auth.routes.js will now be prefixed with /api/auth.
 app.use('/api/auth', authRoutes);
+
 // Mount the user routes on the /api/users path.
 // All routes defined in user.routes.js will now be prefixed with /api/users.
 app.use('/api/users', userRoutes);
+
+// Mount the admin product routes on the /api/admin path.
+// These routes are protected by the autenticateToken middleware, meaning they require a valid JWT token to access.
+app.use('/api/admin', autenticateToken, adminRouter); 
+
 // Mount the product routes on the /api path.
 // All routes defined in product.routes.js will now be prefixed with /api.
-app.use('/api', productRoutes);
+app.use('/api', publicRouter);
 
 
 const PORT = process.env.PORT || 3000;

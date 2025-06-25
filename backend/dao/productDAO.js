@@ -269,6 +269,72 @@ const productDAO = {
 
         product.variants = variants;
         return product;
+    },
+
+    /**
+     * Fetches a filterable, sortable, and searchable list of ALL product variants.
+     * @param {object} options - Object containing filter, sort, and search options.
+     * @returns {Promise<Array>} A promise that resolves to an array of product variants.
+     */
+    async getAdminProductList({ lang = 'en-US', search = '', sortBy = 'productId', sortOrder = 'DESC', status = '' }) {
+        let sql = `
+            SELECT
+                p.id AS productId,
+                pt.name AS productName,
+                pv.id AS variantId,
+                pv.sku AS variantSku,
+                pv.price AS originalPrice,
+                pv.stock_quantity AS stock,
+                p.is_active AS isActive,
+                bt.name as brandName,
+                (SELECT image_url FROM Product_Images WHERE variant_id = pv.id AND is_primary = TRUE LIMIT 1) AS imageUrl
+            FROM Product_Variants AS pv
+            JOIN Products AS p ON pv.product_id = p.id
+            JOIN Product_Translations AS pt ON p.id = pt.product_id
+            JOIN Brands AS b ON p.brand_id = b.id
+            JOIN Brand_Translations AS bt ON b.id = bt.brand_id
+        `;
+
+        const params = [lang, lang];
+        let whereClauses = ['pt.language_code = ?', 'bt.language_code = ?'];
+
+        if (search) {
+            whereClauses.push('(pt.name LIKE ? OR pv.sku LIKE ? OR bt.name LIKE ?)');
+            const searchTerm = `%${search}%`;
+            params.push(searchTerm, searchTerm, searchTerm);
+        }
+
+        if (status === 'active') {
+            whereClauses.push('p.is_active = TRUE');
+        } else if (status === 'inactive') {
+            whereClauses.push('p.is_active = FALSE');
+        }
+
+        if (whereClauses.length > 0) {
+            sql += ` WHERE ${whereClauses.join(' AND ')}`;
+        }
+
+        // CORREZIONE: Aggiunti i nuovi campi all'array di validazione
+        const validSortBy = {
+            productId: 'p.id',
+            productName: 'pt.name',
+            brandName: 'bt.name',
+            variantSku: 'pv.sku',
+            originalPrice: 'pv.price',
+            stock: 'pv.stock_quantity'
+        };
+        
+        const sortColumn = validSortBy[sortBy] || 'p.id'; // Default a p.id se il campo non è valido
+        const orderDirection = sortOrder.toUpperCase() === 'ASC' ? 'ASC' : 'DESC';
+        sql += ` ORDER BY ${sortColumn} ${orderDirection}`;
+
+        try {
+            const [rows] = await dbPool.query(sql, params);
+            return rows;
+        } catch (error) {
+            console.error('Error in getAdminProductList DAO:', error);
+            throw error;
+        }
     }
 
 };

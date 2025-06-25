@@ -48,6 +48,10 @@ export class App implements OnInit, OnDestroy {
     this.authSubscription.add(sub2);
   }
 
+  get isAdmin(): boolean {
+    return this.user?.role === 'admin';
+  }
+
   ngOnDestroy(): void {
     if (this.authSubscription) {
       this.authSubscription.unsubscribe();

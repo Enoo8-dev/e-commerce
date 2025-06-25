@@ -101,4 +101,24 @@ export class ProductService {
     );
   }
 
+  /**
+   * Fetches a filterable/sortable list for the admin panel.
+   * @param options The filter and sort options.
+   * @returns An observable of the products array.
+   */
+  getAdminProductList(options: { [key: string]: any }): Observable<any[]> {
+    let params = new HttpParams();
+    for (const key in options) {
+      if (options[key]) {
+        params = params.set(key, options[key]);
+      }
+    }
+    return this.http.get<any[]>(`${this.apiUrl}/admin/products`, { params }).pipe(
+      map(products => products.map(product => ({
+        ...product,
+        imageUrl: product.imageUrl ? `${this.backendUrl}${product.imageUrl}` : null
+      })))
+    );
+  }
+
 }

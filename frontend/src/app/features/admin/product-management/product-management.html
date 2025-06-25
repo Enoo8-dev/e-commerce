@@ -1,0 +1,140 @@
+<div class="p-4 sm:p-6 lg:p-8">
+  <!-- Intestazione e Aggiungi Prodotto -->
+  <div class="sm:flex sm:items-center">
+    <div class="sm:flex-auto">
+      <h1 class="text-xl font-semibold text-gray-900">Gestione Prodotti</h1>
+      <p class="mt-2 text-sm text-gray-700">Cerca, filtra e gestisci tutti i prodotti del tuo negozio.</p>
+    </div>
+    <div class="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
+      <button type="button" class="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 md:h-12 md:px-5 bg-red-600 hover:bg-red-700 transition-colors text-white text-sm md:text-base font-bold">Aggiungi Prodotto</button>
+    </div>
+  </div>
+
+  <!-- Controlli Filtri e Ricerca -->
+  <div class="mt-8 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
+    <!-- Barra di Ricerca -->
+    <div class="md:col-span-2 lg:col-span-3">
+      <div class="relative rounded-lg shadow-sm">
+        <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+          <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 256 256"><path d="M229.66,218.34l-50.07-50.06a88.11,88.11,0,1,0-11.31,11.31l50.06,50.07a8,8,0,0,0,11.32-11.32ZM40,112a72,72,0,1,1,72,72A72.08,72.08,0,0,1,40,112Z"></path></svg>
+        </div>
+        <input 
+          type="text" 
+          [formControl]="searchControl" 
+          placeholder="Cerca per nome, SKU, brand..." 
+          class="block w-full rounded-lg border-0 bg-[#f4f0f0] py-2 pl-10 text-gray-900 placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-blue-500 sm:text-sm">
+      </div>
+    </div>
+    <!-- Filtro di Stato -->
+    <div class="w-full">
+      <div class="relative">
+        <select [formControl]="statusFilterControl" class="appearance-none block w-full rounded-lg border-0 bg-[#f4f0f0] py-2 pl-3 pr-10 text-gray-900 focus:ring-2 focus:ring-inset focus:ring-blue-500 sm:text-sm cursor-pointer">
+          <option value="all">Tutti gli stati</option>
+          <option value="active">Attivo</option>
+          <option value="inactive">Inattivo</option>
+        </select>
+        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+          <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 3a.75.75 0 01.53.22l3.5 3.5a.75.75 0 01-1.06 1.06L10 4.81 7.03 7.78a.75.75 0 01-1.06-1.06l3.5-3.5A.75.75 0 0110 3zm-3.72 9.28a.75.75 0 011.06 0L10 14.19l2.97-2.97a.75.75 0 111.06 1.06l-3.5 3.5a.75.75 0 01-1.06 0l-3.5-3.5a.75.75 0 010-1.06z" clip-rule="evenodd" /></svg>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  @if(isLoading) { <p class="mt-8 text-center">Caricamento...</p> }
+  @if(error) { <p class="mt-8 text-center text-red-600">{{ error }}</p> }
+
+  @if(!isLoading && !error) {
+    <!-- Tabella Prodotti -->
+    <div class="mt-8 flex flex-col  ">
+      <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+        <div class="inline-block min-w-full py-2 align-middle">
+          <div class="overflow-hidden shadow ring-1 ring-black ring-opacity-5 md:rounded-lg mx-8">
+            <table class="min-w-full divide-y divide-gray-300">
+              <thead class="bg-gray-50">
+                  <tr>
+                    <!-- *** INTESTAZIONE TABELLA CON NUOVE ICONE DI ORDINAMENTO *** -->
+                    <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">
+                      <a (click)="sortBy('productName')" class="group inline-flex cursor-pointer">
+                        Prodotto
+                        <span class="ml-2 flex rounded">
+                          <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20" [ngClass]="{'text-gray-900': sort.by === 'productName' && sort.order === 'ASC', 'text-gray-400 group-hover:text-gray-500': sort.by !== 'productName' || sort.order !== 'ASC'}"><path d="M10 17a.75.75 0 01-.75-.75V5.56l-2.22 2.22a.75.75 0 11-1.06-1.06l3.5-3.5a.75.75 0 011.06 0l3.5 3.5a.75.75 0 11-1.06 1.06L10.75 5.56v10.69A.75.75 0 0110 17z" /></svg>
+                          <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20" [ngClass]="{'text-gray-900': sort.by === 'productName' && sort.order === 'DESC', 'text-gray-400 group-hover:text-gray-500': sort.by !== 'productName' || sort.order !== 'DESC'}"><path d="M10 3a.75.75 0 01.75.75v10.69l2.22-2.22a.75.75 0 111.06 1.06l-3.5 3.5a.75.75 0 01-1.06 0l-3.5-3.5a.75.75 0 111.06-1.06l2.22 2.22V3.75A.75.75 0 0110 3z" /></svg>
+                        </span>
+                      </a>
+                    </th>
+                    <th scope="col" class="px-2 py-3.5 text-left text-sm font-semibold text-gray-900">
+                      <a (click)="sortBy('brandName')" class="group inline-flex cursor-pointer">
+                        Brand
+                        <span class="ml-2 flex rounded">
+                            <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20" [ngClass]="{'text-gray-900': sort.by === 'brandName' && sort.order === 'ASC', 'text-gray-400 group-hover:text-gray-500': sort.by !== 'brandName' || sort.order !== 'ASC'}"><path d="M10 17a.75.75 0 01-.75-.75V5.56l-2.22 2.22a.75.75 0 11-1.06-1.06l3.5-3.5a.75.75 0 011.06 0l3.5 3.5a.75.75 0 11-1.06 1.06L10.75 5.56v10.69A.75.75 0 0110 17z" /></svg>
+                            <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20" [ngClass]="{'text-gray-900': sort.by === 'brandName' && sort.order === 'DESC', 'text-gray-400 group-hover:text-gray-500': sort.by !== 'brandName' || sort.order !== 'DESC'}"><path d="M10 3a.75.75 0 01.75.75v10.69l2.22-2.22a.75.75 0 111.06 1.06l-3.5 3.5a.75.75 0 01-1.06 0l-3.5-3.5a.75.75 0 111.06-1.06l2.22 2.22V3.75A.75.75 0 0110 3z" /></svg>
+                        </span>
+                      </a>
+                    </th>
+                    <th scope="col" class="px-2 py-3.5 text-left text-sm font-semibold text-gray-900">
+                      <a (click)="sortBy('variantSku')" class="group inline-flex cursor-pointer">
+                        SKU
+                        <span class="ml-2 flex rounded">
+                            <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20" [ngClass]="{'text-gray-900': sort.by === 'variantSku' && sort.order === 'ASC', 'text-gray-400 group-hover:text-gray-500': sort.by !== 'variantSku' || sort.order !== 'ASC'}"><path d="M10 17a.75.75 0 01-.75-.75V5.56l-2.22 2.22a.75.75 0 11-1.06-1.06l3.5-3.5a.75.75 0 011.06 0l3.5 3.5a.75.75 0 11-1.06 1.06L10.75 5.56v10.69A.75.75 0 0110 17z" /></svg>
+                            <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20" [ngClass]="{'text-gray-900': sort.by === 'variantSku' && sort.order === 'DESC', 'text-gray-400 group-hover:text-gray-500': sort.by !== 'variantSku' || sort.order !== 'DESC'}"><path d="M10 3a.75.75 0 01.75.75v10.69l2.22-2.22a.75.75 0 111.06 1.06l-3.5 3.5a.75.75 0 01-1.06 0l-3.5-3.5a.75.75 0 111.06-1.06l2.22 2.22V3.75A.75.75 0 0110 3z" /></svg>
+                        </span>
+                      </a>
+                    </th>
+                    <th scope="col" class="px-2 py-3.5 text-left text-sm font-semibold text-gray-900">
+                      <a (click)="sortBy('originalPrice')" class="group inline-flex cursor-pointer">
+                        Prezzo
+                        <span class="ml-2 flex rounded">
+                            <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20" [ngClass]="{'text-gray-900': sort.by === 'originalPrice' && sort.order === 'ASC', 'text-gray-400 group-hover:text-gray-500': sort.by !== 'originalPrice' || sort.order !== 'ASC'}"><path d="M10 17a.75.75 0 01-.75-.75V5.56l-2.22 2.22a.75.75 0 11-1.06-1.06l3.5-3.5a.75.75 0 011.06 0l3.5 3.5a.75.75 0 11-1.06 1.06L10.75 5.56v10.69A.75.75 0 0110 17z" /></svg>
+                            <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20" [ngClass]="{'text-gray-900': sort.by === 'originalPrice' && sort.order === 'DESC', 'text-gray-400 group-hover:text-gray-500': sort.by !== 'originalPrice' || sort.order !== 'DESC'}"><path d="M10 3a.75.75 0 01.75.75v10.69l2.22-2.22a.75.75 0 111.06 1.06l-3.5 3.5a.75.75 0 01-1.06 0l-3.5-3.5a.75.75 0 111.06-1.06l2.22 2.22V3.75A.75.75 0 0110 3z" /></svg>
+                        </span>
+                      </a>
+                    </th>
+                    <th scope="col" class="px-2 py-3.5 text-left text-sm font-semibold text-gray-900">
+                      <a (click)="sortBy('stock')" class="group inline-flex cursor-pointer">
+                        Stock
+                        <span class="ml-2 flex rounded">
+                            <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20" [ngClass]="{'text-gray-900': sort.by === 'stock' && sort.order === 'ASC', 'text-gray-400 group-hover:text-gray-500': sort.by !== 'productName' || sort.order !== 'ASC'}"><path d="M10 17a.75.75 0 01-.75-.75V5.56l-2.22 2.22a.75.75 0 11-1.06-1.06l3.5-3.5a.75.75 0 011.06 0l3.5 3.5a.75.75 0 11-1.06 1.06L10.75 5.56v10.69A.75.75 0 0110 17z" /></svg>
+                            <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20" [ngClass]="{'text-gray-900': sort.by === 'stock' && sort.order === 'DESC', 'text-gray-400 group-hover:text-gray-500': sort.by !== 'productName' || sort.order !== 'DESC'}"><path d="M10 3a.75.75 0 01.75.75v10.69l2.22-2.22a.75.75 0 111.06 1.06l-3.5 3.5a.75.75 0 01-1.06 0l-3.5-3.5a.75.75 0 111.06-1.06l2.22 2.22V3.75A.75.75 0 0110 3z" /></svg>
+                        </span>
+                      </a>
+                    </th>
+                    <th scope="col" class="px-2 py-3.5 text-left text-sm font-semibold text-gray-900">Stato</th>
+                    <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-6"><span class="sr-only">Modifica</span></th>
+                  </tr>
+                </thead>
+              <tbody class="divide-y divide-gray-200 bg-white">
+                @for (product of products; track product.variantSku) {
+                  <tr class="hover:bg-gray-50">
+                    <td class="py-4 pl-4 pr-3 text-sm sm:pl-6">
+                      <div class="flex items-center">
+                        <div class="h-10 w-10 flex-shrink-0">
+                          <img class="h-10 w-10 rounded-full object-contain bg-gray-100" [src]="product.imageUrl || 'https://placehold.co/40x40'" alt="">
+                        </div>
+                        <div class="ml-4">
+                          <div class="font-medium text-gray-900">{{ product.productName }}</div>
+                        </div>
+                      </div>
+                    </td>
+                    <td class="px-2 py-4 text-sm text-gray-500">{{ product.brandName }}</td>
+                    <td class="px-2 py-4 text-sm text-gray-500">{{ product.variantSku }}</td>
+                    <td class="whitespace-nowrap px-2 py-4 text-sm text-gray-500">{{ product.originalPrice | currency:'EUR' }}</td>
+                    <td class="whitespace-nowrap px-2 py-4 text-sm text-gray-500">{{ product.stock }}</td>
+                    <td class="whitespace-nowrap px-2 py-4">
+                      <!-- Toggle Switch -->
+                      <button type="button" (click)="toggleProductStatus(product, $event)" [ngClass]="product.isActive ? 'bg-green-600' : 'bg-red-600'" class="relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2" role="switch">
+                        <span [ngClass]="product.isActive ? 'translate-x-5' : 'translate-x-0'" class="pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"></span>
+                      </button>
+                    </td>
+                    <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
+                      <a href="#" class="text-blue-600 hover:text-blue-900">Modifica</a>
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+</div>

@@ -62,7 +62,16 @@ const productService = {
             console.error('Error in productService.getProductById:', error);
             throw error;
         }
+    },
+    async getAdminProductList(options) {
+        try {
+            return await productDAO.getAdminProductList(options);
+        } catch (error) {
+            console.error('Error in productService.getAdminProductList:', error);
+            throw error;
+        }
     }
+
 };
 
 // Export the service object
