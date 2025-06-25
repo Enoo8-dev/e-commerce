@@ -69,6 +69,7 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
         if (this.product && this.product.variants.length > 0) {
           this.selectVariant(this.product.variants[0]);
         }
+        console.log('Product details loaded:', this.product);
         this.isLoading = false;
       },
       error: (err) => {
@@ -93,7 +94,7 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
 
   setMainImageForVariant(variant: any): void {
     if (!variant || !variant.images || variant.images.length === 0) {
-      this.mainImage = 'https://placehold.co/600x600/F4F0F0/181111?text=No+Image';
+      this.mainImage = `https://placehold.co/600x600/F4F0F0/181111?text=No+Image`;
       return;
     }
     const primaryImage = variant.images.find((img: any) => img.is_primary);

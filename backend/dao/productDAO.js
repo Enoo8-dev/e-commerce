@@ -216,14 +216,20 @@ const productDAO = {
         const product = productRows[0];
 
         // Query 2: Get all variants for this product
-        const variantsSql = `SELECT 
-                                id, 
-                                sku, 
-                                price, 
-                                sale_price, 
-                                stock_quantity 
-                            FROM Product_Variants 
-                            WHERE product_id = ?`;
+        const variantsSql = `
+            SELECT 
+                id, 
+                sku, 
+                price AS originalPrice, -- CORREZIONE: Rinomina per coerenza
+                CASE
+                    WHEN sale_price IS NOT NULL AND (sale_start_date IS NULL OR sale_start_date <= NOW()) AND (sale_end_date IS NULL OR sale_end_date >= NOW())
+                    THEN sale_price
+                    ELSE NULL
+                END AS currentSalePrice, -- CORREZIONE: Calcola il prezzo scontato
+                stock_quantity 
+            FROM Product_Variants 
+            WHERE product_id = ?
+        `;
         const [variants] = await dbPool.query(variantsSql, [productId]);
         if (variants.length === 0) {
             product.variants = [];
