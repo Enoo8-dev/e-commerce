@@ -217,9 +217,9 @@ const productDAO = {
         }
 
         if (status === 'active') {
-            whereClauses.push('p.is_active = TRUE');
+            whereClauses.push('pv.is_active = TRUE');
         } else if (status === 'inactive') {
-            whereClauses.push('p.is_active = FALSE');
+            whereClauses.push('pv.is_active = FALSE');
         }
 
         if (whereClauses.length > 0) {
