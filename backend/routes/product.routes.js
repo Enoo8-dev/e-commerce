@@ -106,5 +106,32 @@ adminRouter.patch('/variants/:variantId/status', async (req, res) => {
   }
 });
 
+// GET /api/admin/products/:productId
+adminRouter.get('/products/:productId', async (req, res) => {
+  try {
+    const { productId } = req.params;
+    const languageCode = req.query.lang || 'it-IT';
+    const product = await productService.getAdminProductDetails(productId, languageCode);
+    res.json(product);
+  } catch (error) {
+    res.status(error.statusCode || 500).json({ message: error.message });
+  }
+});
+
+// PUT /api/admin/products/:productId
+adminRouter.put('/products/:productId', async (req, res) => {
+  try {
+    const { productId } = req.params;
+    const success = await productService.updateProduct(productId, req.body);
+    if (success) {
+      res.json({ message: 'Product updated successfully' });
+    } else {
+      res.status(404).json({ message: 'Product not found or update failed' });
+    }
+  } catch (error) {
+    res.status(500).json({ message: 'Error updating product' });
+  }
+});
+
 // Esportiamo entrambi i router con i nomi corretti
 module.exports = { publicRouter, adminRouter };

@@ -78,6 +78,19 @@ const productService = {
             console.error('Error in productService.updateVariantStatus:', error);
             throw error;
         }
+    },
+    async getAdminProductDetails(productId, languageCode) {
+        const product = await productDAO.getAdminProductDetails(productId, languageCode);
+        if (!product) {
+            const error = new Error('Product not found');
+            error.statusCode = 404;
+            throw error;
+        }
+        return product;
+    },
+
+    async updateProduct(productId, productData) {
+        return await productDAO.updateProduct(productId, productData);
     }
 
 };

@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { ProductService } from '../../../services/product.service';
 import { TranslateModule } from '@ngx-translate/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
@@ -10,7 +10,7 @@ import { takeUntil, debounceTime, distinctUntilChanged } from 'rxjs/operators';
 @Component({
   selector: 'app-product-management',
   standalone: true,
-  imports: [CommonModule, TranslateModule, ReactiveFormsModule],
+  imports: [CommonModule, TranslateModule, ReactiveFormsModule, RouterLink],
   templateUrl: './product-management.html',
   styleUrls: ['./product-management.css']
 })

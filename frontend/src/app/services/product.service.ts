@@ -130,5 +130,25 @@ export class ProductService {
     return this.http.patch(`${this.apiUrl}/admin/variants/${variantId}/status`, { isActive });
   }
 
+  /**
+   * Fetches the details of a product for the admin panel.
+   * @param productId The ID of the product.
+   * @param languageCode The desired language.
+   * @returns An observable of the product details.
+   */
+  getAdminProductDetails(productId: string, languageCode: string): Observable<any> {
+    const params = new HttpParams().set('lang', languageCode);
+    return this.http.get<any>(`${this.apiUrl}/admin/products/${productId}`, { params });
+  }
+
+  /**
+   * Sends the updated product data to the backend.
+   * @param productId The ID of the product to update.
+   * @param productData The updated product data.
+   * @returns An observable of the updated product.
+   */
+  updateProduct(productId: string, productData: any): Observable<any> {
+    return this.http.put(`${this.apiUrl}/admin/products/${productId}`, productData);
+  }
 
 }

@@ -1,0 +1,80 @@
+<div class="p-4 sm:p-6 lg:p-8 max-w-4xl mx-auto">
+  <a routerLink="/admin/products" class="text-sm font-medium text-blue-600 hover:text-blue-800">&larr; Torna alla lista prodotti</a>
+
+  @if(isLoading) { <p class="mt-8 text-center">Caricamento...</p> }
+  @if(error) { <p class="mt-4 text-center text-red-600">{{ error }}</p> }
+
+  @if(!isLoading && !error) {
+    <h1 class="text-2xl font-bold text-gray-900 mt-4">Modifica Prodotto</h1>
+    <p class="text-gray-600">Stai modificando il prodotto: <span class="font-semibold">{{ editForm.get('name')?.value }}</span></p>
+
+    <form [formGroup]="editForm" (ngSubmit)="onSubmit()" class="mt-8 space-y-8">
+      <!-- Sezione Dati Principali -->
+      <div class="space-y-6 p-6 border rounded-lg shadow-sm bg-white">
+        <h2 class="text-lg font-medium text-gray-900">Informazioni Principali</h2>
+        <div>
+          <label for="name" class="block text-sm font-medium text-gray-700">Nome Prodotto</label>
+          <input type="text" formControlName="name" id="name" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
+        </div>
+        <div>
+          <label for="description" class="block text-sm font-medium text-gray-700">Descrizione</label>
+          <textarea formControlName="description" id="description" rows="4" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"></textarea>
+        </div>
+        <div>
+          <label for="features" class="block text-sm font-medium text-gray-700">Specifiche Tecniche (JSON)</label>
+          <textarea formControlName="features" id="features" rows="6" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm font-mono"></textarea>
+        </div>
+        <div class="flex items-center">
+          <input id="is_featured" formControlName="is_featured" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+          <label for="is_featured" class="ml-3 block text-sm font-medium text-gray-700">Prodotto in Evidenza</label>
+        </div>
+      </div>
+
+      <!-- Sezione Varianti -->
+      <div class="space-y-6">
+        <h2 class="text-lg font-medium text-gray-900">Varianti</h2>
+        <div formArrayName="variants">
+          @for(variantGroup of variants.controls; track variantGroup; let i = $index) {
+            <div [formGroupName]="i" class="p-6 border rounded-lg shadow-sm bg-white mb-6">
+              <h3 class="font-medium text-gray-700">Variante SKU: {{ variantGroup.get('sku')?.value }}</h3>
+              <div class="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-6 sm:gap-x-6">
+                <div class="sm:col-span-3">
+                  <label for="sku-{{i}}" class="block text-sm font-medium text-gray-700">SKU</label>
+                  <input type="text" formControlName="sku" id="sku-{{i}}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
+                </div>
+                <div class="sm:col-span-3">
+                  <label for="price-{{i}}" class="block text-sm font-medium text-gray-700">Prezzo Originale</label>
+                  <input type="number" formControlName="price" id="price-{{i}}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
+                </div>
+                <div class="sm:col-span-3">
+                  <label for="sale_price-{{i}}" class="block text-sm font-medium text-gray-700">Prezzo Scontato (opzionale)</label>
+                  <input type="number" formControlName="sale_price" id="sale_price-{{i}}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
+                </div>
+                <div class="sm:col-span-3">
+                  <label for="stock-{{i}}" class="block text-sm font-medium text-gray-700">Stock</label>
+                  <input type="number" formControlName="stock" id="stock-{{i}}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
+                </div>
+                <div class="sm:col-span-6 flex items-center">
+                  <input id="is_active-{{i}}" formControlName="is_active" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+                  <label for="is_active-{{i}}" class="ml-3 block text-sm font-medium text-gray-700">Questa variante è Attiva</label>
+                </div>
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+
+      <!-- Azioni Finali -->
+      <div class="flex justify-end gap-4 pt-5 border-t">
+        <button type="button" routerLink="/admin/products" class="inline-flex items-center justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50">Annulla</button>
+        <button type="submit" [disabled]="editForm.invalid || isLoading" class="inline-flex items-center justify-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed">
+          @if(isLoading) { <span>Salvataggio...</span> } @else { <span>Salva Modifiche</span> }
+        </button>
+      </div>
+
+      @if(successMessage) {
+        <p class="text-green-600 text-sm mt-4 text-right">{{ successMessage }}</p>
+      }
+    </form>
+  }
+</div>

@@ -127,7 +127,11 @@
                       </button>
                     </td>
                     <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
-                      <a href="#" class="text-blue-600 hover:text-blue-900">{{ 'ADMIN.MANAGE_PRODUCTS.EDIT_PRODUCT' | translate }}</a>
+                      <a 
+                        [routerLink]="['/admin/products/edit', product.productId]"
+                        class="text-blue-600 hover:text-blue-900">
+                        {{ 'ADMIN.MANAGE_PRODUCTS.EDIT_PRODUCT' | translate }}
+                      </a>
                     </td>
                   </tr>
                 }

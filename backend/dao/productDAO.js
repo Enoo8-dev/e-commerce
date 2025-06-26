@@ -263,7 +263,58 @@ const productDAO = {
             console.error('Error in updateVariantStatus DAO:', error);
             throw error;
         }
+    },
+
+    async getAdminProductDetails(productId, languageCode = 'en-US') {
+        const productSql = `
+        SELECT p.id, p.is_featured, pt.name, pt.description, pt.features, b.id AS brand_id
+        FROM Products p
+        JOIN Product_Translations pt ON p.id = pt.product_id
+        JOIN Brands b ON p.brand_id = b.id
+        WHERE p.id = ? AND pt.language_code = ?;
+        `;
+        const [productRows] = await dbPool.query(productSql, [productId, languageCode]);
+        if (productRows.length === 0) return null;
+
+        const product = productRows[0];
+
+        const variantsSql = `SELECT id, sku, price AS originalPrice, sale_price, stock_quantity AS stock, is_active FROM Product_Variants WHERE product_id = ? ORDER BY id ASC`;
+        const [variants] = await dbPool.query(variantsSql, [productId]);
+
+        product.variants = variants;
+        return product;
+    },
+
+    async updateProduct(productId, data) {
+        const connection = await dbPool.getConnection();
+        try {
+            await connection.beginTransaction();
+
+            await connection.query('UPDATE Products SET is_featured = ? WHERE id = ?', [data.is_featured, productId]);
+
+            await connection.query(
+                'UPDATE Product_Translations SET name = ?, description = ?, features = ? WHERE product_id = ? AND language_code = ?',
+                [data.name, data.description, JSON.stringify(data.features), productId, data.languageCode]
+            );
+
+            for (const variant of data.variants) {
+                await connection.query(
+                    'UPDATE Product_Variants SET sku = ?, price = ?, sale_price = ?, stock_quantity = ?, is_active = ? WHERE id = ? AND product_id = ?',
+                    [variant.sku, variant.price, variant.sale_price, variant.stock, variant.is_active, variant.id, productId]
+                );
+            }
+
+            await connection.commit();
+            return true;
+        } catch (error) {
+            await connection.rollback();
+            console.error('Error in updateProduct DAO transaction:', error);
+            throw error;
+        } finally {
+            connection.release();
+        }
     }
+
 
 };
 
