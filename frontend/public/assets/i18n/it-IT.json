@@ -50,5 +50,27 @@
         "LOADING": "Caricamento prodotti in corso, attendere prego...",
         "ERROR": "Si è verificato un errore!",
         "NO_PRODUCTS": "Al momento non sono presenti prodotti."        
+    },
+    "ADMIN": {
+        "MANAGE_PRODUCTS": {
+            "TITLE": "Gestisci Prodotti",
+            "SUBTITLE": "Aggiungi, modifica o rimuovi prodotti dal tuo negozio.",
+            "ADD_PRODUCT": "Aggiungi Prodotto",
+            "EDIT_PRODUCT": "Modifica",
+            "SEARCH_PLACEHOLDER": "Cerca per nome prodotto, marca o SKU...",
+            "STATUSES": {
+                "ALL_STATUSES": "Tutti gli stati",
+                "ACTIVE": "Attivo",
+                "INACTIVE": "Inattivo"
+            },
+            "TABLE_HEADERS": {
+                "PRODUCT_NAME": "Nome Prodotto",
+                "BRAND": "Marca",
+                "SKU": "SKU",
+                "PRICE": "Prezzo",
+                "STOCK": "Disponibilità",
+                "STATUS": "Stato"
+            }
+        }
     }
 }

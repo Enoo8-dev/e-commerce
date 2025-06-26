@@ -50,5 +50,27 @@
         "LOADING": "Loading products, please wait...",
         "ERROR": "An error occurred!",
         "NO_PRODUCTS": "No products found at the moment."
+    },
+    "ADMIN": {
+        "MANAGE_PRODUCTS": {
+            "TITLE": "Manage Products",
+            "SUBTITLE": "Add, edit, or remove products from your store.",
+            "ADD_PRODUCT": "Add Product",
+            "EDIT_PRODUCT": "Edit",
+            "SEARCH_PLACEHOLDER": "Search by product name, brand, or SKU...",
+            "STATUSES": {
+                "ALL_STATUSES": "All Statuses",
+                "ACTIVE": "Active",
+                "INACTIVE": "Inactive"
+            },
+            "TABLE_HEADERS": {
+                "PRODUCT_NAME": "Product Name",
+                "BRAND": "Brand",
+                "SKU": "SKU",
+                "PRICE": "Price",
+                "STOCK": "Stock",
+                "STATUS": "Status"
+            }
+        }
     }
 }

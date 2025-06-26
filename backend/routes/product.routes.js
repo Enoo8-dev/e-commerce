@@ -68,6 +68,7 @@ publicRouter.get('/products', async (req, res) => {
 
 
 // --- ROTTE ADMIN (associate ad adminRouter) ---
+// GET /api/admin/products
 adminRouter.get('/products', async (req, res) => {
     try {
       const options = {
@@ -82,6 +83,27 @@ adminRouter.get('/products', async (req, res) => {
     } catch (error) {
       res.status(500).json({ message: 'Error fetching product list for admin' });
     }
+});
+
+// PATCH /api/admin/variants/:variantId/status
+adminRouter.patch('/variants/:variantId/status', async (req, res) => {
+  try {
+    const { variantId } = req.params;
+    const { isActive } = req.body;
+
+    if (typeof isActive !== 'boolean') {
+      return res.status(400).json({ message: 'Invalid "isActive" value.' });
+    }
+
+    const success = await productService.updateVariantStatus(variantId, isActive);
+    if (success) {
+      res.status(200).json({ message: 'Variant status updated successfully.' });
+    } else {
+      res.status(404).json({ message: 'Variant not found.' });
+    }
+  } catch (error) {
+    res.status(500).json({ message: 'Error updating variant status' });
+  }
 });
 
 // Esportiamo entrambi i router con i nomi corretti

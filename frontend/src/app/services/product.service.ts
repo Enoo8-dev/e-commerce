@@ -121,4 +121,14 @@ export class ProductService {
     );
   }
 
+  /**
+   * Updates the active status of a single product variant.
+   * @param variantId The ID of the variant.
+   * @param isActive The new status.
+   */
+  updateVariantStatus(variantId: number, isActive: boolean): Observable<any> {
+    return this.http.patch(`${this.apiUrl}/admin/variants/${variantId}/status`, { isActive });
+  }
+
+
 }

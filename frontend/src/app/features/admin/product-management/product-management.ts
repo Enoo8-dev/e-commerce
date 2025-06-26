@@ -83,11 +83,24 @@ export class ProductManagementComponent implements OnInit, OnDestroy {
     this.fetchProducts();
   }
 
-  // Logica per il toggle (per ora solo visuale)
-  toggleProductStatus(product: any, event: Event): void {
-    event.stopPropagation(); // Impedisce al link della riga di attivarsi
-    console.log(`Toggle status for product: ${product.productId}`);
-    // Qui andrà la logica per il modale di conferma e la chiamata API
+  toggleVariantStatus(variant: any, event: Event): void {
+    event.stopPropagation();
+    
+    const newStatus = !variant.isActive;
+    const actionText = newStatus ? 'attivare' : 'disattivare';
+
+    if (confirm(`Sei sicuro di voler ${actionText} la variante "${variant.productName} - ${variant.variantSku}"?`)) {
+      
+      this.productService.updateVariantStatus(variant.variantId, newStatus).subscribe({
+        next: () => {
+          variant.isActive = newStatus;
+        },
+        error: (err) => {
+          console.error('Failed to update variant status:', err);
+          alert('Errore: impossibile aggiornare lo stato della variante.');
+        }
+      });
+    }
   }
 
   ngOnDestroy(): void {

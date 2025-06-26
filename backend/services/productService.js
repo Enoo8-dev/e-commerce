@@ -70,6 +70,14 @@ const productService = {
             console.error('Error in productService.getAdminProductList:', error);
             throw error;
         }
+    },
+    async updateVariantStatus(variantId, isActive) {
+        try {
+            return await productDAO.updateVariantStatus(variantId, isActive);
+        } catch (error) {
+            console.error('Error in productService.updateVariantStatus:', error);
+            throw error;
+        }
     }
 
 };
