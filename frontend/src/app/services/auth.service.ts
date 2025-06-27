@@ -1,10 +1,9 @@
-import { Injectable, Injector } from '@angular/core'; // 1. Importa Injector
+import { Injectable, Injector } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable, BehaviorSubject, tap, of, throwError } from 'rxjs';
+import { Observable, BehaviorSubject, map, tap, of, throwError } from 'rxjs';
 import { switchMap, catchError } from 'rxjs/operators';
-import { Router } from '@angular/router'; // Importiamo ancora il TIPO Router
+import { Router } from '@angular/router';
 
-// L'interfaccia User rimane la stessa
 export interface User {
   id: number;
   email: string;
@@ -18,30 +17,55 @@ export interface User {
 })
 export class AuthService {
   private apiUrl = 'http://localhost:3000/api';
-
-  private isLoggedInSubject = new BehaviorSubject<boolean>(false);
+  
   private currentUserSubject = new BehaviorSubject<User | null>(null);
-
-  public isLoggedIn$ = this.isLoggedInSubject.asObservable();
   public currentUser$ = this.currentUserSubject.asObservable();
+  
+  public isLoggedIn$: Observable<boolean> = this.currentUser$.pipe(
+    map(user => !!user)
+  );
 
-  // 2. Invece del Router, ora iniettiamo l'Injector
-  constructor(private http: HttpClient, private injector: Injector) {
-    this.loadUserFromToken();
+  // Per rompere la dipendenza circolare, dichiariamo le variabili qui
+  private http!: HttpClient;
+  private router!: Router;
+
+  constructor(private injector: Injector) {
+    // *** LA CORREZIONE DEFINITIVA È QUI ***
+    // Usiamo setTimeout per posticipare l'esecuzione di loadUserFromToken()
+    // di un "tick". Questo rompe il ciclo di dipendenza sincrono che si verifica all'avvio.
+    setTimeout(() => this.loadUserFromToken(), 0);
+  }
+
+  // Funzione helper per ottenere HttpClient "pigramente"
+  private getHttpClient(): HttpClient {
+    if (!this.http) {
+      this.http = this.injector.get(HttpClient);
+    }
+    return this.http;
+  }
+
+  // Funzione helper per ottenere il Router "pigramente"
+  private getRouter(): Router {
+    if (!this.router) {
+      this.router = this.injector.get(Router);
+    }
+    return this.router;
   }
 
   private loadUserFromToken(): void {
     const token = this.getToken();
     if (token) {
-      // Usiamo un try-catch per sicurezza nel caso fetchUserProfile fallisca
       this.fetchUserProfile().subscribe({
-        error: () => this.logoutCleanup() // Se il token non è valido, pulisci
+        error: (err) => {
+          console.error("Token validation failed on startup. Cleaning up.", err);
+          this.logoutCleanup();
+        }
       });
     }
   }
 
-  login(credentials: any): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/auth/login`, credentials).pipe(
+  login(credentials: any): Observable<User> {
+    return this.getHttpClient().post<any>(`${this.apiUrl}/auth/login`, credentials).pipe(
       tap(response => {
         if (response && response.token) {
           localStorage.setItem('authToken', response.token);
@@ -57,26 +81,21 @@ export class AuthService {
 
   fetchUserProfile(): Observable<User> {
     const headers = new HttpHeaders().set('Authorization', `Bearer ${this.getToken()}`);
-    return this.http.get<User>(`${this.apiUrl}/users/me`, { headers }).pipe(
+    return this.getHttpClient().get<User>(`${this.apiUrl}/users/me`, { headers }).pipe(
       tap(user => {
         this.currentUserSubject.next(user);
-        this.isLoggedInSubject.next(true);
       })
     );
   }
 
-  // Funzione di pulizia interna che non reindirizza
   private logoutCleanup(): void {
     localStorage.removeItem('authToken');
     this.currentUserSubject.next(null);
-    this.isLoggedInSubject.next(false);
   }
 
   logout(): void {
-    // 3. Otteniamo il Router "pigramente" solo quando serve, rompendo il ciclo
-    const router = this.injector.get(Router);
     this.logoutCleanup();
-    router.navigate(['/login']);
+    this.getRouter().navigate(['/login']);
   }
 
   getToken(): string | null {
@@ -84,6 +103,6 @@ export class AuthService {
   }
 
   register(userData: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/register`, userData);
+    return this.getHttpClient().post(`${this.apiUrl}/register`, userData);
   }
 }
