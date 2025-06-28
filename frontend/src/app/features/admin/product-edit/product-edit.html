@@ -1,80 +1,143 @@
 <div class="p-4 sm:p-6 lg:p-8 max-w-4xl mx-auto">
-  <a routerLink="/admin/products" class="text-sm font-medium text-blue-600 hover:text-blue-800">&larr; Torna alla lista prodotti</a>
+  <a routerLink="/admin/products" class="text-sm font-medium text-blue-600 hover:text-blue-800">&larr; {{ 'ADMIN.EDIT.BACK_TO_PRODUCTS' | translate }}</a>
 
-  @if(isLoading) { <p class="mt-8 text-center">Caricamento...</p> }
+  @if(isLoading) { <p class="mt-8 text-center">{{ 'PRODUCTS.LOADING' | translate }}</p> }
   @if(error) { <p class="mt-4 text-center text-red-600">{{ error }}</p> }
 
   @if(!isLoading && !error) {
-    <h1 class="text-2xl font-bold text-gray-900 mt-4">Modifica Prodotto</h1>
-    <p class="text-gray-600">Stai modificando il prodotto: <span class="font-semibold">{{ editForm.get('name')?.value }}</span></p>
+
+    <div class="flex items-center gap-2 mt-4">
+      <h1 class="text-2xl font-bold text-gray-900">{{ 'ADMIN.EDIT.TITLE' | translate }}</h1>
+      
+      <div class="relative group">
+        <svg class="w-5 h-5 text-gray-400" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 32 32" xml:space="preserve"><g id="info"><g><path style="fill:currentColor;" d="M10,16c1.105,0,2,0.895,2,2v8c0,1.105-0.895,2-2,2H8v4h16v-4h-1.992c-1.102,0-2-0.895-2-2L20,12H8 v4H10z"/><circle style="fill:currentColor;" cx="16" cy="4" r="4"/></g></g></svg>        
+        <div class="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-64 p-3 bg-gray-800 text-white text-sm rounded-lg shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
+          @if(currentLang === 'it-IT') {
+            {{ 'ADMIN.EDIT.TOOLTIP_IT' | translate }}
+          } @else {
+            {{ 'ADMIN.EDIT.TOOLTIP_EN' | translate }}
+          }
+          <div class="absolute bottom-full left-1/2 -translate-x-1/2 w-0 h-0 border-x-8 border-x-transparent border-b-8 border-b-gray-800"></div>
+        </div>
+      </div>
+    </div>
+    <p class="text-gray-600">{{ 'ADMIN.EDIT.SUBTITLE' | translate }}<span class="font-semibold">{{ editForm.get('name')?.value }}</span></p>
+
+    @if(successMessage) {
+        <p class="text-green-600 text-sm mt-4 text-right">{{ successMessage }}</p>
+    }
 
     <form [formGroup]="editForm" (ngSubmit)="onSubmit()" class="mt-8 space-y-8">
-      <!-- Sezione Dati Principali -->
       <div class="space-y-6 p-6 border rounded-lg shadow-sm bg-white">
-        <h2 class="text-lg font-medium text-gray-900">Informazioni Principali</h2>
+        <h2 class="text-lg font-medium text-gray-900">{{ 'ADMIN.EDIT.MAIN_INFORMATION' | translate }}</h2>
         <div>
-          <label for="name" class="block text-sm font-medium text-gray-700">Nome Prodotto</label>
-          <input type="text" formControlName="name" id="name" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
+          <label for="name" class="block text-sm font-medium text-gray-700">{{ 'ADMIN.EDIT.PRODUCT_NAME' | translate }}</label>
+          <input type="text" formControlName="name" id="name" class="block w-full rounded-lg border-0 bg-[#f4f0f0] py-2 px-3 text-gray-900 placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm mt-1">
         </div>
         <div>
-          <label for="description" class="block text-sm font-medium text-gray-700">Descrizione</label>
-          <textarea formControlName="description" id="description" rows="4" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"></textarea>
+          <label for="description" class="block text-sm font-medium text-gray-700">{{ 'ADMIN.EDIT.DESCRIPTION' | translate }}</label>
+          <textarea formControlName="description" id="description" rows="4" class="block w-full rounded-lg border-0 bg-[#f4f0f0] py-2 px-3 text-gray-900 placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm mt-1"></textarea>
         </div>
         <div>
-          <label for="features" class="block text-sm font-medium text-gray-700">Specifiche Tecniche (JSON)</label>
-          <textarea formControlName="features" id="features" rows="6" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm font-mono"></textarea>
+          <label class="label-form">{{ 'ADMIN.EDIT.TECHNICAL_SPECIFICATIONS' | translate }}</label>
+          <div formArrayName="features" class="mt-2 space-y-1">
+            @for(featureGroup of features.controls; track $index; let i = $index; let isOdd = $odd) {
+              <div [formGroupName]="i" 
+                   class="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 p-2 rounded-md"
+                   [ngClass]="{ 'bg-gray-50': isOdd }">
+                <input type="text" formControlName="key" [placeholder]="'ADMIN.EDIT.KEY_TECH_SPEC' | translate " [ngClass]="{ 'bg-[#f4f0f0]' : !isOdd, 'bg-white' : isOdd }" class="block w-full rounded-lg border-0 py-2 px-3 text-gray-900 placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm flex-1">
+                <input type="text" formControlName="value" [placeholder]="'ADMIN.EDIT.VALUE_TECH_SPEC' | translate " [ngClass]="{ 'bg-[#f4f0f0]' : !isOdd, 'bg-white' : isOdd }" class="block w-full rounded-lg border-0 py-2 px-3 text-gray-900 placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm flex-1">
+                <button type="button" (click)="removeFeature(i)" class="cursor-pointer text-red-500 hover:text-red-700 p-2 self-end sm:self-center" [title]="'ADMIN.EDIT.REMOVE_SPECIFICATION' | translate">
+                  <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path></svg>
+                </button>
+              </div>
+            }
+          </div>
+          <button type="button" (click)="addFeature()" class="cursor-pointer mt-4 text-sm font-medium text-blue-600 hover:text-blue-800">
+            + {{ 'ADMIN.EDIT.ADD_SPECIFICATION' | translate }}
+          </button>
         </div>
         <div class="flex items-center">
-          <input id="is_featured" formControlName="is_featured" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500">
-          <label for="is_featured" class="ml-3 block text-sm font-medium text-gray-700">Prodotto in Evidenza</label>
+          <input id="is_featured" formControlName="is_featured" type="checkbox" class="h-4 w-4 rounded cursor-pointer border-gray-300 text-red-600 focus:ring-red-500">
+          <label for="is_featured" class="ml-3 block text-sm font-medium text-gray-700">{{ 'ADMIN.EDIT.FEATURED_PRODUCT' | translate }}</label>
         </div>
       </div>
 
-      <!-- Sezione Varianti -->
       <div class="space-y-6">
-        <h2 class="text-lg font-medium text-gray-900">Varianti</h2>
+        <h2 class="text-lg font-medium text-gray-900">{{ 'ADMIN.EDIT.VARIANTS' | translate }}</h2>
         <div formArrayName="variants">
-          @for(variantGroup of variants.controls; track variantGroup; let i = $index) {
+          @for(variantGroup of variants.controls; track $index; let i = $index) {
             <div [formGroupName]="i" class="p-6 border rounded-lg shadow-sm bg-white mb-6">
-              <h3 class="font-medium text-gray-700">Variante SKU: {{ variantGroup.get('sku')?.value }}</h3>
+              <h3 class="font-medium text-gray-700">{{ 'ADMIN.EDIT.SKU_VARIANT' | translate }}<span class="text-2xl font-2xl">{{ variantGroup.get('sku')?.value }}</span></h3>
               <div class="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-6 sm:gap-x-6">
-                <div class="sm:col-span-3">
-                  <label for="sku-{{i}}" class="block text-sm font-medium text-gray-700">SKU</label>
-                  <input type="text" formControlName="sku" id="sku-{{i}}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
+                <div class="sm:col-span-6">
+                  <label for="sku-{{i}}" class="block text-sm font-medium text-gray-700">{{ 'ADMIN.MANAGE_PRODUCTS.TABLE_HEADERS.SKU' | translate }}</label>
+                  <input type="text" formControlName="sku" id="sku-{{i}}" class="block w-full rounded-lg border-0 bg-[#f4f0f0] py-2 px-3 text-gray-900 placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm mt-1">
                 </div>
                 <div class="sm:col-span-3">
-                  <label for="price-{{i}}" class="block text-sm font-medium text-gray-700">Prezzo Originale</label>
-                  <input type="number" formControlName="price" id="price-{{i}}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
+                  <label for="price-{{i}}" class="block text-sm font-medium text-gray-700">{{ 'ADMIN.EDIT.ORIGINAL_PRICE' | translate }}</label>
+                  <input type="number" formControlName="price" id="price-{{i}}" class="block w-full rounded-lg border-0 bg-[#f4f0f0] py-2 px-3 text-gray-900 placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm mt-1">
                 </div>
                 <div class="sm:col-span-3">
-                  <label for="sale_price-{{i}}" class="block text-sm font-medium text-gray-700">Prezzo Scontato (opzionale)</label>
-                  <input type="number" formControlName="sale_price" id="sale_price-{{i}}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
+                  <label for="sale_price-{{i}}" class="block text-sm font-medium text-gray-700">{{ 'ADMIN.EDIT.DISCOUNTED_PRICE' | translate }}</label>
+                  <input type="number" formControlName="sale_price" id="sale_price-{{i}}" class="block w-full rounded-lg border-0 bg-[#f4f0f0] py-2 px-3 text-gray-900 placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm mt-1">
                 </div>
                 <div class="sm:col-span-3">
-                  <label for="stock-{{i}}" class="block text-sm font-medium text-gray-700">Stock</label>
-                  <input type="number" formControlName="stock" id="stock-{{i}}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
+                  <label for="sale_start_date-{{i}}" class="block text-sm font-medium text-gray-700">{{ 'ADMIN.EDIT.START_DATE' | translate }}</label>
+                  <input type="datetime-local" formControlName="sale_start_date" id="sale_start_date-{{i}}" class="block w-full rounded-lg border-0 bg-[#f4f0f0] py-2 px-3 text-gray-900 placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm mt-1">
                 </div>
-                <div class="sm:col-span-6 flex items-center">
-                  <input id="is_active-{{i}}" formControlName="is_active" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500">
-                  <label for="is_active-{{i}}" class="ml-3 block text-sm font-medium text-gray-700">Questa variante è Attiva</label>
+                <div class="sm:col-span-3">
+                  <label for="sale_end_date-{{i}}" class="block text-sm font-medium text-gray-700">{{ 'ADMIN.EDIT.END_DATE' | translate }}</label>
+                  <input type="datetime-local" formControlName="sale_end_date" id="sale_end_date-{{i}}" class="block w-full rounded-lg border-0 bg-[#f4f0f0] py-2 px-3 text-gray-900 placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm mt-1">
                 </div>
+                <div class="sm:col-span-3">
+                  <label for="stock-{{i}}" class="block text-sm font-medium text-gray-700">{{ 'ADMIN.MANAGE_PRODUCTS.STOCK' | translate }}</label>
+                  <input type="number" formControlName="stock" id="stock-{{i}}" class="block w-full rounded-lg border-0 bg-[#f4f0f0] py-2 px-3 text-gray-900 placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm mt-1">
+                </div>
+                <div class="sm:col-span-6 flex items-center pt-2">
+                  <input id="is_active-{{i}}" formControlName="is_active" type="checkbox" class="h-4 w-4 rounded cursor-pointer border-gray-300 text-red-600 focus:ring-red-500">
+                  <label for="is_active-{{i}}" class="ml-3 block text-sm font-medium text-gray-700">{{ 'ADMIN.EDIT.IS_ACTIVE_VARIANT' | translate }}</label>
+                </div>
+            </div>
+            <div class="sm:col-span-6 mt-5">
+              <label class="block text-sm font-medium text-gray-700">{{ 'ADMIN.EDIT.IMAGE_GALLERY' | translate }}</label>
+              <div 
+                  cdkDropList 
+                  cdkDropListOrientation="horizontal" 
+                  (cdkDropListDropped)="onImageDrop($event, i)"
+                  class="mt-2 flex items-center gap-4 p-2 border rounded-lg bg-gray-50 flex-wrap">
+                  
+                  @for(imageControl of getImages(i).controls; track imageControl.value.id; let imgIndex = $index) {
+                      <div cdkDrag class="relative group cursor-move">
+                      <img [src]="'http://localhost:3000' + imageControl.value.image_url" class="h-24 w-24 rounded-md object-contain border-2" [ngClass]="imgIndex === 0 ? 'border-blue-500' : 'border-transparent'">
+                      @if(imgIndex === 0) {
+                          <span class="absolute top-1 left-1 bg-blue-500 text-white text-xs font-bold px-2 py-0.5 rounded-full">{{ 'ADMIN.EDIT.MAIN' | translate }}</span>
+                      }
+                      <button (click)="deleteImage(i, imageControl.value.id, imgIndex)" type="button" class="cursor-pointer absolute top-1 right-1 bg-red-600 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+                      </button>
+                      </div>
+                  }
+                  <label class="flex items-center justify-center h-24 w-24 rounded-md border-2 border-dashed border-gray-300 cursor-pointer hover:border-blue-500 hover:bg-gray-100">
+                      <span class="text-gray-500">+ {{ 'ADMIN.EDIT.ADD_IMAGE' | translate }}</span>
+                      <input type="file" (change)="onFileSelected($event, i)" accept="image/*" class="hidden">
+                  </label>
               </div>
+            </div>
+
             </div>
           }
         </div>
       </div>
 
-      <!-- Azioni Finali -->
       <div class="flex justify-end gap-4 pt-5 border-t">
-        <button type="button" routerLink="/admin/products" class="inline-flex items-center justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50">Annulla</button>
-        <button type="submit" [disabled]="editForm.invalid || isLoading" class="inline-flex items-center justify-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed">
-          @if(isLoading) { <span>Salvataggio...</span> } @else { <span>Salva Modifiche</span> }
+        <button type="button" routerLink="/admin/products" class="inline-flex items-center justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm cursor-pointer hover:bg-gray-50">{{ 'ADMIN.EDIT.CANCEL' | translate }}</button>
+        <button type="submit" [disabled]="editForm.invalid || isLoading" class="inline-flex items-center justify-center rounded-md border border-transparent bg-red-600 px-4 py-2 text-sm font-medium text-white shadow-sm cursor-pointer hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed">
+          @if(isLoading) { <span>{{ 'ADMIN.EDIT.SAVING' | translate }}</span> } @else { <span>{{ 'ADMIN.EDIT.SAVE_EDIT' | translate }}</span> }
         </button>
       </div>
 
-      @if(successMessage) {
-        <p class="text-green-600 text-sm mt-4 text-right">{{ successMessage }}</p>
-      }
+      
     </form>
   }
 </div>

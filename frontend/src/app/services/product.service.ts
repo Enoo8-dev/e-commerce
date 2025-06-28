@@ -151,4 +151,28 @@ export class ProductService {
     return this.http.put(`${this.apiUrl}/admin/products/${productId}`, productData);
   }
 
+ 
+  uploadImage(formData: FormData): Observable<any> {
+    return this.http.post(`${this.apiUrl}/admin/images/upload`, formData);
+  }
+
+
+  /**
+   * Deletes an image by its ID.
+   * @param imageId The ID of the image to delete.
+   * @returns An observable of the deletion response.
+   */
+  deleteImage(imageId: number): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/admin/images/${imageId}`);
+  }
+
+  /**
+   * Reorders images for a specific variant.
+   * @param imageIds The ordered list of image IDs.
+   * @returns An observable of the reorder response.
+   */
+  reorderImages(imageIds: number[]): Observable<any> {
+    return this.http.post(`${this.apiUrl}/admin/images/reorder`, { imageIds });
+  }
+
 }

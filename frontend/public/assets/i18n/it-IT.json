@@ -71,6 +71,42 @@
                 "STOCK": "Disponibilità",
                 "STATUS": "Stato"
             }
+        },
+        "EDIT": {
+            "FAILDED_TO_LOAD": "Impossibile caricare i dati del prodotto.",
+            "CONFIRM_DELETE_FEATURE": "Sei sicuro di voler rimuovere questa specifica?",
+            "CONFIRM_DELETE_IMAGE": "Sei sicuro di voler rimuovere questa immagine?",
+            "ERROR_DELETE_IMAGE": "Si è verificato un errore durante la rimozione dell'immagine.",
+            "ERROR_UPLOAD_IMAGE": "Si è verificato un errore durante il caricamento dell'immagine.",
+            "SUCCESS_UPDATE": "Prodotto aggiornato con successo.",
+            "ERROR_UPDATE": "Si è verificato un errore durante l'aggiornamento del prodotto.",
+            "BACK_TO_PRODUCTS": "Torna alla lista prodotti",
+            "TITLE": "Modifica Prodotto",
+            "SUBTITLE": "Stai modificando il prodotto: ",
+            "TOOLTIP_IT": "Stai modificando la versione in Italiano. Le modifiche a nome, descrizione e specifiche verranno salvate per questa lingua. Se vuoi cambiare lingua torna alla pagina precedente e seleziona la lingua desiderata.",
+            "TOOLTIP_EN": "Stai modificando la versione in Inglese. Le modifiche a nome, descrizione e specifiche verranno salvate per questa lingua. Se vuoi cambiare lingua torna alla pagina precedente e seleziona la lingua desiderata.",
+            "MAIN_INFORMATION": "Informazioni principali",
+            "PRODUCT_NAME": "Nome prodotto",
+            "DESCRIPTION": "Descrizione",
+            "TECHNICAL_SPECIFICATIONS": "Specifiche tecniche",
+            "ADD_SPECIFICATION": "Aggiungi specifica",
+            "FEATURED_PRODUCT": "Prodotto in evidenza",
+            "VARIANTS": "Varianti",
+            "SKU_VARIANT": "Variante SKU: ",
+            "ORIGINAL_PRICE": "Prezzo originale",
+            "DISCOUNTED_PRICE": "Prezzo scontato (opzionale)",
+            "START_DATE": "Data di inizio sconto (Formato 12H: MM/DD/YYYY, HH:mm AM/PM)",
+            "END_DATE": "Data di fine sconto (Formato 12H: MM/DD/YYYY, HH:mm AM/PM)",
+            "IS_ACTIVE_VARIANT": "Questa variante è attiva",
+            "IMAGE_GALLERY": "Galleria immagini",
+            "MAIN": "Principale",
+            "ADD_IMAGE": "Aggiungi",
+            "CANCEL": "Annulla",
+            "SAVING": "Salvataggio in corso...",
+            "SAVE_EDIT": "Salva modifiche",
+            "REMOVE_SPECIFICATION": "Rimuovi specifica",
+            "KEY_TECH_SPEC": "Nome Specifica (es. Display)",
+            "VALUE_TECH_SPEC": "Valore Specifica (es. 6.7 pollici)"
         }
     }
 }

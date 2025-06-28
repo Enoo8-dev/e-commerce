@@ -71,6 +71,42 @@
                 "STOCK": "Stock",
                 "STATUS": "Status"
             }
+        },
+        "EDIT": {
+            "FAILDED_TO_LOAD": "Failed to load product data.",
+            "CONFIRM_DELETE_FEATURE": "Are you sure you want to remove this feature?",
+            "CONFIRM_DELETE_IMAGE": "Are you sure you want to remove this image?",
+            "ERROR_DELETE_IMAGE": "An error occurred while deleting the image.",
+            "ERROR_UPLOAD_IMAGE": "An error occurred while uploading the image.",
+            "SUCCESS_UPDATE": "Product updated successfully.",
+            "ERROR_UPDATE": "An error occurred while updating the product.",
+            "BACK_TO_PRODUCTS": "Back to Products",
+            "TITLE": "Edit Product",
+            "SUBTITLE": "You are editing the product: ",
+            "TOOLTIP_IT": "You are editing the Italian version. Changes to name, description, and specifications will be saved for this language. If you want to change language go back to the previous page and select the desired language.",
+            "TOOLTIP_EN": "You are editing the English version. Changes to name, description, and specifications will be saved for this language. If you want to change language go back to the previous page and select the desired language.",
+            "MAIN_INFORMATION": "Main Information",
+            "PRODUCT_NAME": "Product Name",
+            "DESCRIPTION": "Description",
+            "TECHNICAL_SPECIFICATIONS": "Technical Specifications",
+            "ADD_SPECIFICATION": "Add Specification",
+            "FEATURED_PRODUCT": "Featured Product",
+            "VARIANTS": "Variants",
+            "SKU_VARIANT": "Variant SKU: ",
+            "ORIGINAL_PRICE": "Original Price",
+            "DISCOUNTED_PRICE": "Discounted Price (optional)",
+            "START_DATE": "Discount Start Date (Format 12H: MM/DD/YYYY, HH:mm AM/PM)",
+            "END_DATE": "Discount End Date (Format 12H: MM/DD/YYYY, HH:mm AM/PM)",
+            "IS_ACTIVE_VARIANT": "This variant is active",
+            "IMAGE_GALLERY": "Image Gallery",
+            "MAIN": "Main",
+            "ADD_IMAGE": "Add",
+            "CANCEL": "Cancel",
+            "SAVING": "Saving...",
+            "SAVE_EDIT": "Save Changes",
+            "REMOVE_SPECIFICATION": "Remove Specification",
+            "KEY_TECH_SPEC": "Key Specification (e.g. Display)",
+            "VALUE_TECH_SPEC": "Value Specification (e.g. 6.7 inches)"
         }
     }
 }
