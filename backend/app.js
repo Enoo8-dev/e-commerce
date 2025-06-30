@@ -16,6 +16,7 @@ const authRoutes = require('./routes/auth.routes');
 const userRoutes = require('./routes/user.routes');
 const {publicRouter, adminRouter} = require('./routes/product.routes');
 const imageRoutes = require('./routes/image.routes');
+const brandRoutes = require('./routes/brand.routes');
 
 const app = express();
 
@@ -38,6 +39,9 @@ app.use('/api/auth', authRoutes);
 // All routes defined in user.routes.js will now be prefixed with /api/users.
 app.use('/api/users', userRoutes);
 
+// Mount the brand routes on the /api/admin/brands path.
+// These routes are also protected by the autenticateToken middleware, meaning they require a valid JWT token to access.
+app.use('/api/admin/brands', autenticateToken, brandRoutes);
 // Mount the admin product routes on the /api/admin path.
 // These routes are protected by the autenticateToken middleware, meaning they require a valid JWT token to access.
 app.use('/api/admin', autenticateToken, adminRouter); 
@@ -45,6 +49,7 @@ app.use('/api/admin', autenticateToken, adminRouter);
 // Mount the image routes on the /api/images path.
 // These routes are also protected by the autenticateToken middleware, meaning they require a valid JWT token to access.
 app.use('/api/admin/images', autenticateToken, imageRoutes);
+
 
 // Mount the product routes on the /api path.
 // All routes defined in product.routes.js will now be prefixed with /api.

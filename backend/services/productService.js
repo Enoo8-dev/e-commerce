@@ -108,7 +108,6 @@ const productService = {
     async getAttributesForForm(languageCode) {
         const flatList = await productDAO.getAttributesForForm(languageCode);
 
-        // Struttura i dati da una lista piatta a un oggetto gerarchico
         const structuredAttributes = {};
         for (const row of flatList) {
             if (!structuredAttributes[row.attributeId]) {
@@ -118,14 +117,13 @@ const productService = {
                     values: []
                 };
             }
-            if (row.valueId) { // Aggiungi il valore solo se esiste
+            if (row.valueId) { 
                 structuredAttributes[row.attributeId].values.push({
                     id: row.valueId,
                     value: row.valueName
                 });
             }
         }
-        // Converte l'oggetto in un array
         return Object.values(structuredAttributes);
     }
 

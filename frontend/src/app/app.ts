@@ -4,11 +4,12 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import { AuthService, User } from './services/auth.service';
 import { Subscription } from 'rxjs'; // Importa Subscription
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, RouterLink, TranslateModule],
+  imports: [RouterOutlet, RouterLink, TranslateModule, CommonModule],
   templateUrl: './app.html',
   styleUrl: './app.css',
   animations: [
@@ -29,6 +30,7 @@ export class App implements OnInit, OnDestroy {
   user: User | null = null;
   isMobileMenuOpen: boolean = false;
   isLangMenuOpen: boolean = false;
+  isCatalogMenuOpen: boolean = false;
 
   private authSubscription!: Subscription;
 
@@ -96,5 +98,14 @@ export class App implements OnInit, OnDestroy {
 
   toggleMobileMenu(): void {
     this.isMobileMenuOpen = !this.isMobileMenuOpen;
+  }
+
+  toggleCatalogMenu(): void {
+    this.isCatalogMenuOpen = !this.isCatalogMenuOpen;
+  }
+
+  closeAllMenus(): void {
+    this.isMobileMenuOpen = false;
+    this.isCatalogMenuOpen = false;
   }
 }

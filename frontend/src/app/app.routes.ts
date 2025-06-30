@@ -12,6 +12,9 @@ import { UserManagementComponent } from './features/admin/user-management/user-m
 import { adminGuard } from './core/guards/admin-guard';
 import { ProductEditComponent } from './features/admin/product-edit/product-edit';
 import { ProductAddComponent } from './features/admin/product-add/product-add';
+import { BrandManagementComponent } from './features/admin/brand-management/brand-management';
+import { CategoryManagementComponent } from './features/admin/category-management/category-management';
+import { AttributeManagementComponent } from './features/admin/attribute-management/attribute-management';
 
 export const routes: Routes = [
   
@@ -26,6 +29,9 @@ export const routes: Routes = [
   { path: 'admin/users', component: UserManagementComponent, canActivate: [adminGuard] },
   { path: 'admin/products/new', component: ProductAddComponent, canActivate: [adminGuard] },
   { path: 'admin/products/edit/:productId', component: ProductEditComponent, canActivate: [adminGuard] },
+  { path: 'admin/brands', component: BrandManagementComponent, canActivate: [adminGuard] },
+  { path: 'admin/categories', component: CategoryManagementComponent, canActivate: [adminGuard] },
+  { path: 'admin/attributes', component: AttributeManagementComponent, canActivate: [adminGuard] }
   
   // You can add a wildcard route for handling 404 Not Found pages later
   // { path: '**', component: PageNotFoundComponent }

@@ -37,4 +37,4 @@ yarn-error.log*
 **/.angular/
 
 # Private assets
-/backend/public/images/products/
+/backend/public/images/

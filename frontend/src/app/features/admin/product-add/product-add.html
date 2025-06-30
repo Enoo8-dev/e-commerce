@@ -11,7 +11,7 @@
       <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
         <div>
           <label for="brand_id" class="block text-sm font-medium text-gray-700">Marchio</label>
-          <select formControlName="brand_id" id="brand_id" class="block w-full rounded-lg border-0 bg-[#f4f0f0] py-2 px-3 text-gray-900 placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-blue-500 sm:text-sm mt-1">
+          <select formControlName="brand_id" id="brand_id" class="block w-full rounded-lg border-0 bg-[#f4f0f0] py-2 px-3 text-gray-900 placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm mt-1">
             <option [ngValue]="" disabled>Seleziona un marchio</option>
             @for(brand of allBrands$ | async; track brand.id) { 
                 <option [value]="brand.id">{{ brand.name }}</option> 
@@ -23,7 +23,7 @@
           <div formArrayName="category_ids" class="mt-1 space-y-2 border rounded-md p-2 max-h-32 overflow-y-auto">
             @for(category of allCategories$ | async; track category.id) {
               <div class="flex items-center">
-                <input id="category-{{category.id}}" [value]="category.id" type="checkbox" (change)="onCategoryChange($event)" class="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500 cursor-pointer">
+                <input id="category-{{category.id}}" [value]="category.id" type="checkbox" (change)="onCategoryChange($event)" class="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-red-500 cursor-pointer">
                 <label for="category-{{category.id}}" class="ml-3 text-sm text-gray-600 cursor-pointer">{{ category.name }}</label>
               </div>
             }
@@ -31,7 +31,7 @@
         </div>
       </div>
        <div class="flex items-center">
-          <input id="is_featured" formControlName="is_featured" type="checkbox" class="h-4 w-4 rounded cursor-pointer border-gray-300 text-blue-600 focus:ring-blue-500">
+          <input id="is_featured" formControlName="is_featured" type="checkbox" class="h-4 w-4 rounded cursor-pointer border-gray-300 text-blue-600 focus:ring-red-500">
           <label for="is_featured" class="ml-3 block text-sm font-medium text-gray-700">Prodotto in Evidenza</label>
         </div>
     </div>
@@ -50,19 +50,19 @@
             <div formGroupName="it" class="space-y-6">
               <div>
                 <label for="name-it" class="block text-sm font-medium text-gray-700">Nome Prodotto (IT)</label>
-                <input type="text" formControlName="name" id="name-it" class="mt-1 block w-full rounded-lg border-0 bg-[#f4f0f0] py-2 px-3 text-gray-900 placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-blue-500 sm:text-sm">
+                <input type="text" formControlName="name" id="name-it" class="mt-1 block w-full rounded-lg border-0 bg-[#f4f0f0] py-2 px-3 text-gray-900 placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm">
               </div>
               <div>
                 <label for="description-it" class="block text-sm font-medium text-gray-700">Descrizione (IT)</label>
-                <textarea formControlName="description" id="description-it" rows="4" class="mt-1 block w-full rounded-lg border-0 bg-[#f4f0f0] py-2 px-3 text-gray-900 placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-blue-500 sm:text-sm"></textarea>
+                <textarea formControlName="description" id="description-it" rows="4" class="mt-1 block w-full rounded-lg border-0 bg-[#f4f0f0] py-2 px-3 text-gray-900 placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm"></textarea>
               </div>
               <div>
                 <label class="block text-sm font-medium text-gray-700">Specifiche (IT)</label>
                 <div formArrayName="features" class="mt-2 space-y-2">
                     @for(fg of features('it').controls; track $index; let i = $index){
                         <div [formGroupName]="i" class="flex gap-2">
-                            <input type="text" formControlName="key" placeholder="Nome" class="mt-1 block w-full rounded-lg border-0 bg-[#f4f0f0] py-2 px-3 text-gray-900 placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-blue-500 sm:text-sm flex-1">
-                            <input type="text" formControlName="value" placeholder="Valore" class="mt-1 block w-full rounded-lg border-0 bg-[#f4f0f0] py-2 px-3 text-gray-900 placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-blue-500 sm:text-sm flex-1">
+                            <input type="text" formControlName="key" placeholder="Nome" class="mt-1 block w-full rounded-lg border-0 bg-[#f4f0f0] py-2 px-3 text-gray-900 placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm flex-1">
+                            <input type="text" formControlName="value" placeholder="Valore" class="mt-1 block w-full rounded-lg border-0 bg-[#f4f0f0] py-2 px-3 text-gray-900 placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm flex-1">
                             <button type="button" (click)="removeFeature('it', i)" class="text-red-500 hover:text-red-700 p-2 cursor-pointer">Rimuovi</button>
                         </div>
                     }
@@ -75,11 +75,11 @@
             <div formGroupName="en" class="space-y-6">
               <div>
                 <label for="name-en" class="block text-sm font-medium text-gray-700">Nome Prodotto (EN)</label>
-                <input type="text" formControlName="name" id="name-en" class="mt-1 block w-full rounded-lg border-0 bg-[#f4f0f0] py-2 px-3 text-gray-900 placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-blue-500 sm:text-sm">
+                <input type="text" formControlName="name" id="name-en" class="mt-1 block w-full rounded-lg border-0 bg-[#f4f0f0] py-2 px-3 text-gray-900 placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm">
               </div>
               <div>
                 <label for="description-en" class="block text-sm font-medium text-gray-700">Descrizione (EN)</label>
-                <textarea formControlName="description" id="description-en" rows="4" class="mt-1 block w-full rounded-lg border-0 bg-[#f4f0f0] py-2 px-3 text-gray-900 placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-blue-500 sm:text-sm"></textarea>
+                <textarea formControlName="description" id="description-en" rows="4" class="mt-1 block w-full rounded-lg border-0 bg-[#f4f0f0] py-2 px-3 text-gray-900 placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm"></textarea>
               </div>
               <div>
                 <label class="block text-sm font-medium text-gray-700">Specifiche (EN)</label>
@@ -115,16 +115,16 @@
               </button> 
             }
             <div class="mt-4 grid grid-cols-1 gap-6 sm:grid-cols-2">
-              <div><label for="sku-{{i}}" class="block text-sm font-medium text-gray-700">SKU</label><input type="text" formControlName="sku" id="sku-{{i}}" class="mt-1 block w-full rounded-lg border-0 bg-[#f4f0f0] py-2 px-3 text-gray-900 placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-blue-500 sm:text-sm"></div>
-              <div><label for="price-{{i}}" class="block text-sm font-medium text-gray-700">Prezzo</label><input type="number" formControlName="price" id="price-{{i}}" class="mt-1 block w-full rounded-lg border-0 bg-[#f4f0f0] py-2 px-3 text-gray-900 placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-blue-500 sm:text-sm"></div>
-              <div><label for="stock-{{i}}" class="block text-sm font-medium text-gray-700">Stock</label><input type="number" formControlName="stock" id="stock-{{i}}" class="mt-1 block w-full rounded-lg border-0 bg-[#f4f0f0] py-2 px-3 text-gray-900 placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-blue-500 sm:text-sm"></div>
+              <div><label for="sku-{{i}}" class="block text-sm font-medium text-gray-700">SKU</label><input type="text" formControlName="sku" id="sku-{{i}}" class="mt-1 block w-full rounded-lg border-0 bg-[#f4f0f0] py-2 px-3 text-gray-900 placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm"></div>
+              <div><label for="price-{{i}}" class="block text-sm font-medium text-gray-700">Prezzo</label><input type="number" formControlName="price" id="price-{{i}}" step="0.01" class="mt-1 block w-full rounded-lg border-0 bg-[#f4f0f0] py-2 px-3 text-gray-900 placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm"></div>
+              <div><label for="stock-{{i}}" class="block text-sm font-medium text-gray-700">Stock</label><input type="number" formControlName="stock" id="stock-{{i}}" class="mt-1 block w-full rounded-lg border-0 bg-[#f4f0f0] py-2 px-3 text-gray-900 placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm"></div>
             </div>
             <div class="mt-6">
               <label class="block text-sm font-medium text-gray-700">Attributi</label>
               <div formArrayName="attributes" class="space-y-2 mt-2">
                 @for(attrControl of variantAttributes(i).controls; track $index; let attrIndex = $index) {
                   <div class="flex items-center gap-2">
-                    <select [formControlName]="attrIndex" class="mt-1 block w-full rounded-lg border-0 bg-[#f4f0f0] py-2 px-3 text-gray-900 placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-blue-500 sm:text-sm flex-1">
+                    <select [formControlName]="attrIndex" class="mt-1 block w-full rounded-lg border-0 bg-[#f4f0f0] py-2 px-3 text-gray-900 placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm flex-1">
                       <option value="" disabled>Seleziona valore attributo</option>
                       @for(type of allAttributes$ | async; track type.id) {
                         <optgroup [label]="type.name">
@@ -161,7 +161,7 @@
     
     <div class="flex justify-end gap-4 pt-5 border-t">
       <button type="button" routerLink="/admin/products" class="inline-flex items-center justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 cursor-pointer">Annulla</button>
-      <button type="submit" [disabled]="addForm.invalid || isLoading" class="inline-flex items-center justify-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer">
+      <button type="submit" [disabled]="addForm.invalid || isLoading" class="inline-flex items-center justify-center rounded-md border border-transparent bg-red-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer">
         @if(isLoading) { <span>Creazione...</span> } @else { <span>Crea Prodotto</span> }
       </button>
     </div>
