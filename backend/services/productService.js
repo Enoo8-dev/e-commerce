@@ -91,6 +91,42 @@ const productService = {
 
     async updateProduct(productId, productData) {
         return await productDAO.updateProduct(productId, productData);
+    },
+
+    async getAllBrands(languageCode) {
+        return await productDAO.getAllBrands(languageCode);
+    },
+
+    async getAllCategories(languageCode) {
+        return await productDAO.getAllCategories(languageCode);
+    },
+
+    async createProduct(productData) {
+        return await productDAO.createProduct(productData);
+    },
+
+    async getAttributesForForm(languageCode) {
+        const flatList = await productDAO.getAttributesForForm(languageCode);
+
+        // Struttura i dati da una lista piatta a un oggetto gerarchico
+        const structuredAttributes = {};
+        for (const row of flatList) {
+            if (!structuredAttributes[row.attributeId]) {
+                structuredAttributes[row.attributeId] = {
+                    id: row.attributeId,
+                    name: row.attributeName,
+                    values: []
+                };
+            }
+            if (row.valueId) { // Aggiungi il valore solo se esiste
+                structuredAttributes[row.attributeId].values.push({
+                    id: row.valueId,
+                    value: row.valueName
+                });
+            }
+        }
+        // Converte l'oggetto in un array
+        return Object.values(structuredAttributes);
     }
 
 };

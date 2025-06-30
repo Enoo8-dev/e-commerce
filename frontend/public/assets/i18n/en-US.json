@@ -70,10 +70,18 @@
                 "PRICE": "Price",
                 "STOCK": "Stock",
                 "STATUS": "Status"
+            },
+            "ADD_MODAL": {
+                "TITLE": "Add New Product",
+                "SUBTITLE": "How do you want to add the new products?",
+                "IMPORT_FROM_FILE": "Import from File",
+                "MANUAL_ENTRY": "Manual Entry",
+                "IMPORT_FROM_FILE_DESCRIPTION": "Upload a CSV file to add multiple products at once.",
+                "MANUAL_ENTRY_DESCRIPTION": "Fill out a form to enter the details of a single product."
             }
         },
         "EDIT": {
-            "FAILDED_TO_LOAD": "Failed to load product data.",
+            "FAILED_TO_LOAD": "Failed to load product data.",
             "CONFIRM_DELETE_FEATURE": "Are you sure you want to remove this feature?",
             "CONFIRM_DELETE_IMAGE": "Are you sure you want to remove this image?",
             "ERROR_DELETE_IMAGE": "An error occurred while deleting the image.",

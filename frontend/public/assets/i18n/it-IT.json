@@ -70,10 +70,18 @@
                 "PRICE": "Prezzo",
                 "STOCK": "Disponibilità",
                 "STATUS": "Stato"
+            },
+            "ADD_MODAL": {
+                "TITLE": "Aggiungi Nuovo Prodotto",
+                "SUBTITLE": "Come vuoi aggiungere i nuovi prodotti?",
+                "IMPORT_FROM_FILE": "Importa da file",
+                "MANUAL_ENTRY": "Aggiungi manualmente",
+                "IMPORT_FROM_FILE_DESCRIPTION": "Carica un file CSV per aggiungere più prodotti in una volta.",
+                "MANUAL_ENTRY_DESCRIPTION": "Comila un form per inserire i dettagli di un singolo prodotto."
             }
         },
         "EDIT": {
-            "FAILDED_TO_LOAD": "Impossibile caricare i dati del prodotto.",
+            "FAILED_TO_LOAD": "Impossibile caricare i dati del prodotto.",
             "CONFIRM_DELETE_FEATURE": "Sei sicuro di voler rimuovere questa specifica?",
             "CONFIRM_DELETE_IMAGE": "Sei sicuro di voler rimuovere questa immagine?",
             "ERROR_DELETE_IMAGE": "Si è verificato un errore durante la rimozione dell'immagine.",

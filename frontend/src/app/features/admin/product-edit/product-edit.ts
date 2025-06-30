@@ -126,9 +126,9 @@ export class ProductEditComponent implements OnInit {
   onImageDrop(event: CdkDragDrop<any[]>, variantIndex: number): void {
     const imagesArray = this.getImages(variantIndex);
     moveItemInArray(imagesArray.controls, event.previousIndex, event.currentIndex);
-    const imageIds = imagesArray.value.map((img: any) => img.id);
+    const imageIds = imagesArray.controls.map(control => control.get('id')?.value);
     this.productService.reorderImages(imageIds).subscribe({
-      next: () => console.log('Image order updated successfully!\n for variant index:', variantIndex, ' with IDs:', imageIds),
+      next: () => console.log('Image order updated successfully! New order:', imageIds),
       error: (err) => console.error('Failed to update image order', err)
     });
   }

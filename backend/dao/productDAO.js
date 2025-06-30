@@ -382,8 +382,140 @@ const productDAO = {
         } finally {
             connection.release();
         }
-    }
+    },
     
+    /**
+     * Fetches all brands with their translations for a specific language.
+     * This function is used to retrieve a list of brands for product management.
+     * @param {string} languageCode - The language code for translations (default is 'en-US').
+     * @returns {Promise<Array>} A promise that resolves to an array of brand objects.
+     */
+    async getAllBrands(languageCode = 'en-US') {
+        const sql = `
+            SELECT
+                b.id, 
+                bt.name 
+            FROM Brands b 
+            JOIN Brand_Translations bt ON b.id = bt.brand_id 
+            WHERE bt.language_code = ? 
+            ORDER BY bt.name ASC`;
+
+        const [rows] = await dbPool.query(sql, [languageCode]);
+        return rows;
+    },
+
+    /**
+     * Fetches all categories with their translations for a specific language.
+     * This function is used to retrieve a list of categories for product management.
+     * @param {string} languageCode - The language code for translations (default is 'en-US').
+     * @returns {Promise<Array>} A promise that resolves to an array of category objects.
+     */
+    async getAllCategories(languageCode = 'en-US') {
+        const sql = `
+            SELECT 
+                c.id, 
+                ct.name, 
+                c.parent_category_id 
+            FROM Categories c 
+            JOIN Category_Translations ct ON c.id = ct.category_id 
+            WHERE ct.language_code = ? 
+            ORDER BY ct.name ASC`;
+
+        const [rows] = await dbPool.query(sql, [languageCode]);
+        return rows;
+    },
+
+    /**
+     * Creates a new product and all its related data in a single transaction.
+     * This function handles the creation of the main product, its translations, categories, and the first variant.
+     * @param {object} productData - The complete data for the new product.
+     * @returns {Promise<number>} The ID of the newly created product.
+     */
+    async createProduct(productData) {
+        const connection = await dbPool.getConnection();
+        try {
+            await connection.beginTransaction();
+
+            const [productResult] = await connection.query(
+            'INSERT INTO Products (brand_id, is_active, is_featured) VALUES (?, ?, ?)',
+            [productData.brand_id, true, productData.is_featured]
+            );
+            const productId = productResult.insertId;
+
+            const translationSql = 'INSERT INTO Product_Translations (product_id, language_code, name, description, features) VALUES (?, ?, ?, ?, ?)';
+            const itData = productData.translations.it;
+            const enData = productData.translations.en;
+            await connection.query(translationSql, [productId, 'it-IT', itData.name, itData.description, JSON.stringify(itData.features)]);
+            await connection.query(translationSql, [productId, 'en-US', enData.name, enData.description, JSON.stringify(enData.features)]);
+
+            if (productData.category_ids && productData.category_ids.length > 0) {
+                for (const categoryId of productData.category_ids) {
+                    await connection.query('INSERT INTO Product_Categories (product_id, category_id) VALUES (?, ?)', [productId, categoryId]);
+                }
+            }
+            
+            const createdVariantIds = [];
+            if (productData.variants && productData.variants.length > 0) {
+            for (let i = 0; i < productData.variants.length; i++) {
+                const variant = productData.variants[i];
+                const isDefault = (i === 0);
+
+                const [variantResult] = await connection.query(
+                'INSERT INTO Product_Variants (product_id, sku, price, stock_quantity, is_default, is_active) VALUES (?, ?, ?, ?, ?, ?)',
+                [productId, variant.sku, variant.price, variant.stock, isDefault, true]
+                );
+                const variantId = variantResult.insertId;
+                createdVariantIds.push(variantId);
+                
+                if (variant.attributes && variant.attributes.length > 0) {
+                    for (const attributeValueId of variant.attributes) {
+                        if(attributeValueId) {
+                            await connection.query('INSERT INTO Variant_Attributes (variant_id, attribute_value_id) VALUES (?, ?)', [variantId, attributeValueId]);
+                        }
+                    }
+                }
+            }
+            }
+            
+            await connection.commit();
+            return { productId, variantIds: createdVariantIds };
+
+        } catch (error) {
+            await connection.rollback();
+            console.error('Error in createProduct DAO transaction:', error);
+            throw error;
+        } finally {
+            connection.release();
+        }
+    },
+
+    /**
+     * Fetches all attributes and their possible values for form dropdowns.
+     * @param {string} languageCode - The language for translations.
+     * @returns {Promise<Array>} A flat list of attributes and their values.
+     */
+    async getAttributesForForm(languageCode = 'en-US') {
+        const sql = `
+            SELECT
+                a.id AS attributeId,
+                at.name AS attributeName,
+                av.id AS valueId,
+                avt.value AS valueName
+            FROM Attributes AS a
+            JOIN Attribute_Translations AS at ON a.id = at.attribute_id
+            LEFT JOIN Attribute_Values AS av ON a.id = av.attribute_id
+            LEFT JOIN Attribute_Value_Translations AS avt ON av.id = avt.attribute_value_id AND avt.language_code = ?
+            WHERE at.language_code = ?
+            ORDER BY a.id, av.id;
+        `;
+        try {
+            const [rows] = await dbPool.query(sql, [languageCode, languageCode]);
+            return rows;
+        } catch (error) {
+            console.error('Error in getAttributesForForm DAO:', error);
+            throw error;
+        }
+    }
 };
 
 // Export the DAO object so it can be used in other files (in our case, in the Service)

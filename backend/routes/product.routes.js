@@ -85,6 +85,50 @@ adminRouter.get('/products', async (req, res) => {
     }
 });
 
+// POST /api/admin/products
+// create new product
+adminRouter.post('/products', async (req, res) => {
+  try {
+    const newProductIds = await productService.createProduct(req.body);
+    res.status(201).json(newProductIds);
+  } catch (error) {
+    res.status(500).json({ message: 'Error creating product' });
+  }
+});
+
+// GET /api/admin/brands
+adminRouter.get('/brands', async (req, res) => {
+    try {
+        const languageCode = req.query.lang || 'en-US';
+        const brands = await productService.getAllBrands(languageCode);
+        res.json(brands);
+    } catch (error) {
+        res.status(500).json({ message: 'Error fetching brands' });
+    }
+});
+
+// GET /api/admin/attributes
+adminRouter.get('/attributes', async (req, res) => {
+  try {
+    const languageCode = req.query.lang || 'en-US';
+    const attributes = await productService.getAttributesForForm(languageCode);
+    res.json(attributes);
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching attributes' });
+  }
+});
+
+// GET /api/admin/categories
+adminRouter.get('/categories', async (req, res) => {
+    try {
+        const languageCode = req.query.lang || 'en-US';
+        const categories = await productService.getAllCategories(languageCode);
+        res.json(categories);
+    } catch (error) {
+        res.status(500).json({ message: 'Error fetching categories' });
+    }
+});
+
 // PATCH /api/admin/variants/:variantId/status
 adminRouter.patch('/variants/:variantId/status', async (req, res) => {
   try {

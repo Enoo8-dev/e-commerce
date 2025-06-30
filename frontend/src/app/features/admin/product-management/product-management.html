@@ -6,7 +6,7 @@
       <p class="mt-2 text-sm text-gray-700">{{ 'ADMIN.MANAGE_PRODUCTS.SUBTITLE' | translate }}</p>
     </div>
     <div class="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
-      <button type="button" class="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 md:h-12 md:px-5 bg-red-600 hover:bg-red-700 transition-colors text-white text-sm md:text-base font-bold">{{ 'ADMIN.MANAGE_PRODUCTS.ADD_PRODUCT' | translate }}</button>
+      <button type="button" (click)="openAddProductModal()" class="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 md:h-12 md:px-5 bg-red-600 hover:bg-red-700 transition-colors text-white text-sm md:text-base font-bold">{{ 'ADMIN.MANAGE_PRODUCTS.ADD_PRODUCT' | translate }}</button>
     </div>
   </div>
 
@@ -143,3 +143,35 @@
     </div>
   }
 </div>
+
+@if (isAddProductModalOpen) {
+  <!--
+    CORREZIONE: Abbiamo sostituito il vecchio sfondo con uno più leggero e un effetto blur più pronunciato.
+  -->
+  <div class="fixed inset-0 bg-white/10 backdrop-blur-md flex items-center justify-center z-50" (click)="closeAddProductModal()">
+    <div class="bg-white rounded-lg shadow-xl p-6 sm:p-8 max-w-md w-full mx-4" (click)="$event.stopPropagation()">
+      
+      <!-- Intestazione Modale -->
+      <div class="flex justify-between items-center">
+        <h2 class="text-xl font-bold text-gray-900">{{ 'ADMIN.MANAGE_PRODUCTS.ADD_MODAL.TITLE' | translate}}</h2>
+        <button (click)="closeAddProductModal()" class="cursor-pointer text-gray-400 hover:text-gray-600">
+          <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+        </button>
+      </div>
+      
+      <p class="text-gray-600 mt-2 mb-6">{{ 'ADMIN.MANAGE_PRODUCTS.ADD_MODAL.SUBTITLE' | translate}}</p>
+      
+      <!-- Opzioni -->
+      <div class="flex flex-col space-y-4">
+        <button (click)="handleImportFromFile()" class="cursor-pointer w-full text-left p-4 rounded-lg border hover:border-blue-500 hover:bg-blue-50 transition-all">
+          <p class="font-semibold text-gray-800">{{ 'ADMIN.MANAGE_PRODUCTS.ADD_MODAL.IMPORT_FROM_FILE' | translate}}</p>
+          <p class="text-sm text-gray-500">{{ 'ADMIN.MANAGE_PRODUCTS.ADD_MODAL.IMPORT_FROM_FILE_DESCRIPTION' | translate}}</p>
+        </button>
+        <button (click)="navigateToAddManually()" class="cursor-pointer w-full text-left p-4 rounded-lg border hover:border-blue-500 hover:bg-blue-50 transition-all">
+          <p class="font-semibold text-gray-800">{{ 'ADMIN.MANAGE_PRODUCTS.ADD_MODAL.MANUAL_ENTRY' | translate}}</p>
+          <p class="text-sm text-gray-500">{{ 'ADMIN.MANAGE_PRODUCTS.ADD_MODAL.MANUAL_ENTRY_DESCRIPTION' | translate}}</p>
+        </button>
+      </div>
+    </div>
+  </div>
+}

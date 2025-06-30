@@ -175,4 +175,43 @@ export class ProductService {
     return this.http.post(`${this.apiUrl}/admin/images/reorder`, { imageIds });
   }
 
+  /**
+   * Fetches the list of brands and categories for the admin panel.
+   * @param languageCode The desired language.
+   * @returns An observable of the brands and categories.
+   */
+  getBrands(languageCode: string): Observable<any[]> {
+    const params = new HttpParams().set('lang', languageCode);
+    return this.http.get<any[]>(`${this.apiUrl}/admin/brands`, { params });
+  }
+
+  /**
+   * Fetches the list of categories for the admin panel.
+   * @param languageCode The desired language.
+   * @returns An observable of the categories.
+   */
+  getCategories(languageCode: string): Observable<any[]> {
+    const params = new HttpParams().set('lang', languageCode);
+    return this.http.get<any[]>(`${this.apiUrl}/admin/categories`, { params });
+  }
+
+  /**
+   * Creates a new product in the admin panel.
+   * @param productData The data of the product to create.
+   * @returns An observable of the created product.
+   */
+  createProduct(productData: any): Observable<any> {
+    return this.http.post(`${this.apiUrl}/admin/products`, productData);
+  }
+
+  /**
+   * Fetches the attributes for the product form in the admin panel.
+   * @param languageCode The desired language.
+   * @returns An observable of the attributes.
+   */
+  getAttributesForForm(languageCode: string): Observable<any[]> {
+    const params = new HttpParams().set('lang', languageCode);
+    return this.http.get<any[]>(`${this.apiUrl}/admin/attributes`, { params });
+  }
+
 }

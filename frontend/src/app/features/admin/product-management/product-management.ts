@@ -18,6 +18,7 @@ export class ProductManagementComponent implements OnInit, OnDestroy {
   products: any[] = [];
   isLoading = true;
   error: string | null = null;
+  isAddProductModalOpen = false;
 
   // Controlli per i filtri e la ricerca
   searchControl = new FormControl('');
@@ -31,7 +32,10 @@ export class ProductManagementComponent implements OnInit, OnDestroy {
 
   private destroy$ = new Subject<void>();
 
-  constructor(private productService: ProductService) {}
+  constructor(
+    private productService: ProductService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
     this.fetchProducts();
@@ -101,6 +105,23 @@ export class ProductManagementComponent implements OnInit, OnDestroy {
         }
       });
     }
+  }
+
+  openAddProductModal(): void {
+    this.isAddProductModalOpen = true;
+  }
+
+  closeAddProductModal(): void {
+    this.isAddProductModalOpen = false;
+  }
+
+  navigateToAddManually(): void {
+    this.closeAddProductModal();
+    this.router.navigate(['/admin/products/new']);
+  }
+
+  handleImportFromFile(): void {
+    alert('Funzionalità di importazione non ancora implementata.');
   }
 
   ngOnDestroy(): void {
