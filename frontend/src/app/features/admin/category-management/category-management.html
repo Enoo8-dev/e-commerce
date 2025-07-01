@@ -1,19 +1,19 @@
 <div class="p-4 sm:p-6 lg:p-8 max-w-4xl mx-auto">
-  <h1 class="text-2xl font-bold text-gray-900">Gestione Categorie</h1>
-  <p class="mt-2 text-sm text-gray-700">Aggiungi, modifica o rimuovi le categorie dei prodotti.</p>
+  <h1 class="text-2xl font-bold text-gray-900">{{ 'ADMIN.MANAGE_CATEGORIES.TITLE' | translate }}</h1>
+  <p class="mt-2 text-sm text-gray-700">{{ 'ADMIN.MANAGE_CATEGORIES.SUBTITLE' | translate }}</p>
 
   <!-- Barra di Ricerca -->
   <div class="mt-8">
-    <input type="text" [formControl]="searchControl" placeholder="Cerca categorie..." class="block w-full md:w-1/2 rounded-lg border-0 bg-gray-100 py-2 px-3 text-gray-900 placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-blue-500 sm:text-sm">
+    <input type="text" [formControl]="searchControl" [placeholder]="'ADMIN.MANAGE_CATEGORIES.SEARCH_PLACEHOLDER' | translate" class="block w-full md:w-1/2 rounded-lg border-0 bg-gray-100 py-2 px-3 text-gray-900 placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-blue-500 sm:text-sm">
   </div>
   <!-- Form di Aggiunta -->
    <form [formGroup]="addCategoryForm" (ngSubmit)="onAddCategory()" class="mt-8 p-4 border rounded-lg bg-gray-50 space-y-4">
-    <h2 class="text-lg font-medium text-gray-900">Aggiungi Nuova Categoria</h2>
+    <h2 class="text-lg font-medium text-gray-900">{{ 'ADMIN.MANAGE_CATEGORIES.ADD_MODAL.TITLE' | translate }}</h2>
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-      <input type="text" formControlName="name_it" class="block w-full rounded-lg border-0 bg-white py-2 px-3 text-gray-900 placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-blue-500 sm:text-sm" placeholder="Nome Categoria (IT)">
-      <input type="text" formControlName="name_en" class="block w-full rounded-lg border-0 bg-white py-2 px-3 text-gray-900 placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-blue-500 sm:text-sm" placeholder="Nome Categoria (EN)">
+      <input type="text" formControlName="name_it" class="block w-full rounded-lg border-0 bg-white py-2 px-3 text-gray-900 placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-blue-500 sm:text-sm" [placeholder]="( 'ADMIN.MANAGE_CATEGORIES.ADD_MODAL.NAME_PLACEHOLDER' | translate ) + ' (IT)'">
+      <input type="text" formControlName="name_en" class="block w-full rounded-lg border-0 bg-white py-2 px-3 text-gray-900 placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-blue-500 sm:text-sm" [placeholder]="( 'ADMIN.MANAGE_CATEGORIES.ADD_MODAL.NAME_PLACEHOLDER' | translate ) + ' (EN)'">
       <select formControlName="parent_category_id" class="block w-full rounded-lg border-0 bg-white py-2 px-3 text-gray-900 placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-blue-500 sm:text-sm sm:col-span-2">
-        <option [ngValue]="null">Nessuna (Categoria Principale)</option>
+        <option [ngValue]="null">{{ 'ADMIN.MANAGE_CATEGORIES.ADD_MODAL.MAIN_CATEGORY' | translate }}</option>
         @for(cat of categories; track cat.id) {
           <option [value]="cat.id">{{ cat.name }}</option>
         }
@@ -21,7 +21,7 @@
     </div>
     <!-- Contenitore per il pulsante, allineato a destra -->
     <div class="flex justify-end">
-      <button type="submit" [disabled]="addCategoryForm.invalid" class="inline-flex items-center justify-center rounded-md border border-transparent bg-red-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer">Aggiungi Categoria</button>
+      <button type="submit" [disabled]="addCategoryForm.invalid" class="inline-flex items-center justify-center rounded-md border border-transparent bg-red-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer">{{ 'ADMIN.MANAGE_CATEGORIES.ADD_MODAL.ADD_BUTTON' | translate }}</button>
     </div>
   </form>
 
@@ -35,7 +35,7 @@
             <tr>
               <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">
                 <a (click)="sortBy('name')" class="group inline-flex cursor-pointer items-center">
-                  Nome Categoria
+                  {{ 'ADMIN.MANAGE_CATEGORIES.TABLE_HEADERS.CATEGORY_NAME' | translate }}
                   <span class="ml-2 flex rounded text-gray-400 group-hover:text-gray-500">
                     <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20" [ngClass]="{'text-gray-900': sort.by === 'name' && sort.order === 'ASC'}"><path d="M10 17a.75.75 0 01-.75-.75V5.56l-2.22 2.22a.75.75 0 11-1.06-1.06l3.5-3.5a.75.75 0 011.06 0l3.5 3.5a.75.75 0 11-1.06 1.06L10.75 5.56v10.69A.75.75 0 0110 17z" /></svg>
                     <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20" [ngClass]="{'text-gray-900': sort.by === 'name' && sort.order === 'DESC'}"><path d="M10 3a.75.75 0 01.75.75v10.69l2.22-2.22a.75.75 0 111.06 1.06l-3.5 3.5a.75.75 0 01-1.06 0l-3.5-3.5a.75.75 0 111.06-1.06l2.22 2.22V3.75A.75.75 0 0110 3z" /></svg>
@@ -44,7 +44,7 @@
               </th>
               <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
                 <a (click)="sortBy('parent_name')" class="group inline-flex cursor-pointer items-center">
-                  Categoria Genitore
+                  {{ 'ADMIN.MANAGE_CATEGORIES.TABLE_HEADERS.PARENT_CATEGORY' | translate }}
                   <span class="ml-2 flex rounded text-gray-400 group-hover:text-gray-500">
                     <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20" [ngClass]="{'text-gray-900': sort.by === 'parent_name' && sort.order === 'ASC'}"><path d="M10 17a.75.75 0 01-.75-.75V5.56l-2.22 2.22a.75.75 0 11-1.06-1.06l3.5-3.5a.75.75 0 011.06 0l3.5 3.5a.75.75 0 11-1.06 1.06L10.75 5.56v10.69A.75.75 0 0110 17z" /></svg>
                     <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20" [ngClass]="{'text-gray-900': sort.by === 'parent_name' && sort.order === 'DESC'}"><path d="M10 3a.75.75 0 01.75.75v10.69l2.22-2.22a.75.75 0 111.06 1.06l-3.5 3.5a.75.75 0 01-1.06 0l-3.5-3.5a.75.75 0 111.06-1.06l2.22 2.22V3.75A.75.75 0 0110 3z" /></svg>
@@ -55,14 +55,14 @@
             </tr>
           </thead>
           <tbody class="divide-y divide-gray-200 bg-white">
-            @if(isLoading) { <tr><td colspan="3" class="p-4 text-center">Caricamento...</td></tr> }
+            @if(isLoading) { <tr><td colspan="3" class="p-4 text-center">{{ 'ADMIN.MANAGE_CATEGORIES.LOADING' | translate }}</td></tr> }
             @for(category of categories; track category.id) {
               <tr>
                 <td class="py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">{{ category.name }}</td>
                 <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ category.parent_name || 'N/A' }}</td>
                 <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
-                  <button (click)="openEditModal(category)" class="text-blue-600 hover:text-blue-900 mr-4 cursor-pointer">Modifica</button>
-                  <button (click)="onDeleteCategory(category.id)" class="text-red-600 hover:text-red-900 cursor-pointer">Elimina</button>
+                  <button (click)="openEditModal(category)" class="text-blue-600 hover:text-blue-900 mr-4 cursor-pointer">{{ 'ADMIN.MANAGE_CATEGORIES.EDIT' | translate }}</button>
+                  <button (click)="onDeleteCategory(category.id)" class="text-red-600 hover:text-red-900 cursor-pointer">{{ 'ADMIN.MANAGE_CATEGORIES.DELETE' | translate }}</button>
                 </td>
               </tr>
             }
@@ -77,22 +77,22 @@
 @if(isEditModalOpen) {
   <div class="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center z-50">
     <div class="bg-white rounded-lg shadow-xl p-6 sm:p-8 max-w-lg w-full" (click)="$event.stopPropagation()">
-      <h2 class="text-xl font-bold text-gray-900">Modifica Categoria</h2>
+      <h2 class="text-xl font-bold text-gray-900">{{ 'ADMIN.MANAGE_CATEGORIES.EDIT_MODAL.TITLE' | translate }}</h2>
       <form [formGroup]="editCategoryForm" (ngSubmit)="onUpdateCategory()" class="mt-6 space-y-4">
-        <div><label for="edit-name-it" class="block text-sm font-medium text-gray-700">Nome (IT)</label><input type="text" id="edit-name-it" formControlName="name_it" class="mt-1 block w-full rounded-lg border-0 bg-gray-100 py-2 px-3 text-gray-900 placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm"></div>
-        <div><label for="edit-name-en" class="block text-sm font-medium text-gray-700">Nome (EN)</label><input type="text" id="edit-name-en" formControlName="name_en" class="mt-1 block w-full rounded-lg border-0 bg-gray-100 py-2 px-3 text-gray-900 placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm"></div>
+        <div><label for="edit-name-it" class="block text-sm font-medium text-gray-700">{{ 'ADMIN.MANAGE_CATEGORIES.EDIT_MODAL.NAME' | translate }} (IT)</label><input type="text" id="edit-name-it" formControlName="name_it" class="mt-1 block w-full rounded-lg border-0 bg-gray-100 py-2 px-3 text-gray-900 placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm"></div>
+        <div><label for="edit-name-en" class="block text-sm font-medium text-gray-700">{{ 'ADMIN.MANAGE_CATEGORIES.EDIT_MODAL.NAME' | translate }} (EN)</label><input type="text" id="edit-name-en" formControlName="name_en" class="mt-1 block w-full rounded-lg border-0 bg-gray-100 py-2 px-3 text-gray-900 placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm"></div>
         <div>
-          <label for="edit-parent" class="block text-sm font-medium text-gray-700">Categoria Genitore</label>
+          <label for="edit-parent" class="block text-sm font-medium text-gray-700">{{ 'ADMIN.MANAGE_CATEGORIES.EDIT_MODAL.PARENT_CATEGORY' | translate }}</label>
           <select formControlName="parent_category_id" id="edit-parent" class="block w-full rounded-lg border-0 bg-gray-100 py-2 px-3 ...">
-            <option [ngValue]="null">Nessuna (Categoria Principale)</option>
+            <option [ngValue]="null">{{ 'ADMIN.MANAGE_CATEGORIES.EDIT_MODAL.MAIN_CATEGORY' | translate }}</option>
             @for(cat of categories; track cat.id) {
               @if(editingCategory.id !== cat.id) { <option [value]="cat.id">{{ cat.name }}</option> }
             }
           </select>
         </div>
         <div class="pt-6 flex justify-end gap-4">
-          <button type="button" (click)="closeEditModal()" class="inline-flex items-center justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 cursor-pointer">Annulla</button>
-          <button type="submit" [disabled]="editCategoryForm.invalid" class="inline-flex items-center justify-center rounded-md border border-transparent bg-red-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer">Salva Modifiche</button>
+          <button type="button" (click)="closeEditModal()" class="inline-flex items-center justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 cursor-pointer">{{ 'ADMIN.MANAGE_CATEGORIES.EDIT_MODAL.CANCEL_BUTTON' | translate }}</button>
+          <button type="submit" [disabled]="editCategoryForm.invalid" class="inline-flex items-center justify-center rounded-md border border-transparent bg-red-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer">{{ 'ADMIN.MANAGE_CATEGORIES.EDIT_MODAL.SAVE_BUTTON' | translate }}</button>
         </div>
       </form>
     </div>
