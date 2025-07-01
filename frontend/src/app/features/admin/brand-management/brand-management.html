@@ -27,21 +27,34 @@
   </form>
 
   <!-- Lista dei Brand Esistenti -->
-  <div class="mt-8 flow-root">
-    <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
-      <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
-        <table class="min-w-full divide-y divide-gray-300">
-          <thead class="bg-gray-50">
-            <tr>
-              <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">
-                <a (click)="sortBy('name')" class="group inline-flex cursor-pointer">{{ 'ADMIN.MANAGE_BRANDS.TABLE_HEADERS.BRAND_NAME' | translate }}</a>
-              </th>
-              <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                <a (click)="sortBy('created_at')" class="group inline-flex cursor-pointer">{{ 'ADMIN.MANAGE_BRANDS.TABLE_HEADERS.CREATED_AT' | translate }}</a>
-              </th>
-              <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-6"><span class="sr-only">Azioni</span></th>
-            </tr>
-          </thead>
+ <div class="mt-8 flow-root">
+    <div class="overflow-x-auto">
+      <div class="inline-block min-w-full py-2 align-middle">
+        <div class="overflow-hidden shadow ring-1 ring-black ring-opacity-5 sm:rounded-lg">
+          <table class="min-w-full divide-y divide-gray-300">
+            <thead class="bg-gray-50">
+              <tr>
+                <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">
+                  <a (click)="sortBy('name')" class="group inline-flex cursor-pointer items-center">
+                    Nome Brand
+                    <span class="ml-2 flex rounded text-gray-400 group-hover:text-gray-500">
+                      <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20" [ngClass]="{'text-gray-900': sort.by === 'name' && sort.order === 'ASC'}"><path d="M10 17a.75.75 0 01-.75-.75V5.56l-2.22 2.22a.75.75 0 11-1.06-1.06l3.5-3.5a.75.75 0 011.06 0l3.5 3.5a.75.75 0 11-1.06 1.06L10.75 5.56v10.69A.75.75 0 0110 17z" /></svg>
+                      <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20" [ngClass]="{'text-gray-900': sort.by === 'name' && sort.order === 'DESC'}"><path d="M10 3a.75.75 0 01.75.75v10.69l2.22-2.22a.75.75 0 111.06 1.06l-3.5 3.5a.75.75 0 01-1.06 0l-3.5-3.5a.75.75 0 111.06-1.06l2.22 2.22V3.75A.75.75 0 0110 3z" /></svg>
+                    </span>
+                  </a>
+                </th>
+                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                  <a (click)="sortBy('created_at')" class="group inline-flex cursor-pointer items-center">
+                    Data Creazione
+                    <span class="ml-2 flex rounded text-gray-400 group-hover:text-gray-500">
+                      <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20" [ngClass]="{'text-gray-900': sort.by === 'created_at' && sort.order === 'ASC'}"><path d="M10 17a.75.75 0 01-.75-.75V5.56l-2.22 2.22a.75.75 0 11-1.06-1.06l3.5-3.5a.75.75 0 011.06 0l3.5 3.5a.75.75 0 11-1.06 1.06L10.75 5.56v10.69A.75.75 0 0110 17z" /></svg>
+                      <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20" [ngClass]="{'text-gray-900': sort.by === 'created_at' && sort.order === 'DESC'}"><path d="M10 3a.75.75 0 01.75.75v10.69l2.22-2.22a.75.75 0 111.06 1.06l-3.5 3.5a.75.75 0 01-1.06 0l-3.5-3.5a.75.75 0 111.06-1.06l2.22 2.22V3.75A.75.75 0 0110 3z" /></svg>
+                    </span>
+                  </a>
+                </th>
+                <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-6"><span class="sr-only">Azioni</span></th>
+              </tr>
+            </thead>
           <tbody class="divide-y divide-gray-200 bg-white">
             @for(brand of brands; track brand.id) {
               <tr>
@@ -55,6 +68,7 @@
             }
           </tbody>
         </table>
+        </div>
       </div>
     </div>
   </div>
