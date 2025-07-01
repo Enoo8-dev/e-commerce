@@ -3,9 +3,9 @@ import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormArray } from '@angular/forms';
 import { ProductService } from '../../../services/product.service';
-import { Observable, forkJoin, of } from 'rxjs';
+import { Observable, Subscription, forkJoin, of } from 'rxjs';
 import { CdkDragDrop, moveItemInArray, DragDropModule } from '@angular/cdk/drag-drop';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-product-add',
@@ -21,11 +21,14 @@ export class ProductAddComponent implements OnInit {
   isLoading = false;
   error: string | null = null;
   activeTab: 'it' | 'en' = 'it';
+
+  private langChangeSub!: Subscription;
   
   constructor(
     private fb: FormBuilder,
     private productService: ProductService,
-    private router: Router
+    private router: Router,
+    private translate: TranslateService
   ) {
     this.allBrands$ = this.productService.getBrands('it-IT');
     this.allCategories$ = this.productService.getCategories('it-IT');
@@ -33,6 +36,12 @@ export class ProductAddComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.loadDropdownData();
+
+    this.langChangeSub = this.translate.onLangChange.subscribe(() => {
+      this.loadDropdownData();
+    });
+
     this.addForm = this.fb.group({
       brand_id: ['', Validators.required],
       is_featured: [false],
@@ -46,12 +55,25 @@ export class ProductAddComponent implements OnInit {
     this.addVariant();
   }
 
+  loadDropdownData(): void {
+    const currentLang = this.translate.currentLang || this.translate.defaultLang;
+    this.allBrands$ = this.productService.getBrands(currentLang);
+    this.allCategories$ = this.productService.getCategories(currentLang);
+    this.allAttributes$ = this.productService.getAttributesForForm(currentLang);
+  }
+
   features(lang: 'it' | 'en'): FormArray { return this.addForm.get(`translations.${lang}.features`) as FormArray; }
   variants(): FormArray { return this.addForm.get('variants') as FormArray; }
   variantAttributes(variantIndex: number): FormArray { return this.variants().at(variantIndex).get('attributes') as FormArray; }
   variantImages(variantIndex: number): FormArray { return this.variants().at(variantIndex).get('images') as FormArray; }
 
-  createTranslationGroup(): FormGroup { return this.fb.group({ name: ['', Validators.required], description: [''], features: this.fb.array([]) }); }
+  createTranslationGroup(): FormGroup { 
+    return this.fb.group({ 
+      name: ['', Validators.required], 
+      description: [''], 
+      features: this.fb.array([]) 
+    }); 
+  }
   createVariantGroup(): FormGroup {
     return this.fb.group({
       sku: ['', Validators.required],
@@ -159,5 +181,11 @@ onCategoryChange(event: Event): void {
         this.isLoading = false;
       }
     });
+  }
+
+  ngOnDestroy(): void {
+    if (this.langChangeSub) {
+      this.langChangeSub.unsubscribe();
+    }
   }
 }
