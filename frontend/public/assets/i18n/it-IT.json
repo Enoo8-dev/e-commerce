@@ -118,6 +118,62 @@
             "REMOVE_SPECIFICATION": "Rimuovi specifica",
             "KEY_TECH_SPEC": "Nome Specifica (es. Display)",
             "VALUE_TECH_SPEC": "Valore Specifica (es. 6.7 pollici)"
+        },
+        "ADD": {
+            "BACK_TO_PRODUCTS": "Torna alla lista prodotti",
+            "TITLE": "Aggiungi Nuovo Prodotto",
+            "SUBTITLE": "Compila i campi per creare un nuovo prodotto e le sue varianti.",
+            "MAIN_INFORMATION": "Informazioni Generali",
+            "BRAND": "Marchio",
+            "SELECT_BRAND": "Seleziona un marchio",
+            "CATEGORIES": "Categorie",
+            "FEATURED_PRODUCT": "Prodotto in evidenza",
+            "PRODUCT_NAME": "Nome Prodotto",
+            "DESCRIPTION": "Descrizione",
+            "TECHNICAL_SPECIFICATIONS": "Specifiche Tecniche",
+            "ADD_SPECIFICATION": "Aggiungi Specifica",
+            "NAME": "Nome",
+            "VALUE": "Valore",
+            "VARIANTS": "Varianti",
+            "ADD_VARIANT": "Aggiungi Variante",
+            "SKU": "SKU",
+            "PRICE": "Prezzo",
+            "STOCK": "Disponibilità",
+            "ATTRIBUTES": "Attributi",
+            "ADD_ATTRIBUTE": "Aggiungi Attributo",
+            "SELECT_ATTRIBUTE": "Seleziona Attributo",
+            "IMAGES": "Immagini",
+            "ADD_IMAGE": "Aggiungi",
+            "MAIN_IMAGE": "Principale",
+            "REMOVE": "Rimuovi",
+            "CANCEL": "Annulla",
+            "CREATE_PRODUCT": "Crea Prodotto",
+            "CREATING": "Creazione in corso..."
+        },
+        "MANAGE_BRANDS": {
+            "TITLE": "Gestisci Brand",
+            "SUBTITLE": "Aggiungi, modifica o rimuovi brand dal tuo negozio.",
+            "EDIT_BRAND": "Modifica Brand",
+            "SEARCH_PLACEHOLDER": "Cerca brand per nome...",
+            "EDIT": "Modifica",
+            "DELETE": "Elimina",
+            "TABLE_HEADERS": {
+                "BRAND_NAME": "Nome Brand",
+                "CREATED_AT": "Data Creazione"
+            },
+            "ADD_MODAL": {
+                "TITLE": "Aggiungi Nuovo Brand",
+                "NAME_PLACEHOLDER": "Nome brand",
+                "DESCRIPTION_PLACEHOLDER": "Descrizione",
+                "ADD_BUTTON": "Aggiungi Brand"
+            },
+            "EDIT_MODAL": {
+                "TITLE": "Modifica Brand",
+                "NAME": "Nome",
+                "DESCRIPTION": "Descrizione",
+                "SAVE_BUTTON": "Salva Modifiche",
+                "CANCEL_BUTTON": "Annulla"
+            }
         }
     }
 }

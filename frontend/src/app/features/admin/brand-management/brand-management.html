@@ -1,28 +1,28 @@
 <div class="p-4 sm:p-6 lg:p-8 max-w-4xl mx-auto">
   <div class="sm:flex sm:items-center">
     <div class="sm:flex-auto">
-      <h1 class="text-xl font-semibold text-gray-900">Gestione Brand</h1>
-      <p class="mt-2 text-sm text-gray-700">Cerca, ordina e gestisci i marchi dei prodotti.</p>
+      <h1 class="text-xl font-semibold text-gray-900">{{ 'ADMIN.MANAGE_BRANDS.TITLE' | translate }}</h1>
+      <p class="mt-2 text-sm text-gray-700">{{ 'ADMIN.MANAGE_BRANDS.SUBTITLE' | translate }}</p>
     </div>
   </div>
 
   <!-- Controlli di Ricerca e Aggiunta -->
   <div class="mt-8 flex flex-col md:flex-row gap-4">
-    <input type="text" [formControl]="searchControl" placeholder="Cerca brand..." class="block w-full md:w-1/3 rounded-lg border-0 bg-gray-100 py-2 px-3 text-gray-900 placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm">
+    <input type="text" [formControl]="searchControl" [placeholder]="'ADMIN.MANAGE_BRANDS.SEARCH_PLACEHOLDER' | translate" class="block w-full md:w-1/3 rounded-lg border-0 bg-gray-100 py-2 px-3 text-gray-900 placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm">
   </div>
 
   <!-- Form di Aggiunta Brand -->
   <form [formGroup]="addBrandForm" (ngSubmit)="onAddBrand()" class="mt-8 p-4 border rounded-lg bg-gray-50 space-y-4">
-    <h2 class="text-lg font-medium text-gray-900">Aggiungi Nuovo Brand</h2>
+    <h2 class="text-lg font-medium text-gray-900">{{ 'ADMIN.MANAGE_BRANDS.ADD_BRAND' | translate }}</h2>
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-      <input type="text" formControlName="name_it" placeholder="Nome Brand (IT)" class="block w-full rounded-lg border-0 bg-white py-2 px-3 text-gray-900 placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm">
-      <input type="text" formControlName="name_en" placeholder="Nome Brand (EN)" class="block w-full rounded-lg border-0 bg-white py-2 px-3 text-gray-900 placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm">
-      <textarea formControlName="description_it" placeholder="Descrizione (IT)" rows="2" class="block w-full rounded-lg border-0 bg-white py-2 px-3 text-gray-900 placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm md:col-span-2"></textarea>
-      <textarea formControlName="description_en" placeholder="Descrizione (EN)" rows="2" class="block w-full rounded-lg border-0 bg-white py-2 px-3 text-gray-900 placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm md:col-span-2"></textarea>
+      <input type="text" formControlName="name_it" [placeholder]="('ADMIN.MANAGE_BRANDS.ADD_MODAL.NAME_PLACEHOLDER' | translate) + ' (IT)'" class="block w-full rounded-lg border-0 bg-white py-2 px-3 text-gray-900 placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm">
+      <input type="text" formControlName="name_en" [placeholder]="('ADMIN.MANAGE_BRANDS.ADD_MODAL.NAME_PLACEHOLDER' | translate) + ' (EN)'" class="block w-full rounded-lg border-0 bg-white py-2 px-3 text-gray-900 placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm">
+      <textarea formControlName="description_it" [placeholder]="('ADMIN.MANAGE_BRANDS.ADD_MODAL.DESCRIPTION_PLACEHOLDER' | translate) + ' (IT)'" rows="2" class="block w-full rounded-lg border-0 bg-white py-2 px-3 text-gray-900 placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm md:col-span-2"></textarea>
+      <textarea formControlName="description_en" [placeholder]="('ADMIN.MANAGE_BRANDS.ADD_MODAL.DESCRIPTION_PLACEHOLDER' | translate) + ' (EN)'" rows="2" class="block w-full rounded-lg border-0 bg-white py-2 px-3 text-gray-900 placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm md:col-span-2"></textarea>
     </div>
     <div class="flex items-center justify-between">
       <input type="file" (change)="onFileChange($event)" accept="image/*" class="text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer">
-      <button type="submit" [disabled]="addBrandForm.invalid" class="inline-flex items-center justify-center rounded-md border border-transparent bg-red-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer">Aggiungi Brand</button>
+      <button type="submit" [disabled]="addBrandForm.invalid" class="inline-flex items-center justify-center rounded-md border border-transparent bg-red-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer">{{ 'ADMIN.MANAGE_BRANDS.ADD_MODAL.ADD_BUTTON' | translate }}</button>
     </div>
   </form>
 
@@ -34,10 +34,10 @@
           <thead class="bg-gray-50">
             <tr>
               <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">
-                <a (click)="sortBy('name')" class="group inline-flex cursor-pointer">Nome Brand</a>
+                <a (click)="sortBy('name')" class="group inline-flex cursor-pointer">{{ 'ADMIN.MANAGE_BRANDS.TABLE_HEADERS.BRAND_NAME' | translate }}</a>
               </th>
               <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                <a (click)="sortBy('created_at')" class="group inline-flex cursor-pointer">Data Creazione</a>
+                <a (click)="sortBy('created_at')" class="group inline-flex cursor-pointer">{{ 'ADMIN.MANAGE_BRANDS.TABLE_HEADERS.CREATED_AT' | translate }}</a>
               </th>
               <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-6"><span class="sr-only">Azioni</span></th>
             </tr>
@@ -48,8 +48,8 @@
                 <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">{{ brand.name }}</td>
                 <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ brand.created_at | date:'dd/MM/yyyy HH:mm' }}</td>
                 <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
-                  <button (click)="openEditModal(brand)" class="text-blue-600 hover:text-blue-900 mr-4 cursor-pointer">Modifica</button>
-                  <button (click)="onDeleteBrand(brand.id)" class="text-red-600 hover:text-red-900 cursor-pointer">Elimina</button>
+                  <button (click)="openEditModal(brand)" class="text-blue-600 hover:text-blue-900 mr-4 cursor-pointer">{{ 'ADMIN.MANAGE_BRANDS.EDIT' | translate }}</button>
+                  <button (click)="onDeleteBrand(brand.id)" class="text-red-600 hover:text-red-900 cursor-pointer">{{ 'ADMIN.MANAGE_BRANDS.DELETE' | translate }}</button>
                 </td>
               </tr>
             }
@@ -64,7 +64,7 @@
 @if(isEditModalOpen) {
   <div class="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center z-50">
     <div class="bg-white rounded-lg shadow-xl p-6 sm:p-8 max-w-lg w-full" (click)="$event.stopPropagation()">
-      <h2 class="text-xl font-bold text-gray-900">Modifica Brand</h2>
+      <h2 class="text-xl font-bold text-gray-900">{{ 'ADMIN.MANAGE_BRANDS.EDIT_MODAL.TITLE' | translate }}</h2>
       <form [formGroup]="editBrandForm" (ngSubmit)="onUpdateBrand()" class="mt-6 space-y-4">
         <div class="border-b border-gray-200">
           <nav class="-mb-px flex gap-6">
@@ -74,14 +74,14 @@
         </div>
         @if(editModalActiveTab === 'it') {
           <div class="space-y-4">
-            <div><label for="edit-name-it" class="block text-sm font-medium text-gray-700">Nome (IT)</label><input type="text" id="edit-name-it" formControlName="name_it" class="mt-1 block w-full rounded-lg border-0 bg-gray-100 py-2 px-3 text-gray-900 placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm"></div>
-            <div><label for="edit-desc-it" class="block text-sm font-medium text-gray-700">Descrizione (IT)</label><textarea id="edit-desc-it" formControlName="description_it" rows="5" class="mt-1 block w-full rounded-lg border-0 bg-gray-100 py-2 px-3 text-gray-900 placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm"></textarea></div>
+            <div><label for="edit-name-it" class="block text-sm font-medium text-gray-700">{{ 'ADMIN.MANAGE_BRANDS.EDIT_MODAL.NAME' | translate }} (IT)</label><input type="text" id="edit-name-it" formControlName="name_it" class="mt-1 block w-full rounded-lg border-0 bg-gray-100 py-2 px-3 text-gray-900 placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm"></div>
+            <div><label for="edit-desc-it" class="block text-sm font-medium text-gray-700">{{ 'ADMIN.MANAGE_BRANDS.EDIT_MODAL.DESCRIPTION' | translate }} (IT)</label><textarea id="edit-desc-it" formControlName="description_it" rows="5" class="mt-1 block w-full rounded-lg border-0 bg-gray-100 py-2 px-3 text-gray-900 placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm"></textarea></div>
           </div>
         }
         @if(editModalActiveTab === 'en') {
           <div class="space-y-4">
-            <div><label for="edit-name-en" class="block text-sm font-medium text-gray-700">Nome (EN)</label><input type="text" id="edit-name-en" formControlName="name_en" class="mt-1 block w-full rounded-lg border-0 bg-gray-100 py-2 px-3 text-gray-900 placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm"></div>
-            <div><label for="edit-desc-en" class="block text-sm font-medium text-gray-700">Descrizione (EN)</label><textarea id="edit-desc-en" formControlName="description_en" rows="5" class="mt-1 block w-full rounded-lg border-0 bg-gray-100 py-2 px-3 text-gray-900 placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm"></textarea></div>
+            <div><label for="edit-name-en" class="block text-sm font-medium text-gray-700">{{ 'ADMIN.MANAGE_BRANDS.EDIT_MODAL.NAME' | translate }} (EN)</label><input type="text" id="edit-name-en" formControlName="name_en" class="mt-1 block w-full rounded-lg border-0 bg-gray-100 py-2 px-3 text-gray-900 placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm"></div>
+            <div><label for="edit-desc-en" class="block text-sm font-medium text-gray-700">{{ 'ADMIN.MANAGE_BRANDS.EDIT_MODAL.DESCRIPTION' | translate }} (EN)</label><textarea id="edit-desc-en" formControlName="description_en" rows="5" class="mt-1 block w-full rounded-lg border-0 bg-gray-100 py-2 px-3 text-gray-900 placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm"></textarea></div>
           </div>
         }
         <div>
@@ -92,8 +92,8 @@
           </div>
         </div>
         <div class="pt-6 flex justify-end gap-4">
-          <button type="button" (click)="closeEditModal()" class="inline-flex items-center justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 cursor-pointer">Annulla</button>
-          <button type="submit" [disabled]="editBrandForm.invalid" class="inline-flex items-center justify-center rounded-md border border-transparent bg-red-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer">Salva Modifiche</button>
+          <button type="button" (click)="closeEditModal()" class="inline-flex items-center justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 cursor-pointer">{{ 'ADMIN.MANAGE_BRANDS.EDIT_MODAL.CANCEL_BUTTON' | translate }}</button>
+          <button type="submit" [disabled]="editBrandForm.invalid" class="inline-flex items-center justify-center rounded-md border border-transparent bg-red-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer">{{ 'ADMIN.MANAGE_BRANDS.EDIT_MODAL.SAVE_BUTTON' | translate }}</button>
         </div>
       </form>
     </div>

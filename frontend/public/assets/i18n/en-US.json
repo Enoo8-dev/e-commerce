@@ -118,6 +118,62 @@
             "REMOVE_SPECIFICATION": "Remove Specification",
             "KEY_TECH_SPEC": "Key Specification (e.g. Display)",
             "VALUE_TECH_SPEC": "Value Specification (e.g. 6.7 inches)"
+        },
+
+        "ADD": {
+            "BACK_TO_PRODUCTS": "Back to Products",
+            "TITLE": "Add New Product",
+            "SUBTITLE": "Fill in the fields to create a new product and its variants.",
+            "MAIN_INFORMATION": "General Information",
+            "BRAND": "Brand",
+            "SELECT_BRAND": "Select a brand",
+            "CATEGORIES": "Categories",
+            "FEATURED_PRODUCT": "Featured Product",
+            "PRODUCT_NAME": "Product Name",
+            "DESCRIPTION": "Description",
+            "TECHNICAL_SPECIFICATIONS": "Technical Specifications",
+            "ADD_SPECIFICATION": "Add Specification",
+            "NAME": "Nome",
+            "VALUE": "Valore",
+            "VARIANTS": "Variants",
+            "ADD_VARIANT": "Add Variant",
+            "SKU": "SKU",
+            "PRICE": "Price",
+            "STOCK": "Stock",
+            "ATTRIBUTES": "Attributes",
+            "ADD_ATTRIBUTE": "Add Attribute",
+            "SELECT_ATTRIBUTE": "Select Attribute",
+            "IMAGES": "Images",
+            "ADD_IMAGE": "Add",
+            "REMOVE": "Remove",
+            "CANCEL": "Cancel",
+            "CREATE_PRODUCT": "Create Product",
+            "CREATING": "Creating..."
+        },
+        "MANAGE_BRANDS": {
+            "TITLE": "Manage Brands",
+            "SUBTITLE": "Add, edit, or remove brands from your store.",
+            "EDIT_BRAND": "Edit Brand",
+            "SEARCH_PLACEHOLDER": "Search brands by name...",
+            "EDIT": "Edit",
+            "DELETE": "Delete",
+            "TABLE_HEADERS": {
+                "BRAND_NAME": "Brand Name",
+                "CREATED_AT": "Created At"
+            },
+            "ADD_MODAL": {
+                "TITLE": "Add New Brand",
+                "NAME_PLACEHOLDER": "Brand Name",
+                "DESCRIPTION_PLACEHOLDER": "Description",
+                "ADD_BUTTON": "Add Brand"
+            },
+            "EDIT_MODAL": {
+                "TITLE": "Edit Brand",
+                "NAME": "Name",
+                "DESCRIPTION": "Description",
+                "SAVE_BUTTON": "Save Changes",
+                "CANCEL_BUTTON": "Cancel"
+            }
         }
     }
 }

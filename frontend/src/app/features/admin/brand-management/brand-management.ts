@@ -1,15 +1,15 @@
-import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core'; // 1. Importa ChangeDetectorRef
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { BrandService } from '../../../services/brand.service';
-import { TranslateService } from '@ngx-translate/core';
-import { Subject } from 'rxjs';
+import { TranslateService, TranslateModule } from '@ngx-translate/core';
+import { Subject, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-brand-management',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, DatePipe],
+  imports: [CommonModule, ReactiveFormsModule, DatePipe, TranslateModule],
   templateUrl: './brand-management.html',
 })
 export class BrandManagementComponent implements OnInit, OnDestroy {
@@ -17,18 +17,21 @@ export class BrandManagementComponent implements OnInit, OnDestroy {
   isLoading = true;
   isEditModalOpen = false;
   editingBrand: any = null;
+  
   addBrandForm!: FormGroup;
   editBrandForm!: FormGroup;
   searchControl = new FormControl('');
   editModalActiveTab: 'it' | 'en' = 'it';
+
   sort = { by: 'name', order: 'ASC' };
+  
   private destroy$ = new Subject<void>();
+  private langChangeSub!: Subscription; 
 
   constructor(
     private brandService: BrandService,
     private fb: FormBuilder,
-    private translate: TranslateService,
-    private cdr: ChangeDetectorRef // 2. Inietta ChangeDetectorRef
+    private translate: TranslateService
   ) {}
 
   ngOnInit(): void {
@@ -46,6 +49,7 @@ export class BrandManagementComponent implements OnInit, OnDestroy {
       description_en: [''],
       logo: [null]
     });
+    
     this.loadBrands();
 
     this.searchControl.valueChanges.pipe(
@@ -53,6 +57,10 @@ export class BrandManagementComponent implements OnInit, OnDestroy {
       distinctUntilChanged(),
       takeUntil(this.destroy$)
     ).subscribe(() => this.loadBrands());
+
+    this.langChangeSub = this.translate.onLangChange.subscribe(() => {
+      this.loadBrands();
+    });
   }
 
   loadBrands(): void {
@@ -147,5 +155,8 @@ export class BrandManagementComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+    if (this.langChangeSub) {
+      this.langChangeSub.unsubscribe();
+    }
   }
 }
