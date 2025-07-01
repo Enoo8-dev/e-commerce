@@ -17,6 +17,7 @@ const userRoutes = require('./routes/user.routes');
 const {publicRouter, adminRouter} = require('./routes/product.routes');
 const imageRoutes = require('./routes/image.routes');
 const brandRoutes = require('./routes/brand.routes');
+const categoryRoutes = require('./routes/category.routes');
 
 const app = express();
 
@@ -42,13 +43,19 @@ app.use('/api/users', userRoutes);
 // Mount the brand routes on the /api/admin/brands path.
 // These routes are also protected by the autenticateToken middleware, meaning they require a valid JWT token to access.
 app.use('/api/admin/brands', autenticateToken, brandRoutes);
-// Mount the admin product routes on the /api/admin path.
-// These routes are protected by the autenticateToken middleware, meaning they require a valid JWT token to access.
-app.use('/api/admin', autenticateToken, adminRouter); 
 
 // Mount the image routes on the /api/images path.
 // These routes are also protected by the autenticateToken middleware, meaning they require a valid JWT token to access.
 app.use('/api/admin/images', autenticateToken, imageRoutes);
+
+// Mount the category routes on the /api/admin/categories path.
+// These routes are also protected by the autenticateToken middleware, meaning they require a valid JWT token to access.
+app.use('/api/admin/categories', autenticateToken, categoryRoutes); // Mount the category routes on the /api/admin/categories path.
+
+// Mount the admin product routes on the /api/admin path.
+// These routes are protected by the autenticateToken middleware, meaning they require a valid JWT token to access.
+app.use('/api/admin', autenticateToken, adminRouter); 
+
 
 
 // Mount the product routes on the /api path.
