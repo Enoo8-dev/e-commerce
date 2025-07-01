@@ -200,6 +200,27 @@
                 "CATEGORY_NAME": "Category Name",
                 "PARENT_CATEGORY": "Parent Category"
             }
+        }, 
+        "MANAGE_ATTRIBUTES": {
+            "TITLE": "Manage Attributes",
+            "SUBTITLE": "Add, edit, or remove product attributes.",
+            "SEARCH_PLACEHOLDER": "Search attributes by name...",
+            "ADD_PLACEHOLDER": "New Attribute Name (eg. Size)",
+            "ADD_BUTTON": "Add Attribute",
+            "LOADING": "Loading attributes, please wait...",
+            "NO_VALUES_YET": "No values added yet.",
+            "EDIT": "Edit Name",
+            "DELETE": "Delete Attribute",
+            "VALUE": "Value",
+            "HEX_CODE": "Hex Code (eg. #FFFFFF)",
+            "ADD_VALUE": "Add Value",
+            "EDIT_MODAL": {
+                "TITLE_ATTRIBUTE": "Edit Attribute",
+                "TITLE_VALUE": "Edit Value",
+                "NAME": "Name",
+                "CANCEL_BUTTON": "Cancel",
+                "SAVE_BUTTON": "Save Changes"
+            }
         }
     }
 }

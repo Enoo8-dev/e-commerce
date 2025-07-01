@@ -200,6 +200,27 @@
                 "CATEGORY_NAME": "Nome Categoria",
                 "PARENT_CATEGORY": "Categoria Genitore"
             }
+        },
+        "MANAGE_ATTRIBUTES": {
+            "TITLE": "Gestisci Attributi",
+            "SUBTITLE": "Gestisci i tipi di attributo e i loro valori.",
+            "SEARCH_PLACEHOLDER": "Cerca attributi per nome...",
+            "ADD_PLACEHOLDER": "Nuovo Tipo di Attributo (es. Taglia)",
+            "ADD_BUTTON": "Aggiungi Attributo",
+            "LOADING": "Caricamento attributi in corso, attendere prego...",
+            "NO_VALUES_YET": "Nessun valore ancora aggiunto.",
+            "EDIT": "Modifica Nome",
+            "DELETE": "Elimina Attributo",
+            "VALUE": "Valore",
+            "HEX_CODE": "Codice HEX (es. #FFFFFF)",
+            "ADD_VALUE": "Aggiungi Valore",
+            "EDIT_MODAL": {
+                "TITLE_ATTRIBUTE": "Modifica Attributo",
+                "TITLE_VALUE": "Modifica Valore",
+                "NAME": "Nome",
+                "CANCEL_BUTTON": "Annulla",
+                "SAVE_BUTTON": "Salva Modifiche"
+            }
         }
     }
 }

@@ -1,0 +1,95 @@
+<div class="p-4 sm:p-6 lg:p-8 max-w-4xl mx-auto">
+  <h1 class="text-2xl font-bold text-gray-900">{{ 'ADMIN.MANAGE_ATTRIBUTES.TITLE' | translate }}</h1>
+  <p class="mt-2 text-sm text-gray-600">{{ 'ADMIN.MANAGE_ATTRIBUTES.SUBTITLE' | translate }}</p>
+
+  <div class="mt-8 flex flex-col md:flex-row gap-4">
+    <input type="text" [formControl]="searchControl" [placeholder]="'ADMIN.MANAGE_ATTRIBUTES.SEARCH_PLACEHOLDER' | translate " class="block w-full md:w-1/3 rounded-lg border-0 bg-gray-100 py-2 px-3 text-gray-900 placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-blue-500 sm:text-sm">
+    <form [formGroup]="addAttributeForm" (ngSubmit)="onAddAttribute()" class="flex items-center gap-2 flex-grow">
+      <input type="text" formControlName="name" class="block w-full rounded-lg border-0 bg-white py-2 px-3 text-gray-900 placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-blue-500 sm:text-sm" [placeholder]="'ADMIN.MANAGE_ATTRIBUTES.ADD_PLACEHOLDER' | translate ">
+      <button type="submit" [disabled]="addAttributeForm.invalid" class="inline-flex items-center justify-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700 disabled:opacity-50 whitespace-nowrap">{{ 'ADMIN.MANAGE_ATTRIBUTES.ADD_BUTTON' | translate }}</button>
+    </form>
+  </div>
+
+  <div class="mt-8 space-y-6">
+    @if(isLoading) { <p class="text-center">{{ 'ADMIN.MANAGE_ATTRIBUTES.LOADING' | translate }}.</p> }
+    @for(attribute of attributes; track attribute.id) {
+      <div class="p-4 border rounded-lg bg-white shadow-sm">
+        <div class="flex justify-between items-center">
+          <a (click)="sortBy('name')" class="group inline-flex cursor-pointer">
+            <h2 class="text-lg font-medium text-gray-900">{{ attribute.name }}</h2>
+            <span class="ml-2 flex rounded text-gray-400 group-hover:text-gray-500">
+              <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20" [ngClass]="{'text-gray-900': sort.by === 'name' && sort.order === 'ASC'}"><path d="M10 17a.75.75 0 01-.75-.75V5.56l-2.22 2.22a.75.75 0 11-1.06-1.06l3.5-3.5a.75.75 0 011.06 0l3.5 3.5a.75.75 0 11-1.06 1.06L10.75 5.56v10.69A.75.75 0 0110 17z" /></svg>
+              <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20" [ngClass]="{'text-gray-900': sort.by === 'name' && sort.order === 'DESC'}"><path d="M10 3a.75.75 0 01.75.75v10.69l2.22-2.22a.75.75 0 111.06 1.06l-3.5 3.5a.75.75 0 01-1.06 0l-3.5-3.5a.75.75 0 111.06-1.06l2.22 2.22V3.75A.75.75 0 0110 3z" /></svg>
+            </span>
+          </a>
+          <div class="flex gap-4">
+            <button (click)="openEditAttributeModal(attribute)" class="text-sm font-medium text-blue-600 hover:text-blue-900">{{ 'ADMIN.MANAGE_ATTRIBUTES.EDIT' | translate }}</button>
+            <button (click)="onDeleteAttribute(attribute.id)" class="text-sm font-medium text-red-600 hover:text-red-900">{{ 'ADMIN.MANAGE_ATTRIBUTES.DELETE' | translate }}</button>
+          </div>
+        </div>
+
+        <ul class="mt-4 space-y-2">
+          @for(value of attribute.values; track value.id) {
+            <li class="flex items-center justify-between p-2 bg-gray-50 rounded-md">
+              <div class="flex items-center gap-2">
+                @if(value.hex_code) { <span class="h-5 w-5 rounded-full border" [style.backgroundColor]="value.hex_code"></span> }
+                <span class="text-sm text-gray-800">{{ value.value }}</span>
+              </div>
+              <div class="flex items-center gap-3">
+                <button (click)="openEditValueModal(value)" class="text-blue-600 hover:text-blue-800" title="Modifica Valore">
+                  <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" /><path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd" /></svg>
+                </button>
+                <button (click)="onDeleteValue(value.id)" class="text-red-600 hover:text-red-800" title="Elimina Valore">
+                  <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" /></svg>
+                </button>
+              </div>
+            </li>
+          }
+          @if(attribute.values.length === 0) { <li class="text-sm text-gray-500 italic">{{ 'ADMIN.MANAGE_ATTRIBUTES.NO_VALUES_YET' | translate }}</li> }
+        </ul>
+
+        <form [formGroup]="addValueForms[attribute.id]" (ngSubmit)="onAddValue(attribute.id)" class="mt-4 pt-4 border-t flex flex-col sm:flex-row items-end gap-2">
+          <input formControlName="value_it" type="text" [placeholder]="('ADMIN.MANAGE_ATTRIBUTES.VALUE' | translate) + ' (IT)'" class="block w-full rounded-lg border-0 bg-gray-100 py-2 px-3 text-gray-900 placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-blue-500 sm:text-sm flex-grow">
+          <input formControlName="value_en" type="text" [placeholder]="('ADMIN.MANAGE_ATTRIBUTES.VALUE' | translate) + ' (EN)'" class="block w-full rounded-lg border-0 bg-gray-100 py-2 px-3 text-gray-900 placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-blue-500 sm:text-sm flex-grow">
+          <input formControlName="hex_code" type="text" [placeholder]="('ADMIN.MANAGE_ATTRIBUTES.HEX_CODE' | translate) " class="block w-full sm:w-auto rounded-lg border-0 bg-gray-100 py-2 px-3 text-gray-900 placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-blue-500 sm:text-sm">
+          <button type="submit" [disabled]="addValueForms[attribute.id].invalid" class="inline items-center justify-center rounded-md border border-transparent bg-gray-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-gray-700 disabled:opacity-50 w-full sm:w-auto whitespace-nowrap">{{ 'ADMIN.MANAGE_ATTRIBUTES.ADD_VALUE' | translate }}</button>
+        </form>
+      </div>
+    }
+  </div>
+</div>
+
+<!-- Modale di Modifica Nome Attributo -->
+@if(isEditAttrModalOpen) {
+  <div class="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center z-50">
+    <div class="bg-white rounded-lg shadow-xl p-6 sm:p-8 max-w-lg w-full" (click)="$event.stopPropagation()">
+      <h2 class="text-xl font-bold text-gray-900">{{ 'ADMIN.MANAGE_ATTRIBUTES.EDIT_MODAL.TITLE_ATTRIBUTE' | translate }}</h2>
+      <form [formGroup]="editAttributeForm" (ngSubmit)="onUpdateAttribute()" class="mt-6 space-y-4">
+        <div><label for="edit-name-it" class="block text-sm font-medium text-gray-700">{{ 'ADMIN.MANAGE_ATTRIBUTES.EDIT_MODAL.NAME' | translate }} (IT)</label><input type="text" id="edit-name-it" formControlName="name_it" class="mt-1 block w-full rounded-lg border-0 bg-gray-100 py-2 px-3 ..."></div>
+        <div><label for="edit-name-en" class="block text-sm font-medium text-gray-700">{{ 'ADMIN.MANAGE_ATTRIBUTES.EDIT_MODAL.NAME' | translate }} (EN)</label><input type="text" id="edit-name-en" formControlName="name_en" class="mt-1 block w-full rounded-lg ..."></div>
+        <div class="pt-6 flex justify-end gap-4">
+          <button type="button" (click)="closeEditAttributeModal()" class="inline-flex items-center ...">{{ 'ADMIN.MANAGE_ATTRIBUTES.EDIT_MODAL.CANCEL_BUTTON' | translate }}</button>
+          <button type="submit" [disabled]="editAttributeForm.invalid" class="inline-flex items-center ...">{{ 'ADMIN.MANAGE_ATTRIBUTES.EDIT_MODAL.SAVE_BUTTON' | translate }}</button>
+        </div>
+      </form>
+    </div>
+  </div>
+}
+
+<!-- NUOVO Modale di Modifica Valore Attributo -->
+@if(isEditValueModalOpen) {
+  <div class="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center z-50">
+    <div class="bg-white rounded-lg shadow-xl p-6 sm:p-8 max-w-lg w-full" (click)="$event.stopPropagation()">
+      <h2 class="text-xl font-bold text-gray-900">{{ 'ADMIN.MANAGE_ATTRIBUTES.EDIT_MODAL.TITLE_VALUE' | translate }}</h2>
+      <form [formGroup]="editValueForm" (ngSubmit)="onUpdateValue()" class="mt-6 space-y-4">
+        <div><label for="edit-value-it" class="block text-sm font-medium text-gray-700">{{ 'ADMIN.MANAGE_ATTRIBUTES.VALUE' | translate }} (IT)</label><input type="text" id="edit-value-it" formControlName="value_it" class="input-form mt-1"></div>
+        <div><label for="edit-value-en" class="block text-sm font-medium text-gray-700">{{ 'ADMIN.MANAGE_ATTRIBUTES.VALUE' | translate }} (EN)</label><input type="text" id="edit-value-en" formControlName="value_en" class="input-form mt-1"></div>
+        <div><label for="edit-hex" class="block text-sm font-medium text-gray-700">{{ 'ADMIN.MANAGE_ATTRIBUTES.HEX_CODE' | translate }}</label><input type="text" id="edit-hex" formControlName="hex_code" class="input-form mt-1"></div>
+        <div class="pt-6 flex justify-end gap-4">
+          <button type="button" (click)="closeEditValueModal()" class="btn-secondary">{{ 'ADMIN.MANAGE_ATTRIBUTES.EDIT_MODAL.CANCEL_BUTTON' | translate }}</button>
+          <button type="submit" [disabled]="editValueForm.invalid" class="btn-primary">{{ 'ADMIN.MANAGE_ATTRIBUTES.EDIT_MODAL.SAVE_BUTTON' | translate }}</button>
+        </div>
+      </form>
+    </div>
+  </div>
+}
