@@ -46,6 +46,12 @@ const authService = {
             throw error;
         }
 
+        if (!user.is_active) {
+            const error = new Error('Il tuo account è stato disabilitato. Contatta il supporto.');
+            error.statusCode = 403; // 403 Forbidden, not active
+            throw error;
+        }
+
         const isMatch = await bcrypt.compare(password, user.password_hash);
         if (!isMatch) {
             const error = new Error('Invalid email or password');

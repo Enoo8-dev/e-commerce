@@ -221,6 +221,30 @@
                 "CANCEL_BUTTON": "Cancel",
                 "SAVE_BUTTON": "Save Changes"
             }
+        },
+        "MANAGE_USERS": {
+            "TITLE": "Manage Users",
+            "CUSTOMERS": "Customers",
+            "ADMINS": "Admins",
+            "SEARCH_PLACEHOLDER": "Search by name or email...",
+            "ALL_STATUSES": "All Statuses",
+            "ACTIVE": "Active",
+            "INACTIVE": "Inactive",
+            "DELETE": "Delete",
+            "TABLE_HEADERS": {
+                "NAME": "Name",
+                "EMAIL": "Email",
+                "REGISTERED_AT": "Registered At",
+                "STATUS": "Status"
+            },
+            "ADD_MODAL": {
+                "TITLE": "Add New Admin",
+                "FIRST_NAME": "First Name",
+                "LAST_NAME": "Last Name",
+                "EMAIL": "Email",
+                "PASSWORD": "Password",
+                "ADD_BUTTON": "Add Admin"
+            }
         }
     }
 }

@@ -221,6 +221,30 @@
                 "CANCEL_BUTTON": "Annulla",
                 "SAVE_BUTTON": "Salva Modifiche"
             }
+        },
+        "MANAGE_USERS": {
+            "TITLE": "Gestisci Utenti",
+            "CUSTOMERS": "Clienti",
+            "ADMINS": "Amministratori",
+            "SEARCH_PLACEHOLDER": "Cerca per nome o email...",
+            "ALL_STATUSES": "Tutti gli stati",
+            "ACTIVE": "Attivo",
+            "INACTIVE": "Inattivo",
+            "DELETE": "Elimina",
+            "TABLE_HEADERS": {
+                "NAME": "Nome",
+                "EMAIL": "Email",
+                "REGISTERED_AT": "Data Registrazione",
+                "STATUS": "Stato"
+            },
+            "ADD_MODAL": {
+                "TITLE": "Aggiungi Nuovo Admin",
+                "FIRST_NAME": "Nome",
+                "LAST_NAME": "Cognome",
+                "EMAIL": "Email",
+                "PASSWORD": "Password",
+                "ADD_BUTTON": "Aggiungi Admin"
+            }
         }
     }
 }

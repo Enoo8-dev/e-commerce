@@ -103,6 +103,6 @@ export class AuthService {
   }
 
   register(userData: any): Observable<any> {
-    return this.getHttpClient().post(`${this.apiUrl}/register`, userData);
+    return this.getHttpClient().post(`${this.apiUrl}/auth/register`, userData);
   }
 }

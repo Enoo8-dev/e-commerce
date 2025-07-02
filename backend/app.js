@@ -39,7 +39,7 @@ app.use('/api/auth', authRoutes);
 
 // Mount the user routes on the /api/users path.
 // All routes defined in user.routes.js will now be prefixed with /api/users.
-app.use('/api/users', userRoutes);
+app.use('/api/users', autenticateToken, userRoutes);
 
 // Mount the attribute routes on the /api/admin/attributes path.
 // These routes are protected by the authenticateToken middleware, meaning they require a valid JWT token to access.
