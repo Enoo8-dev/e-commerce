@@ -5,6 +5,7 @@ import { trigger, state, style, transition, animate } from '@angular/animations'
 import { AuthService, User } from './services/auth.service';
 import { Subscription } from 'rxjs'; // Importa Subscription
 import { CommonModule } from '@angular/common';
+import { CartService } from './services/cart.service';
 
 @Component({
   selector: 'app-root',
@@ -31,12 +32,14 @@ export class App implements OnInit, OnDestroy {
   isMobileMenuOpen: boolean = false;
   isLangMenuOpen: boolean = false;
   isCatalogMenuOpen: boolean = false;
+  cartItemCount: number = 0; 
 
   private authSubscription!: Subscription;
 
   constructor(
     public translate: TranslateService, 
-    private authService: AuthService
+    private authService: AuthService,
+    private cartService: CartService
   ) {
     translate.setDefaultLang('en-US');
     translate.use('en-US');
@@ -48,6 +51,10 @@ export class App implements OnInit, OnDestroy {
     
     this.authSubscription = sub1;
     this.authSubscription.add(sub2);
+
+    this.cartService.cartItems$.subscribe(items => {
+      this.cartItemCount = items.reduce((count, item) => count + item.quantity, 0);
+    });
   }
 
   get isAdmin(): boolean {

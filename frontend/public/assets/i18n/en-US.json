@@ -45,7 +45,15 @@
         "DETAILS": {
             "AVAILABLE_VARIANTS": "Available Variants",
             "DESCRIPTION": "Description",
-            "TECHNICAL_SPECIFICATIONS": "Technical Specifications"
+            "TECHNICAL_SPECIFICATIONS": "Technical Specifications",
+            "AVAILABILITY": "Availability",
+            "PIECES": "pieces",
+            "SOLD_OUT": "Sold Out",
+            "MIN_PRODUCT_TOAST": "Select a positive quantity to add to the cart.",
+            "LOGIN_REQUIRED_TOAST": "You must <span class='underline font-bold'>login</span> to add products to the cart.",
+            "STOCK_UNAVAILABLE_TOAST": "Quantity not available in stock.",
+            "SOLD_OUT_TOAST": "Product sold out.",
+            "ADDED_TO_CART_TOAST": "Product added to cart."
         },
         "TITLE": "Our Products",
         "SUBTITLE": "Discover our latest tech, curated for you",

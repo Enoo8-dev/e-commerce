@@ -74,11 +74,38 @@
                 }
                 </div>
             </div>
-            <div class="mt-4">
-                <button class="w-full bg-gray-800 text-white font-bold py-3 px-6 rounded-lg hover:bg-gray-700 transition-colors">
-                {{ 'PRODUCTS.ADD_TO_CART' | translate }}
-                </button>
-            </div>
+            <div class="mt-8">
+    @if(selectedVariant.stock_quantity > 0) {
+      <div class="flex items-stretch gap-4">
+        <!-- Selettore Quantità -->
+        <div>
+          <label for="quantity" class="sr-only">Quantità</label>
+          <input 
+            type="number" 
+            id="quantity"
+            [(ngModel)]="quantity" 
+            min="1"
+            [max]="selectedVariant.stock_quantity"
+            class="block w-24 h-full rounded-lg border-0 bg-[#f4f0f0] py-2 px-3 text-center text-gray-900 placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm">
+        </div>
+        <!-- Pulsante Aggiungi al Carrello -->
+        <button 
+          (click)="addToCart()" 
+          [disabled]="quantity > selectedVariant.stock_quantity"
+          class="flex-1 inline-flex items-center justify-center rounded-md border border-transparent bg-gray-800 px-8 py-3 text-base font-medium text-white shadow-sm hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer">
+          {{ 'PRODUCTS.ADD_TO_CART' | translate }}
+        </button>
+      </div>
+      <p class="text-sm text-gray-500 mt-2">{{ 'PRODUCTS.DETAILS.AVAILABILITY' | translate }}: {{ selectedVariant.stock_quantity }} {{ 'PRODUCTS.DETAILS.PIECES' | translate }}</p>
+    } @else {
+      <!-- Messaggio Prodotto Esaurito -->
+      <div class="mt-8">
+        <button disabled class="w-full inline-flex items-center justify-center rounded-md border border-transparent bg-gray-300 px-8 py-3 text-base font-medium text-gray-500 cursor-not-allowed">
+          {{ 'PRODUCTS.DETAILS.SOLD_OUT' | translate }}
+        </button>
+      </div>
+    }
+  </div>
         }
 
         <!-- Descrizione -->

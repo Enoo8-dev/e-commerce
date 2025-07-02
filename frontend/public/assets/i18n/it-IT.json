@@ -45,7 +45,15 @@
         "DETAILS": {
             "AVAILABLE_VARIANTS": "Varianti disponibili",
             "DESCRIPTION": "Descrizione",
-            "TECHNICAL_SPECIFICATIONS": "Specifiche tecniche"
+            "TECHNICAL_SPECIFICATIONS": "Specifiche tecniche",
+            "AVAILABILITY": "Disponibilità",
+            "PIECES": "pezzi",
+            "SOLD_OUT": "Esaurito",
+            "MIN_PRODUCT_TOAST": "Selezionare una quantità positiva per aggiungere al carrello.",
+            "LOGIN_REQUIRED_TOAST": "Devi effettuare il <span class='underline font-bold'>login</span> per aggiungere prodotti al carrello.",
+            "STOCK_UNAVAILABLE_TOAST": "Quantità non disponibile in magazzino.",
+            "SOLD_OUT_TOAST": "Prodotto esaurito.",
+            "ADDED_TO_CART_TOAST": "Prodotto aggiunto al carrello."
         },
         "TITLE": "I nostri prodotti",
         "SUBTITLE": "Scopri le nostre ultime tecnologie scelte per te",

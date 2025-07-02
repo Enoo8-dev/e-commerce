@@ -15,6 +15,7 @@ import { ProductAddComponent } from './features/admin/product-add/product-add';
 import { BrandManagementComponent } from './features/admin/brand-management/brand-management';
 import { CategoryManagementComponent } from './features/admin/category-management/category-management';
 import { AttributeManagementComponent } from './features/admin/attribute-management/attribute-management';
+import { CartComponent } from './features/cart/cart';
 
 export const routes: Routes = [
   
@@ -23,6 +24,7 @@ export const routes: Routes = [
   { path: 'product/:id', component: ProductDetailComponent }, // Dynamic route for product details
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent},
+  { path: 'cart', component: CartComponent },
 
   { path: 'admin/dashboard', component: DashboardComponent, canActivate: [adminGuard] },
   { path: 'admin/products', component: ProductManagementComponent, canActivate: [adminGuard] },

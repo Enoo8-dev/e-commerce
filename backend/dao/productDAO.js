@@ -67,13 +67,38 @@ const productDAO = {
      * @returns {Promise<Array>} A promise that resolves to an array of product objects with sale prices.
      */
     async getLatestOffers(languageCode = 'en-US', limit = 4) {
-        const sql = `${this._getBaseProductQuery()} AND pv.sale_price IS NOT NULL GROUP BY p.id ORDER BY pv.sale_start_date DESC LIMIT ?`;
+        const sql = `
+        SELECT
+            p.id AS productId,
+            pt.name AS productName,
+            pv.price AS originalPrice,
+            pv.sale_price AS currentSalePrice, -- Qui sappiamo che è attivo, quindi è il prezzo corrente
+            pv.sku AS variantSku,
+            bt.name AS brandName,
+            (SELECT image_url FROM Product_Images WHERE variant_id = pv.id ORDER BY display_order ASC LIMIT 1) AS imageUrl
+        FROM Product_Variants AS pv
+        JOIN Products AS p ON pv.product_id = p.id
+        JOIN Product_Translations AS pt ON p.id = pt.product_id AND pt.language_code = ?
+        JOIN Brands AS b ON p.brand_id = b.id
+        JOIN Brand_Translations AS bt ON b.id = bt.brand_id AND bt.language_code = ?
+        WHERE
+            p.is_active = TRUE         -- Il prodotto deve essere attivo
+            AND pv.is_active = TRUE    -- La variante deve essere attiva
+            AND pv.sale_price IS NOT NULL -- Deve esserci un prezzo scontato
+            -- *** LA CORREZIONE CHIAVE È QUI ***
+            -- Lo sconto deve essere valido ORA.
+            AND (pv.sale_start_date IS NULL OR pv.sale_start_date <= NOW())
+            AND (pv.sale_end_date IS NULL OR pv.sale_end_date >= NOW())
+        ORDER BY 
+            pv.sale_start_date DESC, p.id DESC -- Ordina per le offerte più recenti
+        LIMIT ?;
+        `;
         try {
-            const [rows] = await dbPool.query(sql, [languageCode, languageCode, limit]);
-            return rows;
+        const [rows] = await dbPool.query(sql, [languageCode, languageCode, limit]);
+        return rows;
         } catch (error) {
-            console.error('Error in getLatestOffers DAO:', error);
-            throw error;
+        console.error('Error in getLatestOffers DAO:', error);
+        throw error;
         }
     },
 

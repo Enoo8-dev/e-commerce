@@ -1,14 +1,19 @@
 import { Component, OnInit, OnDestroy } from '@angular/core'; // Aggiungi OnDestroy
 import { CommonModule, KeyValuePipe } from '@angular/common';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ProductService } from '../../services/product.service';
 import { TranslateService, TranslateModule } from '@ngx-translate/core';
 import { switchMap, Subscription } from 'rxjs'; // Aggiungi Subscription
+import { CartService } from '../../services/cart.service';
+import { FormsModule } from '@angular/forms'; // Importa FormsModule per ngModel
+import { AuthService } from '../../services/auth.service';
+
+declare var Toastify: any; // Dichiara Toastify per evitare errori di compilazione
 
 @Component({
   selector: 'app-product-detail',
   standalone: true,
-  imports: [CommonModule, TranslateModule, KeyValuePipe],
+  imports: [CommonModule, TranslateModule, KeyValuePipe, FormsModule],
   templateUrl: './product-detail.html',
   styleUrls: ['./product-detail.css']
 })
@@ -18,15 +23,25 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
   mainImage: string = '';
   isLoading = true;
   error: string | null = null;
+  quantity: number = 1; // Aggiunto per gestire la quantità
   private langChangeSub!: Subscription; // Variabile per la sottoscrizione
+  isLoggedIn: boolean = false; // Aggiunto per verificare se l'utente è loggato
 
   constructor(
     private route: ActivatedRoute,
     private productService: ProductService,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private cartService: CartService, // Aggiunto per il servizio del carrello
+    private authService: AuthService, // Aggiunto per il servizio di autenticazione
+    private router: Router // Aggiunto per la navigazione
   ) {}
 
   ngOnInit(): void {
+
+    this.authService.isLoggedIn$.subscribe(status => {
+      this.isLoggedIn = status;
+    });
+
     // Carica i dati la prima volta
     this.fetchProductDetails();
 
@@ -90,6 +105,7 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
   selectVariant(variant: any): void {
     this.selectedVariant = variant;
     this.setMainImageForVariant(variant);
+    this.quantity = 1; 
   }
 
   setMainImageForVariant(variant: any): void {
@@ -103,5 +119,100 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
 
   changeMainImage(imageUrl: string): void {
     this.mainImage = imageUrl;
+  }
+
+  addToCart(): void {
+
+    if (this.quantity <= 0 || !this.quantity || this.quantity === null || this.quantity === undefined) {
+      this.translate.get('PRODUCTS.DETAILS.MIN_PRODUCT_TOAST').subscribe((translations: string) => {
+        Toastify({
+          text: translations,
+          duration: 3000,
+          close: true,
+          gravity: "bottom",
+          position: "right",
+          style: {
+            background: "linear-gradient(to right, #E53935, #EF5350)", // Gradiente per errore
+            borderRadius: "0.5rem"    
+          }
+        }).showToast();
+      })
+      return;
+    }
+
+    if (!this.isLoggedIn) {
+      this.translate.get('PRODUCTS.DETAILS.LOGIN_REQUIRED_TOAST').subscribe((translations: string) => {
+        Toastify({
+          text: translations,
+          duration: 3000,
+          close: true,
+          gravity: "bottom",
+          position: "right",
+          escapeMarkup: false, // Permette l'uso di HTML
+          style: {
+            background: "linear-gradient(to right, #E53935, #EF5350)",
+            borderRadius: "0.5rem",
+            cursor: "pointer" // Rende chiaro che è cliccabile
+          },
+          // Al click, naviga alla pagina di login
+          onClick: () => this.router.navigate(['/login'])
+        }).showToast();
+      });
+      return;
+    }
+
+    if (!this.product || !this.selectedVariant) return;
+
+    if (this.quantity > this.selectedVariant.stock_quantity) {
+      this.translate.get('PRODUCTS.DETAILS.STOCK_UNAVAILABLE_TOAST').subscribe((translations: string) => {
+        Toastify({
+          text: translations,
+          duration: 3000,
+          close: true,
+          gravity: "bottom",
+          position: "right",
+          style: {
+            background: "linear-gradient(to right, #E53935, #EF5350)", // Gradiente per errore
+            borderRadius: "0.5rem"
+          }
+        }).showToast();
+      });
+      return;
+    }
+
+    if (this.selectedVariant.stock_quantity === 0) {
+      this.translate.get('PRODUCTS.DETAILS.SOLD_OUT_TOAST').subscribe((translations: string) => {
+        Toastify({
+          text: translations,
+          duration: 3000,
+          close: true,
+          gravity: "bottom",
+          position: "right",
+          style: {
+            background: "linear-gradient(to right, #E53935, #EF5350)", // Gradiente per errore
+            borderRadius: "0.5rem"
+          }
+        }).showToast();
+      });
+      return;
+    }
+
+    this.cartService.addToCart(this.product, this.selectedVariant, this.quantity);
+
+    this.translate.get('PRODUCTS.DETAILS.ADDED_TO_CART_TOAST').subscribe((translations: string) => {
+      Toastify({
+        text: translations,
+        duration: 3000,
+        close: true,
+        gravity: "bottom",
+        position: "right",
+        stopOnFocus: true,
+        style: {
+          background: "linear-gradient(to right, #313b47, #1e2939)", // Gradiente scuro
+          borderRadius: "0.5rem"
+        },
+        onClick: function(){}
+      }).showToast();
+    });
   }
 }
