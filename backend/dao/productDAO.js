@@ -540,6 +540,31 @@ const productDAO = {
             console.error('Error in getAttributesForForm DAO:', error);
             throw error;
         }
+    },
+
+    async getVariantDetailsByIds(variantIds) {
+        if (!variantIds || variantIds.length === 0) return [];
+        const sql = `
+            SELECT
+            pv.id as variantId,
+            pv.price AS originalPrice,
+            CASE
+                WHEN pv.sale_price IS NOT NULL AND (pv.sale_start_date IS NULL OR pv.sale_start_date <= NOW()) AND (pv.sale_end_date IS NULL OR pv.sale_end_date >= NOW())
+                THEN pv.sale_price
+                ELSE NULL
+            END AS currentSalePrice,
+            pv.stock_quantity as stock,
+            pv.is_active as isActive
+            FROM Product_Variants pv
+            WHERE pv.id IN (?)
+        `;
+        try {
+            const [rows] = await dbPool.query(sql, [variantIds]);
+            return rows;
+        } catch (error) {
+            console.error('Error in getVariantDetailsByIds DAO:', error);
+            throw error;
+        }
     }
 };
 

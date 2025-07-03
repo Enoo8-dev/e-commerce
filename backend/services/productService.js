@@ -125,6 +125,10 @@ const productService = {
             }
         }
         return Object.values(structuredAttributes);
+    },
+    
+    async getVariantDetails(variantIds) {
+        return await productDAO.getVariantDetailsByIds(variantIds);
     }
 
 };

@@ -214,4 +214,13 @@ export class ProductService {
     return this.http.get<any[]>(`${this.apiUrl}/admin/attributes`, { params });
   }
 
+  /**
+   * Validates the cart items against the backend.
+   * @param variantIds The IDs of the product variants in the cart.
+   * @returns An observable of the validation results.
+   */
+  validateCart(variantIds: number[]): Observable<any[]> {
+    return this.http.post<any[]>(`${this.apiUrl}/products/validate-cart`, { variantIds });
+  }
+
 }

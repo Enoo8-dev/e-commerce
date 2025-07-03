@@ -66,6 +66,17 @@ publicRouter.get('/products', async (req, res) => {
     }
 });
 
+// POST /api/products/validate-cart
+publicRouter.post('/products/validate-cart', async (req, res) => {
+  try {
+    const { variantIds } = req.body;
+    const details = await productService.getVariantDetails(variantIds);
+    res.json(details);
+  } catch (error) {
+    res.status(500).json({ message: 'Error validating cart items' });
+  }
+});
+
 
 // --- ROTTE ADMIN (associate ad adminRouter) ---
 // GET /api/admin/products

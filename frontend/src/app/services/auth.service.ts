@@ -3,6 +3,8 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, BehaviorSubject, map, tap, of, throwError } from 'rxjs';
 import { switchMap, catchError } from 'rxjs/operators';
 import { Router } from '@angular/router';
+import { CartService } from './cart.service';
+
 
 export interface User {
   id: number;
@@ -28,6 +30,7 @@ export class AuthService {
   // Per rompere la dipendenza circolare, dichiariamo le variabili qui
   private http!: HttpClient;
   private router!: Router;
+  private cartService!: CartService;
 
   constructor(private injector: Injector) {
     // *** LA CORREZIONE DEFINITIVA È QUI ***
@@ -52,6 +55,13 @@ export class AuthService {
     return this.router;
   }
 
+  private getCartService(): CartService { 
+    if (!this.cartService) 
+      this.cartService = this.injector.get(CartService); 
+    
+    return this.cartService; 
+  }
+
   private loadUserFromToken(): void {
     const token = this.getToken();
     if (token) {
@@ -65,6 +75,8 @@ export class AuthService {
   }
 
   login(credentials: any): Observable<User> {
+    this.getCartService().clearCart(); // Clear cart on login
+
     return this.getHttpClient().post<any>(`${this.apiUrl}/auth/login`, credentials).pipe(
       tap(response => {
         if (response && response.token) {
@@ -91,6 +103,7 @@ export class AuthService {
   private logoutCleanup(): void {
     localStorage.removeItem('authToken');
     this.currentUserSubject.next(null);
+    this.getCartService().clearCart(); // Clear cart on logout
   }
 
   logout(): void {

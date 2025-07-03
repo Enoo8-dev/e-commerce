@@ -20,9 +20,12 @@ export class CartComponent implements OnInit, OnDestroy {
   constructor(private cartService: CartService) {}
 
   ngOnInit(): void {
-    this.cartSub = this.cartService.cartItems$.subscribe(items => {
-      this.cartItems = items;
-      this.calculateTotal();
+    this.cartService.validateCart().subscribe(() => {
+      // Solo dopo la validazione, ci iscriviamo per mostrare i dati aggiornati
+      this.cartSub = this.cartService.cartItems$.subscribe(items => {
+        this.cartItems = items;
+        this.calculateTotal();
+      });
     });
   }
 

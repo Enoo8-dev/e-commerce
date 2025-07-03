@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable, of, tap } from 'rxjs';
+import { ProductService } from './product.service';
 
 export interface CartItem {
   variantId: number;
@@ -12,6 +13,7 @@ export interface CartItem {
   quantity: number;
   imageUrl?: string;
   stock: number;
+  isActive?: boolean;
   attributes: { attribute_name: string, attribute_value: string }[];
 }
 
@@ -22,7 +24,9 @@ export class CartService {
   private cartItemsSubject = new BehaviorSubject<CartItem[]>(this.getCartFromStorage());
   public cartItems$ = this.cartItemsSubject.asObservable();
 
-  constructor() { }
+  constructor(
+    private productService: ProductService
+  ) { }
 
   private getCartFromStorage(): CartItem[] {
     if (typeof window !== 'undefined') {
@@ -38,16 +42,11 @@ export class CartService {
   }
 
   addToCart(product: any, variant: any, quantity: number = 1): void {
-
     const currentItems = [...this.cartItemsSubject.getValue()];
     const existingItem = currentItems.find(i => i.variantId === variant.id);
 
-    console.log('Aggiunta al carrello:', product.name, 'Variante:', variant.id, 'Quantità:', quantity);
-    console.log('QexItem:', existingItem );
-    console.log("curItem" + currentItems);
-
     if (existingItem) {
-      existingItem.quantity += quantity;
+      existingItem.quantity = Math.min(existingItem.quantity + quantity, existingItem.stock);
     } else {
       const primaryImage = variant.images && variant.images.length > 0 ? variant.images[0].image_url : undefined;
       const newItem: CartItem = {
@@ -60,7 +59,8 @@ export class CartService {
         currentSalePrice: variant.currentSalePrice,
         quantity: quantity,
         imageUrl: primaryImage,
-        stock: variant.stock_quantity,
+        stock: variant.stock,
+        isActive: variant.isActive,
         attributes: variant.attributes || []
       };
       currentItems.push(newItem);
@@ -91,6 +91,39 @@ export class CartService {
       // Salva lo stato aggiornato
       this.saveCartToStorage(currentItems);
     }
+  }
+
+  validateCart(): Observable<CartItem[]> {
+    const currentItems = this.getCartFromStorage();
+    if (currentItems.length === 0) {
+      return of([]);
+    }
+
+    const variantIds = currentItems.map(item => item.variantId);
+
+    return this.productService.validateCart(variantIds).pipe(
+      tap(validatedItems => {
+        const updatedCart: CartItem[] = [];
+
+        currentItems.forEach(localItem => {
+          const serverItem = validatedItems.find(v => v.variantId === localItem.variantId);
+
+          if (serverItem && serverItem.isActive) {
+            // Aggiorna prezzo e stock con i dati freschi dal server
+            localItem.originalPrice = serverItem.originalPrice;
+            localItem.currentSalePrice = serverItem.currentSalePrice;
+            localItem.stock = serverItem.stock;
+            localItem.quantity = Math.min(localItem.quantity, serverItem.stock);
+
+            if (localItem.quantity > 0) {
+              updatedCart.push(localItem);
+            }
+          }
+        });
+
+        this.saveCartToStorage(updatedCart);
+      })
+    );
   }
 
   clearCart(): void {
