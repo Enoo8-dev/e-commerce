@@ -59,7 +59,7 @@ export class CartService {
         currentSalePrice: variant.currentSalePrice,
         quantity: quantity,
         imageUrl: primaryImage,
-        stock: variant.stock,
+        stock: variant.stock_quantity,
         isActive: variant.isActive,
         attributes: variant.attributes || []
       };
