@@ -4,15 +4,10 @@ import { Observable, BehaviorSubject, map, tap, of, throwError } from 'rxjs';
 import { switchMap, catchError } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { CartService } from './cart.service';
+import { User } from '../models/user.model'; 
 
 
-export interface User {
-  id: number;
-  email: string;
-  first_name: string;
-  last_name: string;
-  role: 'customer' | 'admin';
-}
+
 
 @Injectable({
   providedIn: 'root'

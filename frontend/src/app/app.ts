@@ -2,7 +2,8 @@ import { Component, OnInit, OnDestroy } from '@angular/core'; // Aggiungi OnDest
 import { RouterOutlet, RouterLink } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { trigger, state, style, transition, animate } from '@angular/animations';
-import { AuthService, User } from './services/auth.service';
+import { AuthService } from './services/auth.service';
+import { User } from './models/user.model'; 
 import { Subscription } from 'rxjs'; // Importa Subscription
 import { CommonModule } from '@angular/common';
 import { CartService } from './services/cart.service';
