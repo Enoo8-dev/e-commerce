@@ -20,6 +20,7 @@ const brandRoutes = require('./routes/brand.routes');
 const categoryRoutes = require('./routes/category.routes');
 const attributeRoutes = require('./routes/attribute.routes');
 const orderRoutes = require('./routes/order.routes');
+const addressRoutes = require('./routes/address.routes');
 
 const app = express();
 
@@ -41,6 +42,10 @@ app.use('/api/auth', authRoutes);
 // Mount the order routes on the /api/orders path.
 // These routes are protected by the authenticateToken middleware, meaning they require a valid JWT token to access.
 app.use('/api/orders', autenticateToken, orderRoutes); // Mount the order routes on the /api/orders path.
+
+// Mount the address routes on the /api/addresses path.
+// These routes are also protected by the autenticateToken middleware, meaning they require a valid JWT token to access.
+app.use('/api/addresses', autenticateToken, addressRoutes); // Mount the address routes on the /api/addresses path.
 
 // Mount the user routes on the /api/users path.
 // All routes defined in user.routes.js will now be prefixed with /api/users.

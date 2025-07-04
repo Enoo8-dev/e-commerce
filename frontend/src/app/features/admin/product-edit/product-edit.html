@@ -32,11 +32,11 @@
         <h2 class="text-lg font-medium text-gray-900">{{ 'ADMIN.EDIT.MAIN_INFORMATION' | translate }}</h2>
         <div>
           <label for="name" class="block text-sm font-medium text-gray-700">{{ 'ADMIN.EDIT.PRODUCT_NAME' | translate }}</label>
-          <input type="text" formControlName="name" id="name" class="block w-full rounded-lg border-0 bg-[#f4f0f0] py-2 px-3 text-gray-900 placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm mt-1">
+          <input type="text" formControlName="name" id="name" class="focus:outline-none block w-full rounded-lg border-0 bg-[#f4f0f0] py-2 px-3 text-gray-900 placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm mt-1">
         </div>
         <div>
           <label for="description" class="block text-sm font-medium text-gray-700">{{ 'ADMIN.EDIT.DESCRIPTION' | translate }}</label>
-          <textarea formControlName="description" id="description" rows="4" class="block w-full rounded-lg border-0 bg-[#f4f0f0] py-2 px-3 text-gray-900 placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm mt-1"></textarea>
+          <textarea formControlName="description" id="description" rows="4" class="focus:outline-none block w-full rounded-lg border-0 bg-[#f4f0f0] py-2 px-3 text-gray-900 placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm mt-1"></textarea>
         </div>
         <div>
           <label class="label-form">{{ 'ADMIN.EDIT.TECHNICAL_SPECIFICATIONS' | translate }}</label>
@@ -45,8 +45,8 @@
               <div [formGroupName]="i" 
                    class="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 p-2 rounded-md"
                    [ngClass]="{ 'bg-gray-50': isOdd }">
-                <input type="text" formControlName="key" [placeholder]="'ADMIN.EDIT.KEY_TECH_SPEC' | translate " [ngClass]="{ 'bg-[#f4f0f0]' : !isOdd, 'bg-white' : isOdd }" class="block w-full rounded-lg border-0 py-2 px-3 text-gray-900 placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm flex-1">
-                <input type="text" formControlName="value" [placeholder]="'ADMIN.EDIT.VALUE_TECH_SPEC' | translate " [ngClass]="{ 'bg-[#f4f0f0]' : !isOdd, 'bg-white' : isOdd }" class="block w-full rounded-lg border-0 py-2 px-3 text-gray-900 placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm flex-1">
+                <input type="text" formControlName="key" [placeholder]="'ADMIN.EDIT.KEY_TECH_SPEC' | translate " [ngClass]="{ 'bg-[#f4f0f0]' : !isOdd, 'bg-white' : isOdd }" class="focus:outline-none block w-full rounded-lg border-0 py-2 px-3 text-gray-900 placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm flex-1">
+                <input type="text" formControlName="value" [placeholder]="'ADMIN.EDIT.VALUE_TECH_SPEC' | translate " [ngClass]="{ 'bg-[#f4f0f0]' : !isOdd, 'bg-white' : isOdd }" class="focus:outline-none block w-full rounded-lg border-0 py-2 px-3 text-gray-900 placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm flex-1">
                 <button type="button" (click)="removeFeature(i)" class="cursor-pointer text-red-500 hover:text-red-700 p-2 self-end sm:self-center" [title]="'ADMIN.EDIT.REMOVE_SPECIFICATION' | translate">
                   <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path></svg>
                 </button>
@@ -72,27 +72,27 @@
               <div class="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-6 sm:gap-x-6">
                 <div class="sm:col-span-6">
                   <label for="sku-{{i}}" class="block text-sm font-medium text-gray-700">{{ 'ADMIN.MANAGE_PRODUCTS.TABLE_HEADERS.SKU' | translate }}</label>
-                  <input type="text" formControlName="sku" id="sku-{{i}}" class="block w-full rounded-lg border-0 bg-[#f4f0f0] py-2 px-3 text-gray-900 placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm mt-1">
+                  <input type="text" formControlName="sku" id="sku-{{i}}" class="focus:outline-none block w-full rounded-lg border-0 bg-[#f4f0f0] py-2 px-3 text-gray-900 placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm mt-1">
                 </div>
                 <div class="sm:col-span-3">
                   <label for="price-{{i}}" class="block text-sm font-medium text-gray-700">{{ 'ADMIN.EDIT.ORIGINAL_PRICE' | translate }}</label>
-                  <input type="number" formControlName="price" id="price-{{i}}" class="block w-full rounded-lg border-0 bg-[#f4f0f0] py-2 px-3 text-gray-900 placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm mt-1">
+                  <input type="number" formControlName="price" id="price-{{i}}" class="focus:outline-none block w-full rounded-lg border-0 bg-[#f4f0f0] py-2 px-3 text-gray-900 placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm mt-1">
                 </div>
                 <div class="sm:col-span-3">
                   <label for="sale_price-{{i}}" class="block text-sm font-medium text-gray-700">{{ 'ADMIN.EDIT.DISCOUNTED_PRICE' | translate }}</label>
-                  <input type="number" formControlName="sale_price" id="sale_price-{{i}}" class="block w-full rounded-lg border-0 bg-[#f4f0f0] py-2 px-3 text-gray-900 placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm mt-1">
+                  <input type="number" formControlName="sale_price" id="sale_price-{{i}}" class="focus:outline-none block w-full rounded-lg border-0 bg-[#f4f0f0] py-2 px-3 text-gray-900 placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm mt-1">
                 </div>
                 <div class="sm:col-span-3">
                   <label for="sale_start_date-{{i}}" class="block text-sm font-medium text-gray-700">{{ 'ADMIN.EDIT.START_DATE' | translate }}</label>
-                  <input type="datetime-local" formControlName="sale_start_date" id="sale_start_date-{{i}}" class="block w-full rounded-lg border-0 bg-[#f4f0f0] py-2 px-3 text-gray-900 placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm mt-1">
+                  <input type="datetime-local" formControlName="sale_start_date" id="sale_start_date-{{i}}" class="focus:outline-none block w-full rounded-lg border-0 bg-[#f4f0f0] py-2 px-3 text-gray-900 placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm mt-1">
                 </div>
                 <div class="sm:col-span-3">
                   <label for="sale_end_date-{{i}}" class="block text-sm font-medium text-gray-700">{{ 'ADMIN.EDIT.END_DATE' | translate }}</label>
-                  <input type="datetime-local" formControlName="sale_end_date" id="sale_end_date-{{i}}" class="block w-full rounded-lg border-0 bg-[#f4f0f0] py-2 px-3 text-gray-900 placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm mt-1">
+                  <input type="datetime-local" formControlName="sale_end_date" id="sale_end_date-{{i}}" class="focus:outline-none block w-full rounded-lg border-0 bg-[#f4f0f0] py-2 px-3 text-gray-900 placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm mt-1">
                 </div>
                 <div class="sm:col-span-3">
                   <label for="stock-{{i}}" class="block text-sm font-medium text-gray-700">{{ 'ADMIN.MANAGE_PRODUCTS.TABLE_HEADERS.STOCK' | translate }}</label>
-                  <input type="number" formControlName="stock" id="stock-{{i}}" class="block w-full rounded-lg border-0 bg-[#f4f0f0] py-2 px-3 text-gray-900 placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm mt-1">
+                  <input type="number" formControlName="stock" id="stock-{{i}}" class="focus:outline-none block w-full rounded-lg border-0 bg-[#f4f0f0] py-2 px-3 text-gray-900 placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm mt-1">
                 </div>
                 <div class="sm:col-span-6 flex items-center pt-2">
                   <input id="is_active-{{i}}" formControlName="is_active" type="checkbox" class="h-4 w-4 rounded cursor-pointer border-gray-300 text-red-600 focus:ring-red-500">

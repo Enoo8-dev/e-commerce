@@ -16,6 +16,7 @@ import { BrandManagementComponent } from './features/admin/brand-management/bran
 import { CategoryManagementComponent } from './features/admin/category-management/category-management';
 import { AttributeManagementComponent } from './features/admin/attribute-management/attribute-management';
 import { CartComponent } from './features/cart/cart';
+import { CheckoutComponent } from './features/checkout/checkout';
 
 export const routes: Routes = [
   
@@ -25,6 +26,7 @@ export const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent},
   { path: 'cart', component: CartComponent },
+  { path: 'checkout', component: CheckoutComponent },
 
   { path: 'admin/dashboard', component: DashboardComponent, canActivate: [adminGuard] },
   { path: 'admin/products', component: ProductManagementComponent, canActivate: [adminGuard] },

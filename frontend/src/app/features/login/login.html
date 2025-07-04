@@ -38,7 +38,7 @@
             'border-b-0' rimuove il bordo inferiore per farlo sembrare connesso al campo password.
           -->
           <input id="email-address" formControlName="email" name="email" type="email" autocomplete="email" required
-                 class="appearance-none relative block w-full px-3 py-2 border border-gray-300 bg-gray-50 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
+                 class="appearance-none relative block w-full px-3 py-2 border border-gray-300 bg-gray-50 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-red-500 focus:border-red-500 focus:z-10 sm:text-sm"
                  placeholder="Indirizzo Email">
           
           @if (email && email.invalid && (email.dirty || email.touched)) {
@@ -54,7 +54,7 @@
           <label for="password" class="sr-only">Password</label>
           <!-- 'rounded-b-md' arrotonda solo gli angoli inferiori. -->
           <input id="password" formControlName="password" name="password" type="password" autocomplete="current-password" required
-                 class="appearance-none relative block w-full px-3 py-2 border border-gray-300 bg-gray-50 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
+                 class="appearance-none relative block w-full px-3 py-2 border border-gray-300 bg-gray-50 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-red-500 focus:border-red-500 focus:z-10 sm:text-sm"
                  placeholder="Password">
 
           @if (password && password.invalid && (password.dirty || password.touched)) {

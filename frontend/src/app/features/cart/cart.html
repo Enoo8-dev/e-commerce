@@ -37,9 +37,9 @@
                   <div class="mt-4 flex items-center justify-between">
                     <div class="w-24">
                       <label for="quantity-{{item.variantId}}" class="sr-only">Quantità</label>
-                      <input type="number" id="quantity-{{item.variantId}}" name="quantity-{{item.variantId}}" [ngModel]="item.quantity" (input)="updateQuantity(item.variantId, $event)" min="1" [max]="item.stock" class="block w-full rounded-lg border-0 bg-[#f4f0f0] py-1.5 text-center text-base font-medium leading-5 text-gray-700 shadow-sm focus:ring-2 focus:ring-inset focus:ring-blue-500 sm:text-sm">
+                      <input type="number" id="quantity-{{item.variantId}}" name="quantity-{{item.variantId}}" [ngModel]="item.quantity" (input)="updateQuantity(item.variantId, $event)" min="1" [max]="item.stock" class="block w-full rounded-lg border-0 bg-[#f4f0f0] py-1.5 text-center text-base font-medium leading-5 text-gray-700 shadow-sm focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm focus:outline-none">
                     </div>
-                     <button type="button" (click)="removeItem(item.variantId)" class="text-sm font-medium text-red-600 hover:text-red-500"><span>{{ 'CART.REMOVE' | translate }}</span></button>
+                     <button type="button" (click)="removeItem(item.variantId)" class="text-sm font-medium text-red-600 hover:text-red-500 cursor-pointer"><span>{{ 'CART.REMOVE' | translate }}</span></button>
                   </div>
                 </div>
               </li>
@@ -65,7 +65,7 @@
               </div>
             </dl>
             <div class="mt-6">
-              <button type="submit" class="w-full rounded-md border border-transparent bg-red-600 px-4 py-3 text-base font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 focus:ring-offset-gray-50">{{ 'CART.CHECKOUT' | translate }}</button>
+              <button type="submit" routerLink="/checkout" class="cursor-pointer w-full rounded-md border border-transparent bg-red-600 px-4 py-3 text-base font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 focus:ring-offset-gray-50">{{ 'CART.CHECKOUT' | translate }}</button>
             </div>
           </div>
         </section>

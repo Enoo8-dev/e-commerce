@@ -39,7 +39,7 @@
           <div class="flex-1">
             <label for="firstName" class="sr-only">Nome</label>
             <input id="firstName" formControlName="firstName" type="text" required
-                   class="appearance-none relative block w-full px-3 py-2 border border-gray-300 bg-gray-50 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                   class="appearance-none relative block w-full px-3 py-2 border border-gray-300 bg-gray-50 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm"
                    placeholder="Nome">
             @if (firstName && firstName.invalid && (firstName.dirty || firstName.touched)) {
               <div class="px-1 py-2 text-sm text-red-600">
@@ -50,7 +50,7 @@
           <div class="flex-1">
             <label for="lastName" class="sr-only">Cognome</label>
             <input id="lastName" formControlName="lastName" type="text" required
-                   class="appearance-none relative block w-full px-3 py-2 border border-gray-300 bg-gray-50 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                   class="appearance-none relative block w-full px-3 py-2 border border-gray-300 bg-gray-50 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm"
                    placeholder="Cognome">
             @if (lastName && lastName.invalid && (lastName.dirty || lastName.touched)) {
               <div class="px-1 py-2 text-sm text-red-600">
@@ -64,7 +64,7 @@
         <div>
           <label for="email-address" class="sr-only">Indirizzo Email</label>
           <input id="email-address" formControlName="email" type="email" autocomplete="email" required
-                 class="appearance-none relative block w-full px-3 py-2 border border-gray-300 bg-gray-50 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                 class="appearance-none relative block w-full px-3 py-2 border border-gray-300 bg-gray-50 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm"
                  placeholder="Indirizzo Email">
           @if (email && email.invalid && (email.dirty || email.touched)) {
             <div class="px-1 py-2 text-sm text-red-600">
@@ -79,7 +79,7 @@
           <div>
             <label for="password" class="sr-only">Password</label>
             <input id="password" formControlName="password" type="password" required
-                   class="appearance-none relative block w-full px-3 py-2 border border-gray-300 bg-gray-50 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                   class="appearance-none relative block w-full px-3 py-2 border border-gray-300 bg-gray-50 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm"
                    placeholder="Password (almeno 8 caratteri)">
             @if (password && password.invalid && (password.dirty || password.touched)) {
               <div class="px-1 py-2 text-sm text-red-600">
@@ -91,7 +91,7 @@
           <div class="mt-4">
             <label for="confirmPassword" class="sr-only">Conferma Password</label>
             <input id="confirmPassword" formControlName="confirmPassword" type="password" required
-                   class="appearance-none relative block w-full px-3 py-2 border border-gray-300 bg-gray-50 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                   class="appearance-none relative block w-full px-3 py-2 border border-gray-300 bg-gray-50 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm"
                    placeholder="Conferma Password">
             @if (confirmPassword && confirmPassword.invalid && (confirmPassword.dirty || confirmPassword.touched)) {
               <div class="px-1 py-2 text-sm text-red-600">
