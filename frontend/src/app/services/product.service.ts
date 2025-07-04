@@ -217,10 +217,12 @@ export class ProductService {
   /**
    * Validates the cart items against the backend.
    * @param variantIds The IDs of the product variants in the cart.
+   * @param languageCode The desired language.
    * @returns An observable of the validation results.
    */
-  validateCart(variantIds: number[]): Observable<any[]> {
-    return this.http.post<any[]>(`${this.apiUrl}/products/validate-cart`, { variantIds });
+  validateCart(variantIds: number[], languageCode: string): Observable<any[]> {
+    const params = new HttpParams().set('lang', languageCode);
+    return this.http.post<any[]>(`${this.apiUrl}/products/validate-cart`, { variantIds }, { params });
   }
 
 }

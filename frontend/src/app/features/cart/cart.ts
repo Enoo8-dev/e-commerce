@@ -5,7 +5,7 @@ import { Subscription } from 'rxjs';
 import { CartService } from '../../services/cart.service';
 import { CartItem } from '../../models/cart-item.model';
 import { FormsModule } from '@angular/forms';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-cart',
@@ -17,8 +17,12 @@ export class CartComponent implements OnInit, OnDestroy {
   cartItems: CartItem[] = [];
   total = 0;
   private cartSub!: Subscription;
+  private langChangeSub!: Subscription;
 
-  constructor(private cartService: CartService) {}
+  constructor(
+    private cartService: CartService,
+    private translate: TranslateService 
+  ) {}
 
   ngOnInit(): void {
     this.cartService.validateCart().subscribe(() => {
@@ -27,6 +31,10 @@ export class CartComponent implements OnInit, OnDestroy {
         this.cartItems = items;
         this.calculateTotal();
       });
+    });
+
+    this.langChangeSub = this.translate.onLangChange.subscribe(() => {
+      this.cartService.validateCart().subscribe();
     });
   }
 
@@ -51,6 +59,10 @@ export class CartComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     if (this.cartSub) {
       this.cartSub.unsubscribe();
+    }
+
+    if (this.langChangeSub) {
+      this.langChangeSub.unsubscribe();
     }
   }
 }

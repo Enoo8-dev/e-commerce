@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, of, tap } from 'rxjs';
 import { ProductService } from './product.service';
-
+import { TranslateService } from '@ngx-translate/core';
 import { CartItem } from '../models/cart-item.model'; 
 
 @Injectable({
@@ -12,8 +12,11 @@ export class CartService {
   public cartItems$ = this.cartItemsSubject.asObservable();
 
   constructor(
-    private productService: ProductService
-  ) { }
+    private productService: ProductService,
+    private translate: TranslateService
+  ) { 
+    this.validateCart().subscribe();
+  }
 
   private getCartFromStorage(): CartItem[] {
     if (typeof window !== 'undefined') {
@@ -80,34 +83,38 @@ export class CartService {
     }
   }
 
-  validateCart(): Observable<CartItem[]> {
-    const currentItems = this.getCartFromStorage();
-    if (currentItems.length === 0) {
+  validateCart(): Observable<any> {
+    const localItems = this.getCartFromStorage();
+    if (localItems.length === 0) {
       return of([]);
     }
 
-    const variantIds = currentItems.map(item => item.variantId);
+    const variantIds = localItems.map(item => item.variantId);
+    const currentLang = this.translate.currentLang || this.translate.defaultLang;
 
-    return this.productService.validateCart(variantIds).pipe(
-      tap(validatedItems => {
+    return this.productService.validateCart(variantIds, currentLang).pipe(
+      tap(serverData => {
         const updatedCart: CartItem[] = [];
 
-        currentItems.forEach(localItem => {
-          const serverItem = validatedItems.find(v => v.variantId === localItem.variantId);
+        localItems.forEach(localItem => {
+          const serverItem = serverData.find((v: any) => v.variantId === localItem.variantId);
 
           if (serverItem && serverItem.isActive) {
-            // Aggiorna prezzo e stock con i dati freschi dal server
-            localItem.originalPrice = serverItem.originalPrice;
-            localItem.currentSalePrice = serverItem.currentSalePrice;
-            localItem.stock = serverItem.stock;
-            localItem.quantity = Math.min(localItem.quantity, serverItem.stock);
+            const updatedItem: CartItem = {
+              ...localItem,
+              productName: serverItem.productName,
+              brandName: serverItem.brandName,
+              originalPrice: serverItem.originalPrice,
+              currentSalePrice: serverItem.currentSalePrice,
+              stock: serverItem.stock_quantity,
+              attributes: serverItem.attributes,
+              imageUrl: localItem.imageUrl
+            };
 
-            if (localItem.quantity > 0) {
-              updatedCart.push(localItem);
-            }
+            updatedItem.quantity = Math.min(updatedItem.quantity, updatedItem.stock);
+            if (updatedItem.quantity > 0) updatedCart.push(updatedItem);
           }
         });
-
         this.saveCartToStorage(updatedCart);
       })
     );

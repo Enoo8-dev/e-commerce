@@ -70,10 +70,14 @@ publicRouter.get('/products', async (req, res) => {
 publicRouter.post('/products/validate-cart', async (req, res) => {
   try {
     const { variantIds } = req.body;
-    const details = await productService.getVariantDetails(variantIds);
-    res.json(details);
+    const lang = req.query.lang || 'en-US';
+    if (!Array.isArray(variantIds)) {
+      return res.status(400).json({ message: 'variantIds must be an array.' });
+    }
+    const freshData = await productService.validateCartItems(variantIds, lang);
+    res.json(freshData);
   } catch (error) {
-    res.status(500).json({ message: 'Error validating cart items' });
+    res.status(500).json({ message: 'Error validating cart items.', error: error.message });
   }
 });
 

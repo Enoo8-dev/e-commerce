@@ -127,8 +127,8 @@ const productService = {
         return Object.values(structuredAttributes);
     },
     
-    async getVariantDetails(variantIds) {
-        return await productDAO.getVariantDetailsByIds(variantIds);
+    async validateCartItems(variantIds, languageCode) {
+        return await productDAO.getVariantDetailsByIds(variantIds, languageCode);
     }
 
 };
