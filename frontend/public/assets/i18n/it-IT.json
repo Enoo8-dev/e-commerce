@@ -254,5 +254,16 @@
                 "ADD_BUTTON": "Aggiungi Admin"
             }
         }
+    },
+    "CART": {
+        "TITLE": "Carrello",
+        "GOT": "Hai",
+        "ITEMS": "articoli nel carrello",
+        "REMOVE": "Rimuovi",
+        "EMPTY": "Il tuo carrello è vuoto.",
+        "KEEP_SHOPPING": "Continua a fare acquisti",
+        "ORDER_SUMMARY": "Riepilogo Ordine",
+        "CHECKOUT": "Procedi al Checkout",
+        "TOTAL": "Totale"
     }
 }

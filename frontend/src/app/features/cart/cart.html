@@ -1,7 +1,7 @@
 <div class="bg-white">
   <main class="mx-auto max-w-4xl px-4 pb-24 pt-16 sm:px-6 lg:px-8">
-    <h1 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">Shopping Bag</h1>
-    <p class="mt-2 text-lg text-gray-500">Hai {{ cartItems.length }} articoli nel tuo carrello.</p>
+    <h1 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">{{ 'CART.TITLE' | translate }}</h1>
+    <p class="mt-2 text-lg text-gray-500">{{ 'CART.GOT' | translate }} {{ cartItems.length }} {{ 'CART.ITEMS' | translate }}</p>
 
     <div class="mt-12">
       <section aria-labelledby="cart-heading">
@@ -37,10 +37,9 @@
                   <div class="mt-4 flex items-center justify-between">
                     <div class="w-24">
                       <label for="quantity-{{item.variantId}}" class="sr-only">Quantità</label>
-                      <!-- CORREZIONE: Usiamo (input) invece di (change) per un aggiornamento istantaneo -->
                       <input type="number" id="quantity-{{item.variantId}}" name="quantity-{{item.variantId}}" [ngModel]="item.quantity" (input)="updateQuantity(item.variantId, $event)" min="1" [max]="item.stock" class="block w-full rounded-lg border-0 bg-[#f4f0f0] py-1.5 text-center text-base font-medium leading-5 text-gray-700 shadow-sm focus:ring-2 focus:ring-inset focus:ring-blue-500 sm:text-sm">
                     </div>
-                     <button type="button" (click)="removeItem(item.variantId)" class="text-sm font-medium text-red-600 hover:text-red-500"><span>Rimuovi</span></button>
+                     <button type="button" (click)="removeItem(item.variantId)" class="text-sm font-medium text-red-600 hover:text-red-500"><span>{{ 'CART.REMOVE' | translate }}</span></button>
                   </div>
                 </div>
               </li>
@@ -48,8 +47,8 @@
           </ul>
         } @else {
           <div class="text-center py-16 border-y border-gray-200">
-            <p class="text-gray-500">Il tuo carrello è vuoto.</p>
-            <a routerLink="/" class="mt-4 inline-block rounded-md border border-transparent bg-red-600 px-4 py-2 text-sm font-medium text-white hover:bg-red-700">Continua lo Shopping</a>
+            <p class="text-gray-500">{{ 'CART.EMPTY' | translate }}</p>
+            <a routerLink="/" class="mt-4 inline-block rounded-md border border-transparent bg-red-600 px-4 py-2 text-sm font-medium text-white hover:bg-red-700">{{ 'CART.KEEP_SHOPPING' | translate }}</a>
           </div>
         }
       </section>
@@ -58,15 +57,15 @@
         <!-- Riepilogo Ordine -->
         <section aria-labelledby="summary-heading" class="mt-10">
           <div class="rounded-lg bg-gray-50 px-4 py-6 sm:p-6 lg:p-8">
-            <h2 id="summary-heading" class="text-lg font-medium text-gray-900">Riepilogo Ordine</h2>
+            <h2 id="summary-heading" class="text-lg font-medium text-gray-900">{{ 'CART.ORDER_SUMMARY' | translate }}</h2>
             <dl class="mt-6 space-y-4">
               <div class="flex items-center justify-between border-t border-gray-200 pt-4">
-                <dt class="text-base font-medium text-gray-900">Totale</dt>
+                <dt class="text-base font-medium text-gray-900">{{ 'CART.TOTAL' | translate }}</dt>
                 <dd class="text-base font-medium text-gray-900">{{ total | currency:'EUR' }}</dd>
               </div>
             </dl>
             <div class="mt-6">
-              <button type="submit" class="w-full rounded-md border border-transparent bg-red-600 px-4 py-3 text-base font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 focus:ring-offset-gray-50">Procedi al Checkout</button>
+              <button type="submit" class="w-full rounded-md border border-transparent bg-red-600 px-4 py-3 text-base font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 focus:ring-offset-gray-50">{{ 'CART.CHECKOUT' | translate }}</button>
             </div>
           </div>
         </section>

@@ -254,5 +254,16 @@
                 "ADD_BUTTON": "Add Admin"
             }
         }
+    },
+    "CART": {
+        "TITLE": "Shopping Bag",
+        "GOT": "You have",
+        "ITEMS": "items in your cart.",
+        "REMOVE": "Remove",
+        "EMPTY": "Your cart is empty.",
+        "KEEP_SHOPPING": "Keep Shopping",
+        "ORDER_SUMMARY": "Order Summary",
+        "CHECKOUT": "Proceed to Checkout",
+        "TOTAL": "Total"
     }
 }
