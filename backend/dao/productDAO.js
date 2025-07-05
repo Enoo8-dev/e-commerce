@@ -540,15 +540,15 @@ const productDAO = {
             console.error('Error in getAttributesForForm DAO:', error);
             throw error;
         }
-    },
+        },
 
-    async getVariantDetailsByIds(variantIds, languageCode = 'en-US') {
-    if (!variantIds || variantIds.length === 0) {
-      return [];
-    }
-    
-    const variantsSql = `
-      SELECT 
+        async getVariantDetailsByIds(variantIds, languageCode = 'en-US') {
+        if (!variantIds || variantIds.length === 0) {
+        return [];
+        }
+
+        const variantsSql = `
+        SELECT 
         pv.id AS variantId,
         p.id AS productId,
         pt.name AS productName,
@@ -558,41 +558,73 @@ const productDAO = {
         pv.stock_quantity, 
         pv.is_active AS isActive,
         CASE
-          WHEN pv.sale_price IS NOT NULL AND (pv.sale_start_date IS NULL OR pv.sale_start_date <= NOW()) AND (pv.sale_end_date IS NULL OR pv.sale_end_date >= NOW())
-          THEN pv.sale_price
-          ELSE NULL
+            WHEN pv.sale_price IS NOT NULL AND (pv.sale_start_date IS NULL OR pv.sale_start_date <= NOW()) AND (pv.sale_end_date IS NULL OR pv.sale_end_date >= NOW())
+            THEN pv.sale_price
+            ELSE NULL
         END AS currentSalePrice
-      FROM Product_Variants pv
-      LEFT JOIN Products p ON pv.product_id = p.id
-      LEFT JOIN Product_Translations pt ON p.id = pt.product_id AND pt.language_code = ?
-      LEFT JOIN Brands b ON p.brand_id = b.id
-      LEFT JOIN Brand_Translations bt ON b.id = bt.brand_id AND bt.language_code = ?
-      WHERE pv.id IN (?);
-    `;
-    const [variants] = await dbPool.query(variantsSql, [languageCode, languageCode, variantIds]);
+        FROM Product_Variants pv
+        LEFT JOIN Products p ON pv.product_id = p.id
+        LEFT JOIN Product_Translations pt ON p.id = pt.product_id AND pt.language_code = ?
+        LEFT JOIN Brands b ON p.brand_id = b.id
+        LEFT JOIN Brand_Translations bt ON b.id = bt.brand_id AND bt.language_code = ?
+        WHERE pv.id IN (?);
+        `;
+        const [variants] = await dbPool.query(variantsSql, [languageCode, languageCode, variantIds]);
 
-    if (variants.length === 0) return [];
+        if (variants.length === 0) return [];
 
-    const attributesSql = `
-      SELECT
+        const attributesSql = `
+        SELECT
         va.variant_id, 
         at.name AS attribute_name, 
         avt.value AS attribute_value
-      FROM Variant_Attributes AS va
-      LEFT JOIN Attribute_Values AS av ON va.attribute_value_id = av.id
-      LEFT JOIN Attribute_Value_Translations AS avt ON av.id = avt.attribute_value_id AND avt.language_code = ?
-      LEFT JOIN Attributes AS a ON av.attribute_id = a.id
-      LEFT JOIN Attribute_Translations AS at ON a.id = at.attribute_id AND at.language_code = ?
-      WHERE va.variant_id IN (?);
-    `;
-    const [attributes] = await dbPool.query(attributesSql, [languageCode, languageCode, variantIds]);
+        FROM Variant_Attributes AS va
+        LEFT JOIN Attribute_Values AS av ON va.attribute_value_id = av.id
+        LEFT JOIN Attribute_Value_Translations AS avt ON av.id = avt.attribute_value_id AND avt.language_code = ?
+        LEFT JOIN Attributes AS a ON av.attribute_id = a.id
+        LEFT JOIN Attribute_Translations AS at ON a.id = at.attribute_id AND at.language_code = ?
+        WHERE va.variant_id IN (?);
+        `;
+        const [attributes] = await dbPool.query(attributesSql, [languageCode, languageCode, variantIds]);
 
-    variants.forEach(variant => {
-      variant.attributes = attributes.filter(attr => attr.variant_id === variant.variantId);
-    });
+        variants.forEach(variant => {
+        variant.attributes = attributes.filter(attr => attr.variant_id === variant.variantId);
+        });
 
-    return variants;
-  }
+        return variants;
+    },
+
+    /**
+     * Fetches detailed information about order items based on variant IDs.
+     * This includes product names and the first image URL for each variant.
+     * @param {Array<number>} variantIds - An array of variant IDs to fetch details for.
+     * @param {string} languageCode - The language code for translations (default is 'en-US').
+     * @returns {Promise<Map<number, Object>>} A promise that resolves to a Map where keys are variant IDs and values are objects containing product name and image URL.
+     */
+    async getOrderItemDetails(variantIds, languageCode = 'en-US') {
+        if (!variantIds || variantIds.length === 0) {
+            return new Map();
+        }
+        const sql = `
+            SELECT 
+            pv.id as variantId,
+            pt.name as productName,
+            (SELECT image_url FROM Product_Images WHERE variant_id = pv.id ORDER BY display_order ASC LIMIT 1) as imageUrl
+            FROM Product_Variants pv
+            JOIN Products p ON pv.product_id = p.id
+            JOIN Product_Translations pt ON p.id = pt.product_id AND pt.language_code = ?
+            WHERE pv.id IN (?)
+        `;
+        const [rows] = await dbPool.query(sql, [languageCode, variantIds]);
+
+        // Converte l'array di risultati in una mappa per un accesso più facile
+        const detailsMap = new Map();
+        rows.forEach(row => {
+            detailsMap.set(row.variantId, row);
+        });
+        return detailsMap;
+    }
+
 };
 
 // Export the DAO object so it can be used in other files (in our case, in the Service)

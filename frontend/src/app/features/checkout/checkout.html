@@ -1,12 +1,13 @@
 <div class="bg-gray-50">
   <main class="mx-auto max-w-7xl px-4 pb-24 pt-16 sm:px-6 lg:px-8">
     <div class="mx-auto max-w-2xl lg:max-w-none">
+      <a routerLink="/cart" class="text-sm font-medium text-blue-600 hover:text-blue-800">&larr; {{'CHECKOUT.BACK_TO_CART' | translate }}</a>
       <h1 class="sr-only">Checkout</h1>
 
       <form (ngSubmit)="onProceedToPayment()" class="lg:grid lg:grid-cols-2 lg:gap-x-12 xl:gap-x-16">
         <!-- Sezione Indirizzo di Spedizione -->
         <div>
-          <h2 class="text-lg font-medium text-gray-900">Informazioni di Spedizione</h2>
+          <h2 class="text-lg font-medium text-gray-900">{{'CHECKOUT.SHIPPING_INFO' | translate }}</h2>
           
           <div class="mt-4 grid grid-cols-1 gap-y-6">
             @for(address of addresses; track address.id) {
@@ -15,11 +16,11 @@
                 <div class="flex flex-1"><div class="flex flex-col">
                   <span class="block text-sm font-medium text-gray-900">{{ address.street }}, {{ address.city }}</span>
                   <span class="mt-1 flex items-center text-sm text-gray-500">{{ address.postal_code }}, {{ address.province }}, {{ address.country }}</span>
-                  @if(address.is_default) { <span class="mt-2 inline-block text-xs font-medium text-white bg-gray-600 px-2 py-1 rounded-full">Predefinito</span> }
+                  @if(address.is_default) { <span class="mt-2 inline-block text-xs font-medium text-white bg-gray-600 px-2 py-1 rounded-full">{{'CHECKOUT.MAIN' | translate }}</span> }
                 </div></div>
                 <!-- Pulsanti Azioni Indirizzo -->
                 <div class="absolute top-4 right-4 flex gap-2">
-                  @if(!address.is_default) { <button type="button" (click)="onSetDefault(address.id, $event)" class="text-xs font-medium text-gray-500 hover:text-gray-800 cursor-pointer">Imposta predefinito</button> }
+                  @if(!address.is_default) { <button type="button" (click)="onSetDefault(address.id, $event)" class="text-xs font-medium text-gray-500 hover:text-gray-800 cursor-pointer">{{'CHECKOUT.SET_MAIN' | translate }}</button> }
                   <button type="button" (click)="startEditing(address, $event)" class="cursor-pointer text-xs font-medium text-blue-600 hover:text-blue-900">
                     <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" /><path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd" /></svg>
                   </button>
@@ -31,20 +32,20 @@
             }
             
             <button type="button" (click)="toggleNewAddressForm()" class="cursor-pointer text-sm font-medium text-blue-600 hover:text-blue-500 self-start">
-              {{ showNewAddressForm && !editingAddressId ? 'Annulla' : '+ Aggiungi un nuovo indirizzo' }}
+              {{ showNewAddressForm && !editingAddressId ? ('CHECKOUT.CANCEL' | translate) : '+ ' + ('CHECKOUT.ADD_NEW_ADDRESS' | translate) }}
             </button>
             
             @if(showNewAddressForm) {
               <div class="mt-4 border-t pt-4 space-y-4" [formGroup]="addressForm">
-                <h3 class="text-base font-medium text-gray-800">{{ editingAddressId ? 'Modifica indirizzo' : 'Nuovo indirizzo' }}</h3>
-                <input formControlName="street" placeholder="Via e numero civico" class="focus:outline-none block w-full rounded-lg border-0 bg-[#f4f0f0] py-2 px-3 text-gray-900 placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm">
-                <input formControlName="city" placeholder="Città" class="focus:outline-none block w-full rounded-lg border-0 bg-[#f4f0f0] py-2 px-3 text-gray-900 placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm">
-                <input formControlName="province" placeholder="Provincia" class="focus:outline-none block w-full rounded-lg border-0 bg-[#f4f0f0] py-2 px-3 text-gray-900 placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm">
-                <input formControlName="postal_code" placeholder="CAP" class="focus:outline-none block w-full rounded-lg border-0 bg-[#f4f0f0] py-2 px-3 text-gray-900 placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm">
-                <input formControlName="country" placeholder="Paese" class="focus:outline-none block w-full rounded-lg border-0 bg-[#f4f0f0] py-2 px-3 text-gray-900 placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm">
+                <h3 class="text-base font-medium text-gray-800">{{ editingAddressId ? ('CHECKOUT.EDIT_ADDRESS' | translate) : 'CHECKOUT.NEW_ADDRESS_TITLE' | translate }}</h3>
+                <input formControlName="street" [placeholder]="'CHECKOUT.STREET_PLACEHOLDER' | translate" class="focus:outline-none block w-full rounded-lg border-0 bg-[#f4f0f0] py-2 px-3 text-gray-900 placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm">
+                <input formControlName="city" [placeholder]="'CHECKOUT.CITY_PLACEHOLDER' | translate" class="focus:outline-none block w-full rounded-lg border-0 bg-[#f4f0f0] py-2 px-3 text-gray-900 placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm">
+                <input formControlName="province" [placeholder]="'CHECKOUT.PROVINCE_PLACEHOLDER' | translate" class="focus:outline-none block w-full rounded-lg border-0 bg-[#f4f0f0] py-2 px-3 text-gray-900 placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm">
+                <input formControlName="postal_code" [placeholder]="'CHECKOUT.ZIP_PLACEHOLDER' | translate" class="focus:outline-none block w-full rounded-lg border-0 bg-[#f4f0f0] py-2 px-3 text-gray-900 placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm">
+                <input formControlName="country" [placeholder]="'CHECKOUT.COUNTRY_PLACEHOLDER' | translate" class="focus:outline-none block w-full rounded-lg border-0 bg-[#f4f0f0] py-2 px-3 text-gray-900 placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm">
                 <div class="flex gap-2">
-                  <button type="button" (click)="editingAddressId ? onUpdateAddress() : onAddAddress()" [disabled]="addressForm.invalid" class="cursor-pointer inline-flex items-center justify-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed">Salva</button>
-                  @if(editingAddressId) { <button type="button" (click)="cancelEditing()" class="cursor-pointer inline-flex items-center justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50">Annulla Modifica</button> }
+                  <button type="button" (click)="editingAddressId ? onUpdateAddress() : onAddAddress()" [disabled]="addressForm.invalid" class="cursor-pointer inline-flex items-center justify-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed">{{ 'CHECKOUT.SAVE' | translate }}</button>
+                  @if(editingAddressId) { <button type="button" (click)="cancelEditing()" class="cursor-pointer inline-flex items-center justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50">{{ 'CHECKOUT.CANCEL_CHANGE' | translate }}</button> }
                 </div>
               </div>
             }
@@ -53,7 +54,7 @@
 
         <!-- Riepilogo Ordine -->
         <div class="mt-10 lg:mt-0">
-          <h2 class="text-lg font-medium text-gray-900">Riepilogo Ordine</h2>
+          <h2 class="text-lg font-medium text-gray-900">{{ 'CHECKOUT.ORDER_SUMMARY' | translate }}</h2>
           <div class="mt-4 rounded-lg border border-gray-200 bg-white shadow-sm">
             <ul role="list" class="divide-y divide-gray-200">
               @for(item of cartItems; track item.variantId) {
@@ -65,7 +66,7 @@
                     <div class="flex">
                       <div class="min-w-0 flex-1">
                         <h4 class="text-sm"><a [routerLink]="['/product', item.productId]" class="font-medium text-gray-700 hover:text-gray-800">{{ item.productName }}</a></h4>
-                        <p class="mt-1 text-sm text-gray-500">Quantity: {{ item.quantity }}</p>
+                        <p class="mt-1 text-sm text-gray-500">{{ 'CHECKOUT.QUANTITY' | translate }}: {{ item.quantity }}</p>
                       </div>
                       <div class="ml-4 flex-shrink-0 flow-root">
                         <button (click)="cartService.removeFromCart(item.variantId)" type="button" class="-m-2.5 flex items-center justify-center bg-white p-2.5 text-red-600 hover:text-red-800 cursor-pointer">
@@ -93,12 +94,12 @@
             </ul>
             <dl class="space-y-6 border-t border-gray-200 px-4 py-6 sm:px-6">
               <div class="flex items-center justify-between pt-6">
-                <dt class="text-base font-medium">Totale</dt>
+                <dt class="text-base font-medium">{{ 'CHECKOUT.TOTAL' | translate }}</dt>
                 <dd class="text-base font-medium">{{ total | currency:'EUR' }}</dd>
               </div>
             </dl>
             <div class="border-t border-gray-200 px-4 py-6 sm:px-6">
-              <button type="submit" class="w-full rounded-md border border-transparent bg-red-600 px-4 py-3 text-base font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 focus:ring-offset-gray-50 cursor-pointer">Continua con il Pagamento</button>
+              <button type="submit" class="w-full rounded-md border border-transparent bg-red-600 px-4 py-3 text-base font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 focus:ring-offset-gray-50 cursor-pointer">{{ 'CHECKOUT.CONTINUE_TO_PAYMENT' | translate }}</button>
             </div>
           </div>
         </div>

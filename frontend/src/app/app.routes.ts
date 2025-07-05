@@ -17,6 +17,8 @@ import { CategoryManagementComponent } from './features/admin/category-managemen
 import { AttributeManagementComponent } from './features/admin/attribute-management/attribute-management';
 import { CartComponent } from './features/cart/cart';
 import { CheckoutComponent } from './features/checkout/checkout';
+import { OrderConfirmationComponent } from './features/order-confirmation/order-confirmation';
+import { PaymentComponent } from './features/payment/payment';
 
 export const routes: Routes = [
   
@@ -27,6 +29,8 @@ export const routes: Routes = [
   { path: 'register', component: RegisterComponent},
   { path: 'cart', component: CartComponent },
   { path: 'checkout', component: CheckoutComponent },
+  { path: 'checkout/payment', component: PaymentComponent },
+  { path: 'order-confirmation/:id', component: OrderConfirmationComponent },
 
   { path: 'admin/dashboard', component: DashboardComponent, canActivate: [adminGuard] },
   { path: 'admin/products', component: ProductManagementComponent, canActivate: [adminGuard] },

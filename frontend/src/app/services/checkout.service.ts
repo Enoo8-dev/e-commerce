@@ -4,23 +4,39 @@ import { Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class CheckoutService {
-  private apiUrl = 'http://localhost:3000/api/addresses';
+  private addressUrl = 'http://localhost:3000/api/addresses';
+  private paymentApiUrl = 'http://localhost:3000/api/payment-methods';
 
   constructor(private http: HttpClient) {}
 
   getAddresses(): Observable<any[]> {
-    return this.http.get<any[]>(this.apiUrl);
+    return this.http.get<any[]>(this.addressUrl);
   }
   addAddress(address: any): Observable<any> {
-    return this.http.post(this.apiUrl, address);
+    return this.http.post(this.addressUrl, address);
   }
   updateAddress(id: number, address: any): Observable<any> {
-    return this.http.put(`${this.apiUrl}/${id}`, address);
+    return this.http.put(`${this.addressUrl}/${id}`, address);
   }
   deleteAddress(id: number): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/${id}`);
+    return this.http.delete(`${this.addressUrl}/${id}`);
   }
   setDefaultAddress(id: number): Observable<any> {
-    return this.http.patch(`${this.apiUrl}/${id}/default`, {});
+    return this.http.patch(`${this.addressUrl}/${id}/default`, {});
+  }
+  getPaymentMethods(): Observable<any[]> {
+    return this.http.get<any[]>(this.paymentApiUrl);
+  }
+  addPaymentMethod(cardData: any): Observable<any> {
+    return this.http.post(this.paymentApiUrl, cardData);
+  }
+  updatePaymentMethod(id: number, cardData: any): Observable<any> {
+    return this.http.put(`${this.paymentApiUrl}/${id}`, cardData);
+  }
+  deletePaymentMethod(id: number): Observable<any> {
+    return this.http.delete(`${this.paymentApiUrl}/${id}`);
+  }
+  setDefaultPaymentMethod(id: number): Observable<any> {
+    return this.http.patch(`${this.paymentApiUrl}/${id}/default`, {});
   }
 }
