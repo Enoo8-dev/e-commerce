@@ -6,9 +6,6 @@ import { Router } from '@angular/router';
 import { CartService } from './cart.service';
 import { User } from '../models/user.model'; 
 
-
-
-
 @Injectable({
   providedIn: 'root'
 })
@@ -28,9 +25,6 @@ export class AuthService {
   private cartService!: CartService;
 
   constructor(private injector: Injector) {
-    // *** LA CORREZIONE DEFINITIVA È QUI ***
-    // Usiamo setTimeout per posticipare l'esecuzione di loadUserFromToken()
-    // di un "tick". Questo rompe il ciclo di dipendenza sincrono che si verifica all'avvio.
     setTimeout(() => this.loadUserFromToken(), 0);
   }
 
@@ -70,15 +64,11 @@ export class AuthService {
   }
 
   login(credentials: any): Observable<User> {
-    this.getCartService().clearCart(); // Clear cart on login
-
+    this.getCartService().clearCart();
     return this.getHttpClient().post<any>(`${this.apiUrl}/auth/login`, credentials).pipe(
-      tap(response => {
-        if (response && response.token) {
-          localStorage.setItem('authToken', response.token);
-        }
-      }),
+      tap(response => localStorage.setItem('authToken', response.token)),
       switchMap(() => this.fetchUserProfile()),
+      tap(() => this.getRouter().navigateByUrl('/')),
       catchError(error => {
         this.logoutCleanup();
         return throwError(() => error);
