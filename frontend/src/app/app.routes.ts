@@ -20,6 +20,7 @@ import { CartComponent } from './features/cart/cart';
 import { CheckoutComponent } from './features/checkout/checkout';
 import { OrderConfirmationComponent } from './features/order-confirmation/order-confirmation';
 import { PaymentComponent } from './features/payment/payment';
+import { OrderTrackingComponent } from './features/order-tracking/order-tracking';
 
 export const routes: Routes = [
   
@@ -28,10 +29,11 @@ export const routes: Routes = [
   { path: 'product/:id', component: ProductDetailComponent }, // Dynamic route for product details
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent},
+  { path: 'orders/:id', component: OrderTrackingComponent },
   { path: 'cart', component: CartComponent, canActivate: [authGuard] }, // Cart route protected by authGuard
   { path: 'checkout', component: CheckoutComponent, canActivate: [authGuard] },
-  { path: 'checkout/payment', component: PaymentComponent, canActivate: [authGuard] },
   { path: 'order-confirmation/:id', component: OrderConfirmationComponent, canActivate: [authGuard] },
+  { path: 'checkout/payment', component: PaymentComponent, canActivate: [authGuard] },
 
   { path: 'admin/dashboard', component: DashboardComponent, canActivate: [adminGuard] },
   { path: 'admin/products', component: ProductManagementComponent, canActivate: [adminGuard] },

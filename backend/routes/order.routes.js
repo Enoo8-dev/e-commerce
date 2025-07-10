@@ -14,6 +14,22 @@ router.post('/', async (req, res) => {
     }
 });
 
+// GET /api/orders/:id - Recupera i dettagli di un ordine specifico (pubblica)
+router.get('/:id', async (req, res) => {
+  try {
+    const lang = req.query.lang || 'en-US';
+    const userId = req.user ? req.user.userId : null;
+    const order = await orderService.getOrderDetails(req.params.id, userId, lang);
+    if (order) {
+      res.json(order);
+    } else {
+      res.status(404).json({ message: 'Order not found.' });
+    }
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching order details.' });
+  }
+});
+
 // GET /api/orders/addresses - Recupera gli indirizzi dell'utente
 router.get('/addresses', async (req, res) => {
     try {
