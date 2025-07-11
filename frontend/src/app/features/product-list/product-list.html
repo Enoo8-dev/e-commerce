@@ -54,9 +54,13 @@
               }
             </div>
 
-            <button class="add-to-cart-btn">
-              {{ 'PRODUCTS.ADD_TO_CART' | translate }}
-            </button>
+            <button (click)="addToCart(product, $event)" 
+        class="flex items-center justify-center rounded-full bg-gray-800 p-2 text-white hover:bg-gray-700 cursor-pointer">
+  <span class="mr-4">{{ 'PRODUCTS.ADD_TO_CART' | translate }}</span>
+  <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+  </svg>
+</button>
           </div>
         </div>
       }

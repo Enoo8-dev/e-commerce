@@ -1,10 +1,14 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { Product } from '../../models/product.model';
 import { ProductService } from '../../services/product.service';
-import { TranslateService, TranslateModule } from '@ngx-translate/core';
+import { CartService } from '../../services/cart.service';
+import { AuthService } from '../../services/auth.service';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
+
+declare var Toastify: any;
 
 @Component({
   selector: 'app-product-list',
@@ -17,22 +21,29 @@ export class ProductListComponent implements OnInit, OnDestroy {
   products: Product[] = [];
   isLoading = true;
   error: string | null = null;
+  isLoggedIn = false;
+  
+  private authSub!: Subscription;
   private langChangeSub!: Subscription;
 
   constructor(
     private productService: ProductService,
+    private cartService: CartService,
+    private authService: AuthService,
+    private router: Router,
     private translate: TranslateService
   ) {}
 
   ngOnInit(): void {
-    this.fetchAllProducts();
-
+    this.authSub = this.authService.isLoggedIn$.subscribe(status => this.isLoggedIn = status);
+    
+    this.loadProducts();
     this.langChangeSub = this.translate.onLangChange.subscribe(() => {
-      this.fetchAllProducts();
+      this.loadProducts();
     });
   }
 
-  fetchAllProducts(): void {
+  loadProducts(): void {
     this.isLoading = true;
     this.error = null;
     const currentLanguage = this.translate.currentLang || this.translate.defaultLang;
@@ -44,19 +55,62 @@ export class ProductListComponent implements OnInit, OnDestroy {
       error: (err) => {
         this.error = 'Failed to load products. Please try again later.';
         this.isLoading = false;
-        console.error('API Error:', err);
       }
     });
+  }
+
+  addToCart(product: Product, event: MouseEvent): void {
+    event.preventDefault();
+    event.stopPropagation();
+
+    if (!this.isLoggedIn) {
+      Toastify({
+        text: "Devi effettuare il login per aggiungere prodotti al carrello.",
+        duration: 3000,
+        destination: '/login',
+        close: true,
+        gravity: "bottom",
+        position: "right",
+        style: { background: "linear-gradient(to right, #E53935, #EF5350)", cursor: "pointer", borderRadius: "0.5rem" }
+      }).showToast();
+      this.router.navigate(['/login']);
+      return;
+    }
+
+    // Ricostruiamo gli oggetti 'product' e 'variant' come si aspetta il CartService
+    const productInfo = {
+      id: product.productId,
+      name: product.productName,
+      brandName: product.brandName
+    };
+    const variantInfo = {
+      id: product.variantId,
+      sku: product.variantSku,
+      originalPrice: product.originalPrice,
+      currentSalePrice: product.currentSalePrice,
+      stock_quantity: product.stock_quantity,
+      images: [{ image_url: product.imageUrl }],
+      attributes: []
+    };
+
+    this.cartService.addToCart(productInfo, variantInfo, 1);
+
+    Toastify({
+      text: "Prodotto aggiunto al carrello!",
+      duration: 3000,
+      close: true,
+      gravity: "bottom",
+      position: "right",
+      style: { background: "linear-gradient(to right, #313b47, #1e2939)", borderRadius: "0.5rem"  }
+    }).showToast();
   }
 
   encodeURIComponent(str: string): string {
     return encodeURIComponent(str);
   }
 
-
   ngOnDestroy(): void {
-    if (this.langChangeSub) {
-      this.langChangeSub.unsubscribe();
-    }
+    if (this.authSub) this.authSub.unsubscribe();
+    if (this.langChangeSub) this.langChangeSub.unsubscribe();
   }
 }

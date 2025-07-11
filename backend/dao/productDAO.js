@@ -33,7 +33,35 @@ const productDAO = {
      * @returns {Promise<Array>} A promise that resolves to an array of product objects.
      */
     async getAllProducts(languageCode = 'en-US') {
-        const sql = `${this._getBaseProductQuery()} GROUP BY p.id`;
+        const sql = `
+            SELECT
+            p.id AS productId,
+            pt.name AS productName,
+            pt.description AS productDescription,
+            pv.id as variantId, -- Aggiungiamo l'ID della variante
+            pv.price AS originalPrice,
+            CASE
+                WHEN pv.sale_price IS NOT NULL AND (pv.sale_start_date IS NULL OR pv.sale_start_date <= NOW()) AND (pv.sale_end_date IS NULL OR pv.sale_end_date >= NOW())
+                THEN pv.sale_price
+                ELSE NULL
+            END AS currentSalePrice,
+            pv.sku AS variantSku,
+            pv.stock_quantity, -- *** AGGIUNTO: Quantità di stock ***
+            bt.name AS brandName,
+            (SELECT image_url FROM Product_Images WHERE variant_id = pv.id ORDER BY display_order ASC LIMIT 1) AS imageUrl
+            FROM Products AS p
+            JOIN Product_Translations AS pt ON p.id = pt.product_id
+            JOIN Brands AS b ON p.brand_id = b.id
+            JOIN Brand_Translations AS bt ON b.id = bt.brand_id
+            JOIN Product_Variants AS pv ON p.id = pv.product_id
+            WHERE
+            p.is_active = TRUE
+            AND pv.is_default = TRUE
+            AND pv.is_active = TRUE
+            AND pt.language_code = ?
+            AND bt.language_code = ?
+            GROUP BY p.id;
+        `;
         try {
             const [rows] = await dbPool.query(sql, [languageCode, languageCode]);
             return rows;
