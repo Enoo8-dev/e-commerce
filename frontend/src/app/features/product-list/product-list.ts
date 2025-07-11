@@ -64,15 +64,18 @@ export class ProductListComponent implements OnInit, OnDestroy {
     event.stopPropagation();
 
     if (!this.isLoggedIn) {
-      Toastify({
-        text: "Devi effettuare il login per aggiungere prodotti al carrello.",
-        duration: 3000,
-        destination: '/login',
-        close: true,
-        gravity: "bottom",
-        position: "right",
-        style: { background: "linear-gradient(to right, #E53935, #EF5350)", cursor: "pointer", borderRadius: "0.5rem" }
-      }).showToast();
+      this.translate.get('PRODUCTS.DETAILS.LOGIN_REQUIRED_TOAST').subscribe((translations: string) => {
+        Toastify({
+          text: translations,
+          duration: 3000,
+          destination: '/login',
+          close: true,
+          gravity: "bottom",
+          position: "right",
+          style: { background: "linear-gradient(to right, #E53935, #EF5350)", cursor: "pointer", borderRadius: "0.5rem" }
+        }).showToast();
+      });
+      // Naviga alla pagina di login
       this.router.navigate(['/login']);
       return;
     }
@@ -95,14 +98,20 @@ export class ProductListComponent implements OnInit, OnDestroy {
 
     this.cartService.addToCart(productInfo, variantInfo, 1);
 
-    Toastify({
-      text: "Prodotto aggiunto al carrello!",
-      duration: 3000,
-      close: true,
-      gravity: "bottom",
-      position: "right",
-      style: { background: "linear-gradient(to right, #313b47, #1e2939)", borderRadius: "0.5rem"  }
-    }).showToast();
+    this.translate.get('PRODUCTS.DETAILS.ADDED_TO_CART_TOAST').subscribe((translations: string) => {
+      Toastify({
+        text: translations,
+        duration: 3000,
+        close: true,
+        gravity: "bottom",
+        position: "right",
+        stopOnFocus: true,
+        style: {
+          background: "linear-gradient(to right, #313b47, #1e2939)", // Gradiente scuro
+          borderRadius: "0.5rem"
+        }
+      }).showToast();
+    });
   }
 
   encodeURIComponent(str: string): string {
