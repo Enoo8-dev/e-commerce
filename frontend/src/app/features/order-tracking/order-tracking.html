@@ -6,22 +6,22 @@
       <p class="text-center text-red-600">{{ error }}</p>
     } @else if(order) {
       <div>
-        <h1 class="text-3xl font-bold tracking-tight text-gray-900">Ordine #{{ order.id }}</h1>
-        <p class="mt-2 text-sm text-gray-500">Effettuato il <time [dateTime]="order.order_date">{{ order.order_date | date:'dd MMMM yyyy' }}</time></p>
+        <h1 class="text-3xl font-bold tracking-tight text-gray-900">{{'ORDER_TRACKING.ORDER' | translate }} #{{ order.id }}</h1>
+        <p class="mt-2 text-sm text-gray-500">{{'ORDER_TRACKING.PLACED_ON' | translate }} <time [dateTime]="order.order_date">{{ order.order_date | date:'dd MMMM yyyy':undefined:currentLang }}</time></p>
 
         <!-- Riepilogo Articoli e Tracking -->
         <div class="mt-8 grid grid-cols-1 gap-y-16 lg:grid-cols-2 lg:gap-x-8">
           
           <!-- Riepilogo Articoli -->
           <div>
-            <h2 class="text-lg font-medium text-gray-900">Articoli Spediti</h2>
+            <h2 class="text-lg font-medium text-gray-900">{{'ORDER_TRACKING.SHIPPED_ARTICLES' | translate }}</h2>
             <div class="mt-6 space-y-6">
               @for(item of order.items; track item.variantId) {
                 <div class="flex items-start">
                   <img [src]="'http://localhost:3000' + item.imageUrl" [alt]="item.productName" class="h-20 w-20 flex-none rounded-lg border border-gray-200 bg-gray-100 object-contain object-center">
                   <div class="ml-4 flex-auto">
                     <h3 class="font-medium text-gray-900">{{ item.productName }}</h3>
-                    <p class="text-sm text-gray-500">Quantità: {{ item.quantity }}</p>
+                    <p class="text-sm text-gray-500">{{'ORDER_TRACKING.QUANTITY' | translate }}: {{ item.quantity }}</p>
                   </div>
                   <p class="flex-none font-medium text-gray-900">{{ item.price_per_unit * item.quantity | currency:'EUR' }}</p>
                 </div>
@@ -30,7 +30,7 @@
             <!-- Totale -->
             <dl class="mt-6 space-y-4 border-t border-gray-200 pt-6 text-sm font-medium text-gray-500">
               <div class="flex justify-between">
-                <dt>Totale</dt>
+                <dt>{{'ORDER_TRACKING.TOTAL_PRICE' | translate }}</dt>
                 <dd class="text-gray-900">{{ order.total_amount | currency:'EUR' }}</dd>
               </div>
             </dl>
@@ -38,7 +38,7 @@
 
           <!-- Timeline di Tracciamento -->
           <div>
-            <h2 class="text-lg font-medium text-gray-900">Cronologia Ordine</h2>
+            <h2 class="text-lg font-medium text-gray-900">{{'ORDER_TRACKING.ORDER_HISTORY' | translate }}</h2>
             <div class="mt-6 flow-root">
               <div class="-my-8">
                 @for(event of order.history; track event.id; let isLast = $last) {
@@ -56,10 +56,16 @@
                       </div>
                       <div class="min-w-0 flex-1 py-1.5">
                         <div class="text-sm text-gray-500">
-                          <span class="font-medium text-gray-900">{{ event.status }}</span>
-                          <span class="whitespace-nowrap ml-2">{{ event.changed_at | date:'dd/MM/yyyy HH:mm' }}</span>
+                          <span class="font-medium text-gray-900">{{ event.status | translate }}</span>
+                          <span class="whitespace-nowrap ml-2">{{ event.changed_at | date:'dd/MM/yyyy HH:mm':undefined:currentLang }}</span>
                         </div>
-                        <div class="mt-1 text-sm text-gray-700">{{ event.notes }}</div>
+                        <div class="mt-1 text-sm text-gray-700">
+                          @if(event.status === 'ORDER_TRACKING.DELIVRED') {
+                            {{ 'ORDER_TRACKING.NOTE_DELIVERED' | translate:{ deliveryDate: (event.changed_at | date:'longDate':'':currentLang) } }}
+                          } @else {
+                            {{ parseNote(event.notes).key | translate:parseNote(event.notes).params }}
+                          }
+                        </div>
                       </div>
                     </div>
                   </div>

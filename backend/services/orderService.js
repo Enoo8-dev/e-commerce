@@ -7,12 +7,13 @@ const orderService = {
   async createNewOrder(userId, orderData) {
     const { orderId, paymentId } = await orderDAO.createOrder(userId, orderData);
 
-    await orderDAO.addTrackingEvent(orderId, 'Ordine Confermato', 'Il tuo pagamento è in fase di elaborazione.');
+    await orderDAO.addTrackingEvent(orderId, 'ORDER_TRACKING.ORDER_CONFIRMED', 'ORDER_TRACKING.PAYMENT_PROCESSING');
     this.simulateShippingProcess(orderId, paymentId);
 
     const user = await userDAO.getUserById(userId);
+    const lang = user.language_code || 'en-US';
     const variantIds = orderData.items.map(item => item.variantId);
-    const itemDetailsMap = await productDAO.getOrderItemDetails(variantIds, user.language_code || 'it-IT');
+    const itemDetailsMap = await productDAO.getOrderItemDetails(variantIds, lang);
 
     const itemsForEmail = orderData.items.map(item => {
         const details = itemDetailsMap.get(item.variantId);
@@ -26,28 +27,30 @@ const orderService = {
   },
 
   simulateShippingProcess(orderId, paymentId) {
-    // Simula la conferma del pagamento dopo 10 secondi
+    // Simula la conferma del pagamento
     setTimeout(async () => {
       const transactionId = `txn_${Date.now()}`;
       await orderDAO.updatePaymentStatus(paymentId, 'succeeded', transactionId);
-      await orderDAO.addTrackingEvent(orderId, 'Pagamento Approvato', `Transazione ${transactionId} completata.`);
+      const notes = JSON.stringify({ key: 'ORDER_TRACKING.NOTE_PAYMENT_APPROVED', params: { transactionId } });
+      await orderDAO.addTrackingEvent(orderId, 'ORDER_TRACKING.PAYMENT_APPROVED', notes);
       console.log(`Payment for order ${orderId} confirmed.`);
-    }, 10 * 1000); // 10 secondi
+    }, 10 * 1000);
 
-    // Simula la spedizione dopo 1 minuto
+    // Simula la spedizione
     setTimeout(async () => {
-      const trackingNumber = `BRT${Date.now()}`;
+      const trackingNumber = `${Date.now()}`;
       await orderDAO.updateOrderStatus(orderId, 'shipped', trackingNumber);
-      await orderDAO.addTrackingEvent(orderId, 'Spedito', `Il pacco è in viaggio. Tracking: ${trackingNumber}`);
+      const notes = JSON.stringify({ key: 'ORDER_TRACKING.NOTE_SHIPPED', params: { trackingNumber } });
+      await orderDAO.addTrackingEvent(orderId, 'ORDER_TRACKING.ORDER_SHIPPED', notes);
       console.log(`Order ${orderId} has been shipped.`);
-    }, 60 * 1000); // 1 minuto
+    }, 60 * 1000);
 
-    // Simula la consegna dopo 3 minuti
+    // Simula la consegna
     setTimeout(async () => {
       await orderDAO.updateOrderStatus(orderId, 'delivered');
-      await orderDAO.addTrackingEvent(orderId, 'Consegnato', 'Il tuo pacco è stato consegnato.');
+      await orderDAO.addTrackingEvent(orderId, 'ORDER_TRACKING.DELIVERED', 'ORDER_TRACKING.NOTE_DELIVERED');
       console.log(`Order ${orderId} has been delivered.`);
-    }, 3 * 60 * 1000); // 3 minuti
+    }, 3 * 60 * 1000);
   },
 
   async getOrderDetails(orderId, userId, languageCode) {

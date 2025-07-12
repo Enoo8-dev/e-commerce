@@ -169,7 +169,7 @@ adminRouter.patch('/variants/:variantId/status', async (req, res) => {
 adminRouter.get('/products/:productId', async (req, res) => {
   try {
     const { productId } = req.params;
-    const languageCode = req.query.lang || 'it-IT';
+    const languageCode = req.query.lang || 'en-US';
     const product = await productService.getAdminProductDetails(productId, languageCode);
     res.json(product);
   } catch (error) {

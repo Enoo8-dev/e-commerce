@@ -315,5 +315,21 @@
         "IS_CONFIRMED": "has been confirmed.",
         "EMAIL_SENT": "We have sent an email with all the details.",
         "BACK_TO_HOME": "Back to Home"
+    },
+    "ORDER_TRACKING": {
+        "ORDER": "Order",
+        "PLACED_ON": "Placed on",
+        "SHIPPED_ARTICLES": "Shipped Articles",
+        "QUANTITY": "Quantity",
+        "TOTAL_PRICE": "Total Price",
+        "ORDER_HISTORY": "Order History",
+        "ORDER_CONFIRMED": "Order Confirmed",
+        "PAYMENT_PROCESSING": "Your payment is being processed.",
+        "PAYMENT_APPROVED": "Payment Approved",
+        "NOTE_PAYMENT_APPROVED": "{{transactionId}} transition successfully completed.",
+        "ORDER_SHIPPED": "Shipped",
+        "NOTE_SHIPPED": "Your order is on its way. Tracking number: {{trackingNumber}}.",
+        "DELIVRED": "Delivred",
+        "NOTE_DELIVERED": "Your order was delivered on {{deliveryDate}}."
     }
 }
