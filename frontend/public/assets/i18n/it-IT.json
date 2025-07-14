@@ -331,5 +331,23 @@
         "NOTE_SHIPPED": "Il tuo pacco è in viaggio. Numero di tracciamento: {{trackingNumber}}",
         "DELIVRED": "Consegnato",
         "NOTE_DELIVERED": "Il tuo ordine è stato consegnato il {{deliveryDate}}."
+    },
+    "PROFILE": {
+        "TITLE": "Il mio Profilo",
+        "ORDER_HISTORY": "Storico Ordini",
+        "LOADING_ORDERS": "Caricamento ordini in corso, attendere prego...",
+        "ACCOUNT_MANAGEMENT": "Gestione Account",
+        "CHANGE_PASSWORD": "Cambia Password",
+        "UPDATE_PASSWORD": "Aggiorna Password",
+        "ORDER": "Ordine",
+        "DELIVERED": "Consegnato",
+        "SHIPPED": "Spedito",
+        "NO_ORDERS": "Non hai ancora effettuato ordini.",
+        "PROCESSING": "In Lavorazione",
+        "OLD_PASSWORD": "Vecchia Password",
+        "NEW_PASSWORD": "Nuova Password",
+        "CONFIRM_NEW_PASSWORD": "Conferma Nuova Password",
+        "PASSWORDS_MISMATCH": "Le password non corrispondono.", 
+        "MIN_LENGTH": "La password deve avere almeno 8 caratteri."
     }
 }

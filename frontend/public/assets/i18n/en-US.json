@@ -331,5 +331,23 @@
         "NOTE_SHIPPED": "Your order is on its way. Tracking number: {{trackingNumber}}.",
         "DELIVRED": "Delivred",
         "NOTE_DELIVERED": "Your order was delivered on {{deliveryDate}}."
+    },
+    "PROFILE": {
+        "TITLE": "Profile",
+        "ORDER_HISTORY": "Order History",
+        "LOADING_ORDERS": "Loading orders, please wait...",
+        "ACCOUNT_MANAGEMENT": "Account Management",
+        "CHANGE_PASSWORD": "Change Password",
+        "UPDATE_PASSWORD": "Update Password",
+        "ORDER": "Order",
+        "DELIVERED": "Delivered",
+        "SHIPPED": "Shipped",
+        "NO_ORDERS": "No orders found.",
+        "PROCESSING": "Processing",
+        "OLD_PASSWORD": "Old Password",
+        "NEW_PASSWORD": "New Password",
+        "CONFIRM_NEW_PASSWORD": "Confirm New Password",
+        "PASSWORDS_MISMATCH": "Passwords do not match.",
+        "MIN_LENGTH": "Password must be at least 8 characters long."
     }
 }
