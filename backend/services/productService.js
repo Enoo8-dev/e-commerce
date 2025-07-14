@@ -129,6 +129,32 @@ const productService = {
     
     async validateCartItems(variantIds, languageCode) {
         return await productDAO.getVariantDetailsByIds(variantIds, languageCode);
+    },
+
+    async getOffersPageLayout(languageCode) {
+        const allOffers = await productDAO.getActiveOffers(languageCode);
+        
+        const popularOffers = allOffers.filter(offer => offer.is_featured);
+
+        const offersByCategoryMap = allOffers.reduce((acc, offer) => {
+            if (offer.categoryId && offer.categoryName) {
+            if (!acc.has(offer.categoryId)) {
+                acc.set(offer.categoryId, {
+                categoryId: offer.categoryId,
+                categoryName: offer.categoryName,
+                products: []
+                });
+            }
+            acc.get(offer.categoryId).products.push(offer);
+            }
+            return acc;
+        }, new Map());
+
+        return {
+            heroOffer: popularOffers[0] || allOffers[0] || null,
+            popularOffers: popularOffers.slice(0, 4), // Prendiamo le prime 4 popolari
+            offersByCategory: Array.from(offersByCategoryMap.values()) // Convertiamo la mappa in un array
+        };
     }
 
 };

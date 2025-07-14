@@ -651,7 +651,46 @@ const productDAO = {
             detailsMap.set(row.variantId, row);
         });
         return detailsMap;
+    },
+
+    /**
+     * Fetches all active offers with their category details.
+     * @param {string} languageCode - The language for translations.
+     * @returns {Promise<Array>} A list of all active offers.
+     */
+    async getActiveOffers(languageCode = 'en-US') {
+        const sql = `
+            SELECT
+            p.id AS productId,
+            pt.name AS productName,
+            pv.id as variantId,
+            pv.price AS originalPrice,
+            pv.sale_price AS currentSalePrice,
+            pv.sku AS variantSku,
+            pv.stock_quantity,
+            bt.name AS brandName,
+            (SELECT image_url FROM Product_Images WHERE variant_id = pv.id ORDER BY display_order ASC LIMIT 1) AS imageUrl,
+            p.is_featured,
+            pc.category_id as categoryId,
+            ct.name as categoryName
+            FROM Product_Variants AS pv
+            JOIN Products AS p ON pv.product_id = p.id
+            JOIN Product_Translations AS pt ON p.id = pt.product_id AND pt.language_code = ?
+            JOIN Brands AS b ON p.brand_id = b.id
+            JOIN Brand_Translations AS bt ON b.id = bt.brand_id AND bt.language_code = ?
+            LEFT JOIN Product_Categories pc ON p.id = pc.product_id
+            LEFT JOIN Category_Translations ct ON pc.category_id = ct.category_id AND ct.language_code = ?
+            WHERE
+            p.is_active = TRUE
+            AND pv.is_active = TRUE
+            AND pv.sale_price IS NOT NULL
+            AND (pv.sale_start_date IS NULL OR pv.sale_start_date <= NOW())
+            AND (pv.sale_end_date IS NULL OR pv.sale_end_date >= NOW());
+        `;
+        const [rows] = await dbPool.query(sql, [languageCode, languageCode, languageCode]);
+        return rows;
     }
+
 
 };
 

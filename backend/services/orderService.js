@@ -48,7 +48,7 @@ const orderService = {
     // Simula la consegna
     setTimeout(async () => {
       await orderDAO.updateOrderStatus(orderId, 'delivered');
-      await orderDAO.addTrackingEvent(orderId, 'ORDER_TRACKING.DELIVERED', 'ORDER_TRACKING.NOTE_DELIVERED');
+      await orderDAO.addTrackingEvent(orderId, 'ORDER_TRACKING.DELIVRED', 'ORDER_TRACKING.NOTE_DELIVERED');
       console.log(`Order ${orderId} has been delivered.`);
     }, 3 * 60 * 1000);
   },

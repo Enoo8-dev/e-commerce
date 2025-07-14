@@ -7,6 +7,17 @@ const adminRouter = express.Router();
 
 // --- ROTTE PUBBLICHE (associate a publicRouter) ---
 
+// GET /api/products/offers-layout
+publicRouter.get('/products/offers-layout', async (req, res) => {
+  try {
+    const lang = req.query.lang || 'en-US';
+    const layoutData = await productService.getOffersPageLayout(lang);
+    res.json(layoutData);
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching offers page layout' });
+  }
+});
+
 // GET /api/products/featured
 publicRouter.get('/products/featured', async (req, res) => {
     try {

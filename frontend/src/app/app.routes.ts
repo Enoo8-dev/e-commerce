@@ -23,6 +23,7 @@ import { PaymentComponent } from './features/payment/payment';
 import { OrderTrackingComponent } from './features/order-tracking/order-tracking';
 import { ProfileComponent } from './features/profile/profile';
 import { WishlistComponent } from './features/wishlist/wishlist';
+import { OffersPageComponent } from './features/offers-page/offers-page';
 
 export const routes: Routes = [
   
@@ -31,6 +32,7 @@ export const routes: Routes = [
   { path: 'product/:id', component: ProductDetailComponent }, // Dynamic route for product details
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent},
+  { path: 'offers', component: OffersPageComponent },
   { path: 'orders/:id', component: OrderTrackingComponent },
   { path: 'wishlist', component: WishlistComponent, canActivate: [authGuard] },
   { path: 'cart', component: CartComponent, canActivate: [authGuard] }, // Cart route protected by authGuard

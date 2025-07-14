@@ -225,4 +225,14 @@ export class ProductService {
     return this.http.post<any[]>(`${this.apiUrl}/products/validate-cart`, { variantIds }, { params });
   }
 
+  /**
+   * Fetches the layout for the offers page.  
+   * @param languageCode The desired language.
+   * @returns An observable of the offers page layout.
+   */
+  getOffersPageLayout(languageCode: string): Observable<any> {
+    const params = new HttpParams().set('lang', languageCode);
+    return this.http.get<any>(`${this.apiUrl}/products/offers-layout`, { params });
+  }
+
 }
