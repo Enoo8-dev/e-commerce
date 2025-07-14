@@ -689,6 +689,42 @@ const productDAO = {
         `;
         const [rows] = await dbPool.query(sql, [languageCode, languageCode, languageCode]);
         return rows;
+    },
+
+    /**
+     * Fetches all newest products, ordered by creation date.
+     * @param {string} languageCode - The language for translations.
+     * @returns {Promise<Array>} A list of the newest products.
+     */
+    async getNewestProductsWithDetails(languageCode = 'en-US') {
+        const sql = `
+            SELECT
+            p.id AS productId,
+            pt.name AS productName,
+            pv.id as variantId,
+            pv.price AS originalPrice,
+            CASE
+                WHEN pv.sale_price IS NOT NULL AND (pv.sale_start_date IS NULL OR pv.sale_start_date <= NOW()) AND (pv.sale_end_date IS NULL OR pv.sale_end_date >= NOW())
+                THEN pv.sale_price
+                ELSE NULL
+            END AS currentSalePrice,
+            pv.sku AS variantSku,
+            pv.stock_quantity,
+            bt.name AS brandName,
+            (SELECT image_url FROM Product_Images WHERE variant_id = pv.id ORDER BY display_order ASC LIMIT 1) AS imageUrl
+            FROM Products AS p
+            JOIN Product_Translations AS pt ON p.id = pt.product_id AND pt.language_code = ?
+            JOIN Brands AS b ON p.brand_id = b.id
+            JOIN Brand_Translations AS bt ON b.id = bt.brand_id AND bt.language_code = ?
+            JOIN Product_Variants AS pv ON p.id = pv.product_id AND pv.id = (
+                SELECT id FROM Product_Variants WHERE product_id = p.id AND is_active = TRUE ORDER BY is_default DESC, id ASC LIMIT 1
+            )
+            WHERE
+            p.is_active = TRUE
+            ORDER BY p.created_at DESC;
+        `;
+        const [rows] = await dbPool.query(sql, [languageCode, languageCode]);
+        return rows;
     }
 
 

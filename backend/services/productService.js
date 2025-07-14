@@ -155,6 +155,20 @@ const productService = {
             popularOffers: popularOffers.slice(0, 4), // Prendiamo le prime 4 popolari
             offersByCategory: Array.from(offersByCategoryMap.values()) // Convertiamo la mappa in un array
         };
+    },
+
+    /**
+     * Fetches the layout for the newest products page.
+     * @param {string} languageCode - The desired language.
+     * @returns {Promise<object>} An object containing the hero product and a list of new products.
+     */
+    async getNewestPageLayout(languageCode) {
+        const allNewest = await productDAO.getNewestProductsWithDetails(languageCode);
+
+        return {
+            heroProduct: allNewest[0] || null, // Il primo prodotto più nuovo come hero
+            newProducts: allNewest.slice(1, 9), // I successivi 8 per la griglia
+        };
     }
 
 };

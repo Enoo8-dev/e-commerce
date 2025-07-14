@@ -18,6 +18,17 @@ publicRouter.get('/products/offers-layout', async (req, res) => {
   }
 });
 
+// GET /api/products/newest-layout
+publicRouter.get('/products/newest-layout', async (req, res) => {
+  try {
+    const lang = req.query.lang || 'en-US';
+    const layoutData = await productService.getNewestPageLayout(lang);
+    res.json(layoutData);
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching newest page layout' });
+  }
+});
+
 // GET /api/products/featured
 publicRouter.get('/products/featured', async (req, res) => {
     try {

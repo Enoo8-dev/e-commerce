@@ -1,0 +1,46 @@
+<div class="bg-white mb-36">
+  <main class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    @if(layoutData) {
+      <!-- Hero Section -->
+      @if(layoutData.heroProduct) {
+        <div class="relative my-8 rounded-lg overflow-hidden">
+          <img [src]="'http://localhost:3000' + layoutData.heroProduct.imageUrl" class="w-full h-96 object-cover">
+          <div class="absolute inset-0 bg-gray-900/80 hover:bg-gray-900/95 transition-colors duration-300 flex flex-col items-center justify-center text-center p-4">
+            <h2 class="text-4xl font-bold text-white">Appena Arrivato</h2>
+            <p class="mt-2 text-xl text-white">{{ layoutData.heroProduct.productName }}</p>
+            <a [routerLink]="['/product', layoutData.heroProduct.productId]" class="mt-4 inline-block bg-white text-gray-900 font-bold py-2 px-6 rounded-lg">Scopri di più</a>
+          </div>
+        </div>
+      }
+
+      <!-- New Products Grid -->
+      <h2 class="text-2xl font-bold tracking-tight text-gray-900">Ultime Novità</h2>
+      <div class="mt-6 grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
+        @for(product of layoutData.newProducts; track product.productId) {
+          <div class="group relative">
+            <div class="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 transition-opacity duration-75 lg:aspect-none group-hover:opacity-75 lg:h-80">
+              <img [src]="'http://localhost:3000' + product.imageUrl" [alt]="product.productName" class="h-full w-full object-contain object-center lg:h-full lg:w-full">
+            </div>
+            <div class="mt-4 flex justify-between">
+              <div>
+                <h3 class="text-sm text-gray-700"><a [routerLink]="['/product', product.productId]"><span aria-hidden="true" class="absolute inset-0"></span>{{ product.productName }}</a></h3>
+                <p class="mt-1 text-sm text-gray-500">{{ product.brandName }}</p>
+              </div>
+              <div class="text-right">
+                @if(product.currentSalePrice) {
+                  <p class="text-sm font-medium text-red-600">{{ product.currentSalePrice | currency:'EUR' }}</p>
+                  <p class="text-xs text-gray-500 line-through">{{ product.originalPrice | currency:'EUR' }}</p>
+                } @else {
+                  <p class="text-sm font-medium text-gray-900">{{ product.originalPrice | currency:'EUR' }}</p>
+                }
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+
+    } @else if(isLoading) {
+      <p class="text-center py-16">Caricamento novità...</p>
+    }
+  </main>
+</div>

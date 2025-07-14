@@ -235,4 +235,14 @@ export class ProductService {
     return this.http.get<any>(`${this.apiUrl}/products/offers-layout`, { params });
   }
 
+  /**
+   * Fetches the layout for the newest products page. 
+   * @param languageCode The desired language.
+   * @returns An observable of the newest products page layout.
+   */
+  getNewestPageLayout(languageCode: string): Observable<any> {
+    const params = new HttpParams().set('lang', languageCode);
+    return this.http.get<any>(`${this.apiUrl}/products/newest-layout`, { params });
+  }
+
 }

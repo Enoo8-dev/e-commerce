@@ -43,7 +43,7 @@
           <div class="mt-6 grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
             @for(product of category.products; track product.productId) {
               <div class="group relative">
-                <div class="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-80">
+                <div class="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 transition-opacity duration-75 lg:aspect-none group-hover:opacity-75 lg:h-80">
                 <img [src]="'http://localhost:3000' + product.imageUrl" [alt]="product.productName" class="h-full w-full object-contain object-center lg:h-full lg:w-full">
                 </div>
                 <div class="mt-4 flex justify-between">
