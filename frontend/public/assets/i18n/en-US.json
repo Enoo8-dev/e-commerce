@@ -349,5 +349,13 @@
         "CONFIRM_NEW_PASSWORD": "Confirm New Password",
         "PASSWORDS_MISMATCH": "Passwords do not match.",
         "MIN_LENGTH": "Password must be at least 8 characters long."
+    },
+    "WISHLIST": {
+        "REMOVED": "Product removed from wishlist.",
+        "ADDED": "Product added to wishlist.",
+        "TITLE": "Wishlist",
+        "EMPTY_MESSAGE": "Your wishlist is empty.",
+        "EMPTY_SUBMESSAGE": "Browse our products and add your favorites to the wishlist.",
+        "CONTINUE_SHOPPING": "Continue Shopping"
     }
 }

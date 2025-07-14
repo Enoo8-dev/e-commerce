@@ -7,6 +7,7 @@ import { User } from './models/user.model';
 import { Subscription } from 'rxjs'; // Importa Subscription
 import { CommonModule } from '@angular/common';
 import { CartService } from './services/cart.service';
+import { WishlistService } from './services/wishlist.service';
 
 @Component({
   selector: 'app-root',
@@ -34,13 +35,15 @@ export class App implements OnInit, OnDestroy {
   isLangMenuOpen: boolean = false;
   isCatalogMenuOpen: boolean = false;
   cartItemCount: number = 0; 
+  wishlistItemCount: number = 0; 
 
   private authSubscription!: Subscription;
 
   constructor(
     public translate: TranslateService, 
     private authService: AuthService,
-    private cartService: CartService
+    private cartService: CartService,
+    private wishlistService: WishlistService
   ) {
     translate.setDefaultLang('en-US');
     translate.use('en-US');
@@ -50,13 +53,19 @@ export class App implements OnInit, OnDestroy {
     const sub1 = this.authService.isLoggedIn$.subscribe(status => this.isUserLoggedIn = status);
     const sub2 = this.authService.currentUser$.subscribe(user => this.user = user);
     
-    this.authSubscription = sub1;
-    this.authSubscription.add(sub2);
-
+    
+    const wishlistSub = this.wishlistService.wishlist$.subscribe(items => {
+      this.wishlistItemCount = items.length;
+    });
+    
     this.cartService.cartItems$.subscribe(items => {
       this.cartItemCount = items.reduce((count, item) => count + item.quantity, 0);
-    });
-  }
+    })
+
+    this.authSubscription = sub1;
+    this.authSubscription.add(sub2);
+    this.authSubscription.add(wishlistSub);
+    }
 
   get isAdmin(): boolean {
     return this.user?.role === 'admin';

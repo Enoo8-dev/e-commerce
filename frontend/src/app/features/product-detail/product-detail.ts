@@ -7,6 +7,7 @@ import { switchMap, Subscription } from 'rxjs'; // Aggiungi Subscription
 import { CartService } from '../../services/cart.service';
 import { FormsModule } from '@angular/forms'; // Importa FormsModule per ngModel
 import { AuthService } from '../../services/auth.service';
+import { WishlistService } from '../../services/wishlist.service'; // Aggiunto per il servizio della wishlist
 
 declare var Toastify: any; // Dichiara Toastify per evitare errori di compilazione
 
@@ -26,6 +27,8 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
   quantity: number = 1; // Aggiunto per gestire la quantità
   private langChangeSub!: Subscription; // Variabile per la sottoscrizione
   isLoggedIn: boolean = false; // Aggiunto per verificare se l'utente è loggato
+  isWishlisted = false;
+  private wishlistSub!: Subscription;
 
   constructor(
     private route: ActivatedRoute,
@@ -33,13 +36,20 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
     private translate: TranslateService,
     private cartService: CartService, // Aggiunto per il servizio del carrello
     private authService: AuthService, // Aggiunto per il servizio di autenticazione
-    private router: Router // Aggiunto per la navigazione
+    private router: Router, // Aggiunto per la navigazione
+    private wishlistService: WishlistService // Aggiunto per il servizio della wishlist
   ) {}
 
   ngOnInit(): void {
 
     this.authService.isLoggedIn$.subscribe(status => {
       this.isLoggedIn = status;
+    });
+
+    this.wishlistSub = this.wishlistService.wishlist$.subscribe((wishlistItems: any[]) => {
+      if (this.selectedVariant) {
+        this.isWishlisted = wishlistItems.some(item => item.variantId === this.selectedVariant.id);
+      }
     });
 
     // Carica i dati la prima volta
@@ -100,12 +110,14 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
     if (this.langChangeSub) {
       this.langChangeSub.unsubscribe();
     }
+    if (this.wishlistSub) this.wishlistSub.unsubscribe();
   }
 
   selectVariant(variant: any): void {
     this.selectedVariant = variant;
     this.setMainImageForVariant(variant);
     this.quantity = 1; 
+    this.isWishlisted = this.wishlistService.isInWishlist(this.selectedVariant.id);
   }
 
   setMainImageForVariant(variant: any): void {
@@ -121,22 +133,34 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
     this.mainImage = imageUrl;
   }
 
-  addToCart(): void {
+toggleWishlist(): void {
+    if (!this.selectedVariant || !this.isLoggedIn) {
+        this.showToast('Devi effettuare il login per usare la wishlist.', false);
+        this.router.navigate(['/login']);
+        return;
+    }
 
+    const variantId = this.selectedVariant.id;
+    const wasWishlisted = this.isWishlisted;
+
+    const action$ = wasWishlisted 
+      ? this.wishlistService.removeFromWishlist(variantId) 
+      : this.wishlistService.addToWishlist(variantId);
+
+    action$.subscribe({
+      next: () => {
+        const messageKey = wasWishlisted ? 'WISHLIST.REMOVED' : 'WISHLIST.ADDED';
+        this.showToast(messageKey, !wasWishlisted);
+      },
+      error: () => {
+        alert('Si è verificato un errore. Riprova.');
+      }
+    });
+  }
+
+  addToCart(): void {
     if (this.quantity <= 0 || !this.quantity || this.quantity === null || this.quantity === undefined) {
-      this.translate.get('PRODUCTS.DETAILS.MIN_PRODUCT_TOAST').subscribe((translations: string) => {
-        Toastify({
-          text: translations,
-          duration: 3000,
-          close: true,
-          gravity: "bottom",
-          position: "right",
-          style: {
-            background: "linear-gradient(to right, #E53935, #EF5350)", // Gradiente per errore
-            borderRadius: "0.5rem"    
-          }
-        }).showToast();
-      })
+      this.showToast('PRODUCTS.DETAILS.INVALID_QUANTITY_TOAST', false);
       return;
     }
 
@@ -164,55 +188,34 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
     if (!this.product || !this.selectedVariant) return;
 
     if (this.quantity > this.selectedVariant.stock_quantity) {
-      this.translate.get('PRODUCTS.DETAILS.STOCK_UNAVAILABLE_TOAST').subscribe((translations: string) => {
-        Toastify({
-          text: translations,
-          duration: 3000,
-          close: true,
-          gravity: "bottom",
-          position: "right",
-          style: {
-            background: "linear-gradient(to right, #E53935, #EF5350)", // Gradiente per errore
-            borderRadius: "0.5rem"
-          }
-        }).showToast();
-      });
+      this.showToast('PRODUCTS.DETAILS.QUANTITY_EXCEEDS_STOCK_TOAST', false); 
       return;
     }
 
     if (this.selectedVariant.stock_quantity === 0) {
-      this.translate.get('PRODUCTS.DETAILS.SOLD_OUT_TOAST').subscribe((translations: string) => {
-        Toastify({
-          text: translations,
-          duration: 3000,
-          close: true,
-          gravity: "bottom",
-          position: "right",
-          style: {
-            background: "linear-gradient(to right, #E53935, #EF5350)", // Gradiente per errore
-            borderRadius: "0.5rem"
-          }
-        }).showToast();
-      });
+      this.showToast('PRODUCTS.DETAILS.STOCK_UNAVAILABLE_TOAST', false); 
       return;
     }
 
     this.cartService.addToCart(this.product, this.selectedVariant, this.quantity);
 
-    this.translate.get('PRODUCTS.DETAILS.ADDED_TO_CART_TOAST').subscribe((translations: string) => {
+    this.showToast('PRODUCTS.DETAILS.ADDED_TO_CART_TOAST', true); 
+  }
+
+  showToast(messageKey: string, isSuccess: boolean = false): void {
+    this.translate.get(messageKey).subscribe((message: string) => {
       Toastify({
-        text: translations,
+        text: message,
         duration: 3000,
         close: true,
         gravity: "bottom",
         position: "right",
-        stopOnFocus: true,
         style: {
-          background: "linear-gradient(to right, #313b47, #1e2939)", // Gradiente scuro
+          background: isSuccess ? "linear-gradient(to right, #313b47, #1e2939)" : "linear-gradient(to right, #E53935, #EF5350)",
           borderRadius: "0.5rem"
-        },
-        onClick: function(){}
+        }
       }).showToast();
     });
   }
+
 }

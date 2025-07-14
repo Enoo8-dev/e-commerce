@@ -22,6 +22,7 @@ const attributeRoutes = require('./routes/attribute.routes');
 const orderRoutes = require('./routes/order.routes');
 const addressRoutes = require('./routes/address.routes');
 const paymentRoutes = require('./routes/payment.routes');
+const wishlistRoute = require('./routes/wishlist.routes');
 
 const app = express();
 
@@ -47,6 +48,11 @@ app.use('/api/orders', autenticateToken, orderRoutes); // Mount the order routes
 // Mount the payment routes on the /api/payment-methods path.
 // These routes are also protected by the authenticateToken middleware, meaning they require a valid JWT token to access.
 app.use('/api/payment-methods', autenticateToken, paymentRoutes);
+
+// Mount the wishlist routes on the /api/wishlist path.
+// These routes are protected by the autenticateToken middleware, meaning they require a valid JWT token to access.
+const wishlistRoutes = require('./routes/wishlist.routes'); // Import the wishlist routes
+app.use('/api/wishlist', autenticateToken, wishlistRoutes);
 
 // Mount the address routes on the /api/addresses path.
 // These routes are also protected by the autenticateToken middleware, meaning they require a valid JWT token to access.
