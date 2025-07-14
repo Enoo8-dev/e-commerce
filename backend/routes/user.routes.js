@@ -13,6 +13,17 @@ router.get('/me', async (req, res) => {
     }
 });
 
+// POST /api/users/change-password - Per cambiare la password
+router.post('/change-password', async (req, res) => {
+  try {
+    const { oldPassword, newPassword } = req.body;
+    await userService.changePassword(req.user.userId, oldPassword, newPassword);
+    res.json({ message: 'Password updated successfully.' });
+  } catch (error) {
+    res.status(error.statusCode || 500).json({ message: error.message });
+  }
+});
+
 // --- ROTTE SOLO PER ADMIN ---
 
 // GET /api/users - per ottenere la lista filtrata

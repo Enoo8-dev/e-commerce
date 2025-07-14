@@ -21,6 +21,7 @@ import { CheckoutComponent } from './features/checkout/checkout';
 import { OrderConfirmationComponent } from './features/order-confirmation/order-confirmation';
 import { PaymentComponent } from './features/payment/payment';
 import { OrderTrackingComponent } from './features/order-tracking/order-tracking';
+import { ProfileComponent } from './features/profile/profile';
 
 export const routes: Routes = [
   
@@ -32,6 +33,7 @@ export const routes: Routes = [
   { path: 'orders/:id', component: OrderTrackingComponent },
   { path: 'cart', component: CartComponent, canActivate: [authGuard] }, // Cart route protected by authGuard
   { path: 'checkout', component: CheckoutComponent, canActivate: [authGuard] },
+  { path: 'profile', component: ProfileComponent, canActivate: [authGuard] },
   { path: 'order-confirmation/:id', component: OrderConfirmationComponent, canActivate: [authGuard] },
   { path: 'checkout/payment', component: PaymentComponent, canActivate: [authGuard] },
 

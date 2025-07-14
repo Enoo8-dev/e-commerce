@@ -16,4 +16,9 @@ export class OrderService {
     const params = new HttpParams().set('lang', lang);
     return this.http.get<any>(`${this.apiUrl}/${id}`, { params });
   }
+
+  getMyOrders(lang: string): Observable<any[]> {
+    const params = new HttpParams().set('lang', lang);
+    return this.http.get<any[]>(`${this.apiUrl}/my-orders`, { params });
+  }
 }

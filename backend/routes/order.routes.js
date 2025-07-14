@@ -2,6 +2,17 @@ const express = require('express');
 const router = express.Router();
 const orderService = require('../services/orderService');
 
+// GET /api/orders/my-orders - Recupera gli ordini dell'utente loggato
+router.get('/my-orders', async (req, res) => {
+  try {
+    const lang = req.query.lang || 'en-US';
+    const orders = await orderService.getUserOrders(req.user.userId, lang);
+    res.json(orders);
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching user orders.' });
+  }
+});
+
 // POST /api/orders - Crea un nuovo ordine
 router.post('/', async (req, res) => {
     try {
@@ -23,7 +34,7 @@ router.get('/:id', async (req, res) => {
     if (order) {
       res.json(order);
     } else {
-      res.status(404).json({ message: 'Order not found.' });
+      res.status(404).json({ message: 'Order not found.', orderId: req.params.id });
     }
   } catch (error) {
     res.status(500).json({ message: 'Error fetching order details.' });

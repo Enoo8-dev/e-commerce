@@ -30,6 +30,25 @@ const userService = {
       throw error;
     }
     return user;
+  },
+
+   async changePassword(userId, oldPassword, newPassword) {
+    const user = await userDAO.getUserById(userId, true); // Passa true per ottenere anche l'hash
+    if (!user) {
+        const error = new Error('User not found');
+        error.statusCode = 404;
+        throw error;
+    }
+
+    const isMatch = await bcrypt.compare(oldPassword, user.password_hash);
+    if (!isMatch) {
+        const error = new Error('Current password is incorrect');
+        error.statusCode = 401;
+        throw error;
+    }
+
+    const newPasswordHash = await bcrypt.hash(newPassword, 10);
+    return await userDAO.updatePassword(userId, newPasswordHash);
   }
 };
 

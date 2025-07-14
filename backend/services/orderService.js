@@ -67,6 +67,10 @@ const orderService = {
     return { ...order, items, history };
   },
 
+  async getUserOrders(userId, languageCode) {
+    return await orderDAO.getOrdersByUserId(userId, languageCode);
+  },
+
   async getUserAddresses(userId) {
     return await orderDAO.getAddressesByUserId(userId);
   },

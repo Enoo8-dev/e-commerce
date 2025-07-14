@@ -88,17 +88,25 @@ const userDAO = {
     /**
      * Retrieves a user by their ID.
      * @param {number} userId - The ID of the user to retrieve.
+     * @param {boolean} includePassword - Whether to include the password hash in the result.
      * @returns {Promise<Object>} The user object if found, otherwise undefined.
      */
-    async getUserById(userId) {
-        const sql = "SELECT id, email, first_name, last_name, role, created_at FROM Users WHERE id = ?";
+    async getUserById(userId, includePassword = false) {
+        const columns = 'id, email, first_name, last_name, role, is_active';
+        const sql = `SELECT ${includePassword ? columns + ', password_hash' : columns} FROM Users WHERE id = ?`;        
         try {
-            const [rows] = await dbPool.query(sql, [userId]);
+            const [rows] = await dbPool.query(sql, [userId]);            
             return rows[0]; // Return the user object if found
         } catch (error) {
             console.error('Error fetching user by ID:', error);
             throw new Error('Database error while fetching user');
         }
+    },
+
+    async updatePassword(userId, passwordHash) {
+        const sql = 'UPDATE Users SET password_hash = ? WHERE id = ?';
+        const [result] = await dbPool.query(sql, [passwordHash, userId]);
+        return result.affectedRows > 0;
     }
 }
 

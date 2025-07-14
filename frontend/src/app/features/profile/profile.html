@@ -1,0 +1,86 @@
+<div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+  <h1 class="text-3xl font-bold text-gray-900">Il Mio Profilo</h1>
+  
+  <div class="mt-8 grid grid-cols-1 lg:grid-cols-3 gap-8">
+    <!-- Colonna Storico Ordini -->
+    <div class="lg:col-span-2">
+      <h2 class="text-xl font-semibold text-gray-800">Storico Ordini</h2>
+      <div class="mt-4 bg-white shadow overflow-hidden sm:rounded-md">
+        <ul role="list" class="divide-y divide-gray-200">
+          @if(isLoading) {
+            <li class="p-6 text-center text-gray-500">Caricamento ordini...</li>
+          }
+          @for(order of orders; track order.id) {
+            <li>
+              <a [routerLink]="['/orders', order.id]" class="block hover:bg-gray-100">
+                <div class="px-4 py-4 sm:px-6">
+                  <div class="flex items-center justify-between">
+                    <p class="text-sm font-medium text-blue-600 truncate">Ordine #{{ order.id }}</p>
+                    <div class="ml-2 flex-shrink-0 flex">
+                      @switch (order.status) {
+                        @case ('processing') {
+                          <p class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">In Lavorazione</p>
+                        }
+                        @case ('shipped') {
+                          <p class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">Spedito</p>
+                        }
+                        @case ('delivered') {
+                          <p class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Consegnato</p>
+                        }
+                        @default {
+                          <p class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">{{ order.status }}</p>
+                        }
+                      }
+                    </div>
+                  </div>
+                  <div class="mt-2 sm:flex sm:justify-between">
+                    <div class="sm:flex">
+                      <p class="flex items-center text-sm text-gray-500">{{ order.order_date | date:'dd MMMM yyyy' }}</p>
+                    </div>
+                    <div class="mt-2 flex items-center text-sm text-gray-500 sm:mt-0">
+                      <p>{{ order.total_amount | currency:'EUR' }}</p>
+                    </div>
+                  </div>
+                </div>
+              </a>
+            </li>
+          }
+          @if(!isLoading && orders.length === 0) {
+            <li class="p-6 text-center text-gray-500">Non hai ancora effettuato nessun ordine.</li>
+          }
+        </ul>
+      </div>
+    </div>
+
+    <!-- Colonna Gestione Account -->
+    <div>
+      <h2 class="text-xl font-semibold text-gray-800">Gestione Account</h2>
+      <div class="mt-4 bg-white shadow p-6 rounded-lg">
+        <h3 class="text-lg font-medium text-gray-900">Cambia Password</h3>
+        <form [formGroup]="passwordForm" (ngSubmit)="onChangePassword()" class="mt-4 space-y-4">
+          <div>
+            <label for="oldPassword" class="sr-only">Vecchia Password</label>
+            <input type="password" formControlName="oldPassword" id="oldPassword" placeholder="Vecchia Password" class="block w-full rounded-lg border-0 bg-gray-100 py-2 px-3 text-gray-900 placeholder:text-gray-500 focus:ring-2 focus:ring-inset outline-none focus:ring-red-500 sm:text-sm">
+          </div>
+          <div>
+            <label for="newPassword" class="sr-only">Nuova Password</label>
+            <input type="password" formControlName="newPassword" id="newPassword" placeholder="Nuova Password" class="block w-full rounded-lg border-0 bg-gray-100 py-2 px-3 text-gray-900 placeholder:text-gray-500 focus:ring-2 focus:ring-inset outline-none focus:ring-red-500 sm:text-sm">
+            @if(passwordForm.get('newPassword')?.hasError('minlength') && passwordForm.get('newPassword')?.touched) {
+              <p class="text-xs text-red-600 mt-1">La password deve avere almeno 8 caratteri.</p>
+            }
+          </div>
+          <div>
+            <label for="confirmPassword" class="sr-only">Conferma Nuova Password</label>
+            <input type="password" formControlName="confirmPassword" id="confirmPassword" placeholder="Conferma Nuova Password" class="block w-full rounded-lg border-0 bg-gray-100 py-2 px-3 text-gray-900 placeholder:text-gray-500 focus:ring-2 outline-none focus:ring-inset focus:ring-red-500 sm:text-sm">
+            @if(passwordForm.errors?.['passwordsMismatch'] && passwordForm.get('confirmPassword')?.touched) {
+              <p class="text-xs text-red-600 mt-1">Le password non corrispondono.</p>
+            }
+          </div>
+          <button type="submit" [disabled]="passwordForm.invalid" class="w-full inline-flex items-center justify-center rounded-md border border-transparent bg-red-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-red-700 disabled:opacity-50 cursor-pointer disabled:cursor-not-allowed">Aggiorna Password</button>
+          @if(passwordSuccess) { <p class="text-sm text-green-600">{{ passwordSuccess }}</p> }
+          @if(passwordError) { <p class="text-sm text-red-600">{{ passwordError }}</p> }
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

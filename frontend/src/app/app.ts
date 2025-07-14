@@ -87,6 +87,7 @@ export class App implements OnInit, OnDestroy {
   }
   
   logout(): void {
+    this.closeAllMenus();
     this.authService.logout();
   }
 

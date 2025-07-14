@@ -39,21 +39,13 @@ export class LoginComponent implements OnInit {
       return;
     }
 
-    this.isLoading = true;
     this.errorMessage = null; // Reset error message
 
     this.authService.login(this.loginForm.value).subscribe({
       next: () => {
-        // Il blocco 'next' viene eseguito solo se TUTTO è andato a buon fine,
-        // incluso il recupero del profilo utente.
-        this.isLoading = false;
         console.log('Login e recupero profilo completati con successo!');
-        // Ora possiamo reindirizzare l'utente alla home page.
-        this.router.navigate(['/']); 
       },
       error: (err) => {
-        this.isLoading = false;
-        // Mostriamo il messaggio di errore che arriva dal backend
         this.errorMessage = err.error?.message || 'Login fallito. Controlla le tue credenziali e riprova.';
         console.error('Login flow error:', err);
       }

@@ -1,21 +1,24 @@
 import { inject } from '@angular/core';
-import { CanActivateFn, Router } from '@angular/router';
+import { CanActivateFn, Router, RouterStateSnapshot } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
-import { map, take } from 'rxjs/operators';
+import { map, filter, switchMap, take } from 'rxjs/operators';
 
-export const authGuard: CanActivateFn = (route, state) => {
+export const authGuard: CanActivateFn = (route, state: RouterStateSnapshot) => {
   const authService = inject(AuthService);
   const router = inject(Router);
 
-  return authService.isLoggedIn$.pipe(
-    take(1), // Prende solo il valore corrente e si disiscrive
+  return authService.authCheckCompleted$.pipe(
+    filter(completed => completed),
+    switchMap(() => authService.isLoggedIn$),
+    take(1),
     map(isLoggedIn => {
       if (isLoggedIn) {
-        return true; // Accesso consentito, l'utente può procedere
+        return true;
       } else {
-        // Se l'utente non è loggato, reindirizza alla pagina di login
+        // Chiama la funzione del servizio per salvare l'URL
+        authService.setRedirectUrl(state.url);
         router.navigate(['/login']);
-        return false; // Accesso negato
+        return false;
       }
     })
   );

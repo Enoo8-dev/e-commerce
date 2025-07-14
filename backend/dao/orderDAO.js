@@ -84,6 +84,21 @@ const orderDAO = {
     await dbPool.query('INSERT INTO Order_Tracking_History (order_id, status, notes) VALUES (?, ?, ?)', [orderId, status, notes]);
   },
 
+  async getOrdersByUserId(userId, languageCode) {
+    const sql = `
+      SELECT 
+        o.id,
+        o.order_date,
+        o.total_amount,
+        o.status
+      FROM Orders o
+      WHERE o.user_id = ?
+      ORDER BY o.order_date DESC;
+    `;
+    const [orders] = await dbPool.query(sql, [userId]);
+    return orders;
+  },
+
   /**
    * Fetches all addresses for a specific user.
    */

@@ -1,7 +1,7 @@
 import { Injectable, Injector } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, BehaviorSubject, map, tap, of, throwError } from 'rxjs';
-import { switchMap, catchError } from 'rxjs/operators';
+import { switchMap, catchError, finalize } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { CartService } from './cart.service';
 import { User } from '../models/user.model'; 
@@ -23,6 +23,11 @@ export class AuthService {
   private http!: HttpClient;
   private router!: Router;
   private cartService!: CartService;
+
+  private authCheckCompleted = new BehaviorSubject<boolean>(false);
+  public authCheckCompleted$ = this.authCheckCompleted.asObservable();
+
+  private redirectUrl: string | null = null;
 
   constructor(private injector: Injector) {
     setTimeout(() => this.loadUserFromToken(), 0);
@@ -53,22 +58,39 @@ export class AuthService {
 
   private loadUserFromToken(): void {
     const token = this.getToken();
-    if (token) {
-      this.fetchUserProfile().subscribe({
-        error: (err) => {
-          console.error("Token validation failed on startup. Cleaning up.", err);
-          this.logoutCleanup();
-        }
-      });
+    if (!token) {
+      // Se non c'è token, il controllo è immediatamente completato.
+      this.authCheckCompleted.next(true);
+      return;
     }
+
+    // Se c'è un token, proviamo a validarlo.
+    this.fetchUserProfile().pipe(
+      // finalize() viene eseguito sia in caso di successo che di errore.
+      finalize(() => this.authCheckCompleted.next(true))
+    ).subscribe({
+      error: (err) => {
+        console.error("Token validation failed on startup. Cleaning up.", err);
+        this.logoutCleanup();
+      }
+    });
   }
 
   login(credentials: any): Observable<User> {
     this.getCartService().clearCart();
     return this.getHttpClient().post<any>(`${this.apiUrl}/auth/login`, credentials).pipe(
-      tap(response => localStorage.setItem('authToken', response.token)),
+      tap(response => {
+        if (response && response.token) {
+          localStorage.setItem('authToken', response.token);
+        }
+      }),
       switchMap(() => this.fetchUserProfile()),
-      tap(() => this.getRouter().navigateByUrl('/')),
+      tap(() => {
+        // La logica di redirect ora usa la variabile interna
+        const url = this.redirectUrl || '/';
+        this.redirectUrl = null; // Pulisci l'URL dopo averlo usato
+        this.getRouter().navigateByUrl(url);
+      }),
       catchError(error => {
         this.logoutCleanup();
         return throwError(() => error);
@@ -102,5 +124,9 @@ export class AuthService {
 
   register(userData: any): Observable<any> {
     return this.getHttpClient().post(`${this.apiUrl}/auth/register`, userData);
+  }
+
+  setRedirectUrl(url: string): void {
+    this.redirectUrl = url;
   }
 }
