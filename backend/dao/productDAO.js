@@ -728,78 +728,123 @@ const productDAO = {
     },
 
     findBrandIdByNames(name_it, name_en) {
-    const sql = `
+        const sql = `
       SELECT b.id FROM Brands b
       JOIN Brand_Translations it ON b.id = it.brand_id AND it.language_code = 'it-IT' AND it.name = ?
       JOIN Brand_Translations en ON b.id = en.brand_id AND en.language_code = 'en-US' AND en.name = ?
       LIMIT 1;
     `;
-    return dbPool.query(sql, [name_it, name_en]).then(([rows]) => rows[0] ? rows[0].id : null);
-  },
+        return dbPool.query(sql, [name_it, name_en]).then(([rows]) => rows[0] ? rows[0].id : null);
+    },
 
-  findCategoryIdsByNames(names, languageCode) {
-    if (!names || names.length === 0) return [];
-    const sql = 'SELECT category_id FROM Category_Translations WHERE name IN (?) AND language_code = ?';
-    return dbPool.query(sql, [names, languageCode]).then(([rows]) => rows.map(r => r.category_id));
-  },
+    findCategoryIdsByNames(names, languageCode) {
+        if (!names || names.length === 0) return [];
+        const sql = 'SELECT category_id FROM Category_Translations WHERE name IN (?) AND language_code = ?';
+        return dbPool.query(sql, [names, languageCode]).then(([rows]) => rows.map(r => r.category_id));
+    },
 
-  findAttributeIdByName(name, languageCode) {
-    const sql = `SELECT attribute_id FROM Attribute_Translations WHERE name = ? AND language_code = ? LIMIT 1`;
-    return dbPool.query(sql, [name, languageCode]).then(([rows]) => rows[0] ? rows[0].attribute_id : null);
-  },
-  
-  findAttributeValueIdByName(attributeId, value, languageCode) {
-    const sql = `
+    findAttributeIdByName(name, languageCode) {
+        const sql = `SELECT attribute_id FROM Attribute_Translations WHERE name = ? AND language_code = ? LIMIT 1`;
+        return dbPool.query(sql, [name, languageCode]).then(([rows]) => rows[0] ? rows[0].attribute_id : null);
+    },
+
+    findAttributeValueIdByName(attributeId, value, languageCode) {
+        const sql = `
       SELECT av.id FROM Attribute_Values av
       JOIN Attribute_Value_Translations avt ON av.id = avt.attribute_value_id
       WHERE av.attribute_id = ? AND avt.value = ? AND avt.language_code = ?
       LIMIT 1;
     `;
-    return dbPool.query(sql, [attributeId, value, languageCode]).then(([rows]) => rows[0] ? rows[0].id : null);
-  },
+        return dbPool.query(sql, [attributeId, value, languageCode]).then(([rows]) => rows[0] ? rows[0].id : null);
+    },
 
-  async createProduct(productData) {
-    const connection = await dbPool.getConnection();
-    try {
-      await connection.beginTransaction();
-      const [productResult] = await connection.query('INSERT INTO Products (brand_id, is_active, is_featured) VALUES (?, ?, ?)', [productData.brand_id, true, productData.is_featured]);
-      const productId = productResult.insertId;
+    async createProduct(productData) {
+        const connection = await dbPool.getConnection();
+        try {
+            await connection.beginTransaction();
+            const [productResult] = await connection.query('INSERT INTO Products (brand_id, is_active, is_featured) VALUES (?, ?, ?)', [productData.brand_id, true, productData.is_featured]);
+            const productId = productResult.insertId;
 
-      const itData = productData.translations['it-IT'];
-      const enData = productData.translations['en-US'];
-      const translationSql = 'INSERT INTO Product_Translations (product_id, language_code, name, description, features) VALUES (?, ?, ?, ?, ?)';
-      await connection.query(translationSql, [productId, 'it-IT', itData.name, itData.description, JSON.stringify(itData.features)]);
-      await connection.query(translationSql, [productId, 'en-US', enData.name, enData.description, JSON.stringify(enData.features)]);
+            const itData = productData.translations['it-IT'];
+            const enData = productData.translations['en-US'];
+            const translationSql = 'INSERT INTO Product_Translations (product_id, language_code, name, description, features) VALUES (?, ?, ?, ?, ?)';
+            await connection.query(translationSql, [productId, 'it-IT', itData.name, itData.description, JSON.stringify(itData.features)]);
+            await connection.query(translationSql, [productId, 'en-US', enData.name, enData.description, JSON.stringify(enData.features)]);
 
-      if (productData.category_ids && productData.category_ids.length > 0) {
-        for (const categoryId of productData.category_ids) {
-          await connection.query('INSERT INTO Product_Categories (product_id, category_id) VALUES (?, ?)', [productId, categoryId]);
-        }
-      }
-      
-      for (const [index, variant] of productData.variants.entries()) {
-        const isDefault = (index === 0);
-        const [variantResult] = await connection.query('INSERT INTO Product_Variants (product_id, sku, price, stock_quantity, is_default, is_active) VALUES (?, ?, ?, ?, ?, ?)', [productId, variant.sku, variant.price, variant.stock, isDefault, true]);
-        const variantId = variantResult.insertId;
-        
-        if (variant.attributes && variant.attributes.length > 0) {
-          for (const attributeValueId of variant.attributes) {
-            if(attributeValueId) {
-              await connection.query('INSERT INTO Variant_Attributes (variant_id, attribute_value_id) VALUES (?, ?)', [variantId, attributeValueId]);
+            if (productData.category_ids && productData.category_ids.length > 0) {
+                for (const categoryId of productData.category_ids) {
+                    await connection.query('INSERT INTO Product_Categories (product_id, category_id) VALUES (?, ?)', [productId, categoryId]);
+                }
             }
-          }
+
+            for (const [index, variant] of productData.variants.entries()) {
+                const isDefault = (index === 0);
+                const [variantResult] = await connection.query('INSERT INTO Product_Variants (product_id, sku, price, stock_quantity, is_default, is_active) VALUES (?, ?, ?, ?, ?, ?)', [productId, variant.sku, variant.price, variant.stock, isDefault, true]);
+                const variantId = variantResult.insertId;
+
+                if (variant.attributes && variant.attributes.length > 0) {
+                    for (const attributeValueId of variant.attributes) {
+                        if (attributeValueId) {
+                            await connection.query('INSERT INTO Variant_Attributes (variant_id, attribute_value_id) VALUES (?, ?)', [variantId, attributeValueId]);
+                        }
+                    }
+                }
+            }
+
+            await connection.commit();
+            return { productId };
+        } catch (error) {
+            await connection.rollback();
+            throw error;
+        } finally {
+            connection.release();
         }
-      }
-      
-      await connection.commit();
-      return { productId };
-    } catch (error) {
-      await connection.rollback();
-      throw error;
-    } finally {
-      connection.release();
-    }
-  }
+    },
+
+    /**
+     * Fetches all active products along with their category and parent category info.
+     * @param {string} languageCode - The language for translations.
+     * @returns {Promise<Array>} A flat list of products with category details.
+     */
+    async getProductsGroupedByCategories(languageCode = 'en-US') {
+  const sql = `
+    SELECT
+      p.id AS productId,
+      pt.name AS productName,
+      pv.id as variantId,
+      pv.price AS originalPrice,
+      CASE
+        WHEN pv.sale_price IS NOT NULL AND (pv.sale_start_date IS NULL OR pv.sale_start_date <= NOW()) AND (pv.sale_end_date IS NULL OR pv.sale_end_date >= NOW())
+        THEN pv.sale_price
+        ELSE NULL
+      END AS currentSalePrice,
+      pv.sku AS variantSku,
+      pv.stock_quantity,
+      bt.name AS brandName,
+      (SELECT image_url FROM Product_Images WHERE variant_id = pv.id ORDER BY display_order ASC LIMIT 1) AS imageUrl,
+      p.is_featured,
+      sub_cat.id as categoryId,
+      sub_cat_trans.name as categoryName,
+      main_cat.id as mainCategoryId,
+      main_cat_trans.name as mainCategoryName
+    FROM Products p
+    JOIN Product_Translations pt ON p.id = pt.product_id AND pt.language_code = ?
+    JOIN Brands b ON p.brand_id = b.id
+    JOIN Brand_Translations bt ON b.id = bt.brand_id AND bt.language_code = ?
+    JOIN Product_Variants pv ON p.id = pv.product_id AND pv.is_default = TRUE AND pv.is_active = TRUE
+    JOIN Product_Categories pc ON p.id = pc.product_id
+    JOIN Categories sub_cat ON pc.category_id = sub_cat.id
+    JOIN Category_Translations sub_cat_trans ON sub_cat.id = sub_cat_trans.category_id AND sub_cat_trans.language_code = ?
+    LEFT JOIN Categories main_cat ON sub_cat.parent_category_id = main_cat.id
+    LEFT JOIN Category_Translations main_cat_trans ON main_cat.id = main_cat_trans.category_id AND main_cat_trans.language_code = ?
+    WHERE p.is_active = TRUE
+    ORDER BY mainCategoryName, categoryName, productName;
+  `;
+  const [rows] = await dbPool.query(sql, [languageCode, languageCode, languageCode, languageCode]);
+  return rows;
+}
+
+
 };
 
 // Export the DAO object so it can be used in other files (in our case, in the Service)

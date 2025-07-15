@@ -256,4 +256,14 @@ export class ProductService {
     return this.http.post(`${this.apiUrl}/admin/import/products`, formData);
   }
 
+  /**
+   * Fetches the layout for the category page, grouping products by main and sub-categories.
+   * @param languageCode The desired language for product names.  
+   * @return An observable of the category page layout.
+   */
+  getCategoryPageLayout(languageCode: string): Observable<any> {
+    const params = new HttpParams().set('lang', languageCode);
+    return this.http.get<any>(`${this.apiUrl}/products/by-category`, { params });
+  }
+
 }

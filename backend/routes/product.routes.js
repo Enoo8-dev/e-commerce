@@ -29,6 +29,17 @@ publicRouter.get('/products/newest-layout', async (req, res) => {
   }
 });
 
+// GET /api/products/category-layout
+publicRouter.get('/products/by-category', async (req, res) => {
+  try {
+    const lang = req.query.lang || 'en-US';
+    const layoutData = await productService.getCategoryPageLayout(lang);
+    res.json(layoutData);
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching category page layout' });
+  }
+});
+
 // GET /api/products/featured
 publicRouter.get('/products/featured', async (req, res) => {
     try {

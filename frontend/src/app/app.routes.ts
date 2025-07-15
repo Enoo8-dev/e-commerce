@@ -25,6 +25,7 @@ import { ProfileComponent } from './features/profile/profile';
 import { WishlistComponent } from './features/wishlist/wishlist';
 import { OffersPageComponent } from './features/offers-page/offers-page';
 import { NewPageComponent } from './features/new-page/new-page';
+import { CategoryPageComponent } from './features/category-page/category-page';
 
 export const routes: Routes = [
   
@@ -35,6 +36,7 @@ export const routes: Routes = [
   { path: 'register', component: RegisterComponent},
   { path: 'offers', component: OffersPageComponent },
   { path: 'new', component: NewPageComponent },
+  { path: 'categories', component: CategoryPageComponent },
   { path: 'orders/:id', component: OrderTrackingComponent },
   { path: 'wishlist', component: WishlistComponent, canActivate: [authGuard] },
   { path: 'cart', component: CartComponent, canActivate: [authGuard] }, // Cart route protected by authGuard
