@@ -6,7 +6,9 @@
       <p class="mt-2 text-sm text-gray-700">{{ 'ADMIN.MANAGE_PRODUCTS.SUBTITLE' | translate }}</p>
     </div>
     <div class="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
-      <button type="button" (click)="openAddProductModal()" class="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 md:h-12 md:px-5 bg-red-600 hover:bg-red-700 transition-colors text-white text-sm md:text-base font-bold">{{ 'ADMIN.MANAGE_PRODUCTS.ADD_PRODUCT' | translate }}</button>
+      <button type="button" (click)="openAddProductModal()"
+        class="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 md:h-12 md:px-5 bg-red-600 hover:bg-red-700 transition-colors text-white text-sm md:text-base font-bold">{{
+        'ADMIN.MANAGE_PRODUCTS.ADD_PRODUCT' | translate }}</button>
     </div>
   </div>
 
@@ -16,12 +18,14 @@
     <div class="md:col-span-2 lg:col-span-3">
       <div class="relative rounded-lg shadow-sm">
         <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-          <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 256 256"><path d="M229.66,218.34l-50.07-50.06a88.11,88.11,0,1,0-11.31,11.31l50.06,50.07a8,8,0,0,0,11.32-11.32ZM40,112a72,72,0,1,1,72,72A72.08,72.08,0,0,1,40,112Z"></path></svg>
+          <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
+            viewBox="0 0 256 256">
+            <path
+              d="M229.66,218.34l-50.07-50.06a88.11,88.11,0,1,0-11.31,11.31l50.06,50.07a8,8,0,0,0,11.32-11.32ZM40,112a72,72,0,1,1,72,72A72.08,72.08,0,0,1,40,112Z">
+            </path>
+          </svg>
         </div>
-        <input 
-          type="text" 
-          [title]="'NAV.SEARCH' | translate"
-          [formControl]="searchControl" 
+        <input type="text" [title]="'NAV.SEARCH' | translate" [formControl]="searchControl"
           [placeholder]="'ADMIN.MANAGE_PRODUCTS.SEARCH_PLACEHOLDER' | translate"
           class="focus:outline-none block w-full rounded-lg border-0 bg-[#f4f0f0] py-2 pl-10 text-gray-900 placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm">
       </div>
@@ -29,13 +33,18 @@
     <!-- Filtro di Stato -->
     <div class="w-full">
       <div class="relative">
-        <select [formControl]="statusFilterControl" class="appearance-none block w-full rounded-lg border-0 bg-[#f4f0f0] py-2 pl-3 pr-10 text-gray-900 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm cursor-pointer">
+        <select [formControl]="statusFilterControl"
+          class="appearance-none block w-full rounded-lg border-0 bg-[#f4f0f0] py-2 pl-3 pr-10 text-gray-900 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm cursor-pointer">
           <option value="all">{{ 'ADMIN.MANAGE_PRODUCTS.STATUSES.ALL_STATUSES' | translate }}</option>
           <option value="active">{{ 'ADMIN.MANAGE_PRODUCTS.STATUSES.ACTIVE' | translate }}</option>
           <option value="inactive">{{ 'ADMIN.MANAGE_PRODUCTS.STATUSES.INACTIVE' | translate }}</option>
         </select>
         <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-          <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 3a.75.75 0 01.53.22l3.5 3.5a.75.75 0 01-1.06 1.06L10 4.81 7.03 7.78a.75.75 0 01-1.06-1.06l3.5-3.5A.75.75 0 0110 3zm-3.72 9.28a.75.75 0 011.06 0L10 14.19l2.97-2.97a.75.75 0 111.06 1.06l-3.5 3.5a.75.75 0 01-1.06 0l-3.5-3.5a.75.75 0 010-1.06z" clip-rule="evenodd" /></svg>
+          <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd"
+              d="M10 3a.75.75 0 01.53.22l3.5 3.5a.75.75 0 01-1.06 1.06L10 4.81 7.03 7.78a.75.75 0 01-1.06-1.06l3.5-3.5A.75.75 0 0110 3zm-3.72 9.28a.75.75 0 011.06 0L10 14.19l2.97-2.97a.75.75 0 111.06 1.06l-3.5 3.5a.75.75 0 01-1.06 0l-3.5-3.5a.75.75 0 010-1.06z"
+              clip-rule="evenodd" />
+          </svg>
         </div>
       </div>
     </div>
@@ -45,133 +54,229 @@
   @if(error) { <p class="mt-8 text-center text-red-600">{{ error }}</p> }
 
   @if(!isLoading && !error) {
-    <!-- Tabella Prodotti -->
-    <div class="mt-8 flex flex-col  ">
-      <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
-        <div class="inline-block min-w-full py-2 align-middle">
-          <div class="overflow-hidden shadow ring-1 ring-black ring-opacity-5 md:rounded-lg mx-8">
-            <table class="min-w-full divide-y divide-gray-300">
-              <thead class="bg-gray-50">
-                  <tr>
-                    <!-- *** INTESTAZIONE TABELLA CON NUOVE ICONE DI ORDINAMENTO *** -->
-                    <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">
-                      <a (click)="sortBy('productName')" class="group inline-flex cursor-pointer">
-                        {{ 'ADMIN.MANAGE_PRODUCTS.TABLE_HEADERS.PRODUCT_NAME' | translate }}
-                        <span class="ml-2 flex rounded">
-                          <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20" [ngClass]="{'text-gray-900': sort.by === 'productName' && sort.order === 'ASC', 'text-gray-400 group-hover:text-gray-500': sort.by !== 'productName' || sort.order !== 'ASC'}"><path d="M10 17a.75.75 0 01-.75-.75V5.56l-2.22 2.22a.75.75 0 11-1.06-1.06l3.5-3.5a.75.75 0 011.06 0l3.5 3.5a.75.75 0 11-1.06 1.06L10.75 5.56v10.69A.75.75 0 0110 17z" /></svg>
-                          <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20" [ngClass]="{'text-gray-900': sort.by === 'productName' && sort.order === 'DESC', 'text-gray-400 group-hover:text-gray-500': sort.by !== 'productName' || sort.order !== 'DESC'}"><path d="M10 3a.75.75 0 01.75.75v10.69l2.22-2.22a.75.75 0 111.06 1.06l-3.5 3.5a.75.75 0 01-1.06 0l-3.5-3.5a.75.75 0 111.06-1.06l2.22 2.22V3.75A.75.75 0 0110 3z" /></svg>
-                        </span>
-                      </a>
-                    </th>
-                    <th scope="col" class="px-2 py-3.5 text-left text-sm font-semibold text-gray-900">
-                      <a (click)="sortBy('brandName')" class="group inline-flex cursor-pointer">
-                        {{ 'ADMIN.MANAGE_PRODUCTS.TABLE_HEADERS.BRAND' | translate }}
-                        <span class="ml-2 flex rounded">
-                            <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20" [ngClass]="{'text-gray-900': sort.by === 'brandName' && sort.order === 'ASC', 'text-gray-400 group-hover:text-gray-500': sort.by !== 'brandName' || sort.order !== 'ASC'}"><path d="M10 17a.75.75 0 01-.75-.75V5.56l-2.22 2.22a.75.75 0 11-1.06-1.06l3.5-3.5a.75.75 0 011.06 0l3.5 3.5a.75.75 0 11-1.06 1.06L10.75 5.56v10.69A.75.75 0 0110 17z" /></svg>
-                            <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20" [ngClass]="{'text-gray-900': sort.by === 'brandName' && sort.order === 'DESC', 'text-gray-400 group-hover:text-gray-500': sort.by !== 'brandName' || sort.order !== 'DESC'}"><path d="M10 3a.75.75 0 01.75.75v10.69l2.22-2.22a.75.75 0 111.06 1.06l-3.5 3.5a.75.75 0 01-1.06 0l-3.5-3.5a.75.75 0 111.06-1.06l2.22 2.22V3.75A.75.75 0 0110 3z" /></svg>
-                        </span>
-                      </a>
-                    </th>
-                    <th scope="col" class="px-2 py-3.5 text-left text-sm font-semibold text-gray-900">
-                      <a (click)="sortBy('variantSku')" class="group inline-flex cursor-pointer">
-                        {{ 'ADMIN.MANAGE_PRODUCTS.TABLE_HEADERS.SKU' | translate }}
-                        <span class="ml-2 flex rounded">
-                            <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20" [ngClass]="{'text-gray-900': sort.by === 'variantSku' && sort.order === 'ASC', 'text-gray-400 group-hover:text-gray-500': sort.by !== 'variantSku' || sort.order !== 'ASC'}"><path d="M10 17a.75.75 0 01-.75-.75V5.56l-2.22 2.22a.75.75 0 11-1.06-1.06l3.5-3.5a.75.75 0 011.06 0l3.5 3.5a.75.75 0 11-1.06 1.06L10.75 5.56v10.69A.75.75 0 0110 17z" /></svg>
-                            <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20" [ngClass]="{'text-gray-900': sort.by === 'variantSku' && sort.order === 'DESC', 'text-gray-400 group-hover:text-gray-500': sort.by !== 'variantSku' || sort.order !== 'DESC'}"><path d="M10 3a.75.75 0 01.75.75v10.69l2.22-2.22a.75.75 0 111.06 1.06l-3.5 3.5a.75.75 0 01-1.06 0l-3.5-3.5a.75.75 0 111.06-1.06l2.22 2.22V3.75A.75.75 0 0110 3z" /></svg>
-                        </span>
-                      </a>
-                    </th>
-                    <th scope="col" class="px-2 py-3.5 text-left text-sm font-semibold text-gray-900">
-                      <a (click)="sortBy('originalPrice')" class="group inline-flex cursor-pointer">
-                        {{ 'ADMIN.MANAGE_PRODUCTS.TABLE_HEADERS.PRICE' | translate }}
-                        <span class="ml-2 flex rounded">
-                            <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20" [ngClass]="{'text-gray-900': sort.by === 'originalPrice' && sort.order === 'ASC', 'text-gray-400 group-hover:text-gray-500': sort.by !== 'originalPrice' || sort.order !== 'ASC'}"><path d="M10 17a.75.75 0 01-.75-.75V5.56l-2.22 2.22a.75.75 0 11-1.06-1.06l3.5-3.5a.75.75 0 011.06 0l3.5 3.5a.75.75 0 11-1.06 1.06L10.75 5.56v10.69A.75.75 0 0110 17z" /></svg>
-                            <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20" [ngClass]="{'text-gray-900': sort.by === 'originalPrice' && sort.order === 'DESC', 'text-gray-400 group-hover:text-gray-500': sort.by !== 'originalPrice' || sort.order !== 'DESC'}"><path d="M10 3a.75.75 0 01.75.75v10.69l2.22-2.22a.75.75 0 111.06 1.06l-3.5 3.5a.75.75 0 01-1.06 0l-3.5-3.5a.75.75 0 111.06-1.06l2.22 2.22V3.75A.75.75 0 0110 3z" /></svg>
-                        </span>
-                      </a>
-                    </th>
-                    <th scope="col" class="px-2 py-3.5 text-left text-sm font-semibold text-gray-900">
-                      <a (click)="sortBy('stock')" class="group inline-flex cursor-pointer">
-                        {{ 'ADMIN.MANAGE_PRODUCTS.TABLE_HEADERS.STOCK' | translate }}
-                        <span class="ml-2 flex rounded">
-                            <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20" [ngClass]="{'text-gray-900': sort.by === 'stock' && sort.order === 'ASC', 'text-gray-400 group-hover:text-gray-500': sort.by !== 'productName' || sort.order !== 'ASC'}"><path d="M10 17a.75.75 0 01-.75-.75V5.56l-2.22 2.22a.75.75 0 11-1.06-1.06l3.5-3.5a.75.75 0 011.06 0l3.5 3.5a.75.75 0 11-1.06 1.06L10.75 5.56v10.69A.75.75 0 0110 17z" /></svg>
-                            <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20" [ngClass]="{'text-gray-900': sort.by === 'stock' && sort.order === 'DESC', 'text-gray-400 group-hover:text-gray-500': sort.by !== 'productName' || sort.order !== 'DESC'}"><path d="M10 3a.75.75 0 01.75.75v10.69l2.22-2.22a.75.75 0 111.06 1.06l-3.5 3.5a.75.75 0 01-1.06 0l-3.5-3.5a.75.75 0 111.06-1.06l2.22 2.22V3.75A.75.75 0 0110 3z" /></svg>
-                        </span>
-                      </a>
-                    </th>
-                    <th scope="col" class="px-2 py-3.5 text-left text-sm font-semibold text-gray-900">{{ 'ADMIN.MANAGE_PRODUCTS.TABLE_HEADERS.STATUS' | translate }}</th>
-                    <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-6"><span class="sr-only">{{ 'ADMIN.MANAGE_PRODUCTS.EDIT_PRODUCT' | translate }}</span></th>
-                  </tr>
-                </thead>
-              <tbody class="divide-y divide-gray-200 bg-white">
-                @for (product of products; track product.variantSku) {
-                  <tr class="hover:bg-gray-50">
-                    <td class="py-4 pl-4 pr-3 text-sm sm:pl-6">
-                      <div class="flex items-center">
-                        <div class="h-10 w-10 flex-shrink-0">
-                          <img class="h-10 w-10 rounded-full object-contain bg-gray-100" [src]="product.imageUrl || 'https://placehold.co/40x40'" alt="">
-                        </div>
-                        <div class="ml-4">
-                          <div class="font-medium text-gray-900">{{ product.productName }}</div>
-                        </div>
-                      </div>
-                    </td>
-                    <td class="px-2 py-4 text-sm text-gray-500">{{ product.brandName }}</td>
-                    <td class="px-2 py-4 text-sm text-gray-500">{{ product.variantSku }}</td>
-                    <td class="whitespace-nowrap px-2 py-4 text-sm text-gray-500">{{ product.originalPrice | currency:'EUR' }}</td>
-                    <td class="whitespace-nowrap px-2 py-4 text-sm text-gray-500">{{ product.stock }}</td>
-                    <td class="whitespace-nowrap px-2 py-4">
-                      <!-- Toggle Switch -->
-                      <button type="button" (click)="toggleVariantStatus(product, $event)" [ngClass]="product.isActive ? 'bg-green-600' : 'bg-red-600'" class="relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2" role="switch">
-                        <span [ngClass]="product.isActive ? 'translate-x-5' : 'translate-x-0'" class="pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"></span>
-                      </button>
-                    </td>
-                    <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
-                      <a 
-                        [routerLink]="['/admin/products/edit', product.productId]"
-                        class="text-blue-600 hover:text-blue-900">
-                        {{ 'ADMIN.MANAGE_PRODUCTS.EDIT_PRODUCT' | translate }}
-                      </a>
-                    </td>
-                  </tr>
-                }
-              </tbody>
-            </table>
-          </div>
+  <!-- Tabella Prodotti -->
+  <div class="mt-8 flex flex-col  ">
+    <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+      <div class="inline-block min-w-full py-2 align-middle">
+        <div class="overflow-hidden shadow ring-1 ring-black ring-opacity-5 md:rounded-lg mx-8">
+          <table class="min-w-full divide-y divide-gray-300">
+            <thead class="bg-gray-50">
+              <tr>
+                <!-- *** INTESTAZIONE TABELLA CON NUOVE ICONE DI ORDINAMENTO *** -->
+                <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">
+                  <a (click)="sortBy('productName')" class="group inline-flex cursor-pointer">
+                    {{ 'ADMIN.MANAGE_PRODUCTS.TABLE_HEADERS.PRODUCT_NAME' | translate }}
+                    <span class="ml-2 flex rounded">
+                      <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20"
+                        [ngClass]="{'text-gray-900': sort.by === 'productName' && sort.order === 'ASC', 'text-gray-400 group-hover:text-gray-500': sort.by !== 'productName' || sort.order !== 'ASC'}">
+                        <path
+                          d="M10 17a.75.75 0 01-.75-.75V5.56l-2.22 2.22a.75.75 0 11-1.06-1.06l3.5-3.5a.75.75 0 011.06 0l3.5 3.5a.75.75 0 11-1.06 1.06L10.75 5.56v10.69A.75.75 0 0110 17z" />
+                      </svg>
+                      <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20"
+                        [ngClass]="{'text-gray-900': sort.by === 'productName' && sort.order === 'DESC', 'text-gray-400 group-hover:text-gray-500': sort.by !== 'productName' || sort.order !== 'DESC'}">
+                        <path
+                          d="M10 3a.75.75 0 01.75.75v10.69l2.22-2.22a.75.75 0 111.06 1.06l-3.5 3.5a.75.75 0 01-1.06 0l-3.5-3.5a.75.75 0 111.06-1.06l2.22 2.22V3.75A.75.75 0 0110 3z" />
+                      </svg>
+                    </span>
+                  </a>
+                </th>
+                <th scope="col" class="px-2 py-3.5 text-left text-sm font-semibold text-gray-900">
+                  <a (click)="sortBy('brandName')" class="group inline-flex cursor-pointer">
+                    {{ 'ADMIN.MANAGE_PRODUCTS.TABLE_HEADERS.BRAND' | translate }}
+                    <span class="ml-2 flex rounded">
+                      <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20"
+                        [ngClass]="{'text-gray-900': sort.by === 'brandName' && sort.order === 'ASC', 'text-gray-400 group-hover:text-gray-500': sort.by !== 'brandName' || sort.order !== 'ASC'}">
+                        <path
+                          d="M10 17a.75.75 0 01-.75-.75V5.56l-2.22 2.22a.75.75 0 11-1.06-1.06l3.5-3.5a.75.75 0 011.06 0l3.5 3.5a.75.75 0 11-1.06 1.06L10.75 5.56v10.69A.75.75 0 0110 17z" />
+                      </svg>
+                      <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20"
+                        [ngClass]="{'text-gray-900': sort.by === 'brandName' && sort.order === 'DESC', 'text-gray-400 group-hover:text-gray-500': sort.by !== 'brandName' || sort.order !== 'DESC'}">
+                        <path
+                          d="M10 3a.75.75 0 01.75.75v10.69l2.22-2.22a.75.75 0 111.06 1.06l-3.5 3.5a.75.75 0 01-1.06 0l-3.5-3.5a.75.75 0 111.06-1.06l2.22 2.22V3.75A.75.75 0 0110 3z" />
+                      </svg>
+                    </span>
+                  </a>
+                </th>
+                <th scope="col" class="px-2 py-3.5 text-left text-sm font-semibold text-gray-900">
+                  <a (click)="sortBy('variantSku')" class="group inline-flex cursor-pointer">
+                    {{ 'ADMIN.MANAGE_PRODUCTS.TABLE_HEADERS.SKU' | translate }}
+                    <span class="ml-2 flex rounded">
+                      <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20"
+                        [ngClass]="{'text-gray-900': sort.by === 'variantSku' && sort.order === 'ASC', 'text-gray-400 group-hover:text-gray-500': sort.by !== 'variantSku' || sort.order !== 'ASC'}">
+                        <path
+                          d="M10 17a.75.75 0 01-.75-.75V5.56l-2.22 2.22a.75.75 0 11-1.06-1.06l3.5-3.5a.75.75 0 011.06 0l3.5 3.5a.75.75 0 11-1.06 1.06L10.75 5.56v10.69A.75.75 0 0110 17z" />
+                      </svg>
+                      <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20"
+                        [ngClass]="{'text-gray-900': sort.by === 'variantSku' && sort.order === 'DESC', 'text-gray-400 group-hover:text-gray-500': sort.by !== 'variantSku' || sort.order !== 'DESC'}">
+                        <path
+                          d="M10 3a.75.75 0 01.75.75v10.69l2.22-2.22a.75.75 0 111.06 1.06l-3.5 3.5a.75.75 0 01-1.06 0l-3.5-3.5a.75.75 0 111.06-1.06l2.22 2.22V3.75A.75.75 0 0110 3z" />
+                      </svg>
+                    </span>
+                  </a>
+                </th>
+                <th scope="col" class="px-2 py-3.5 text-left text-sm font-semibold text-gray-900">
+                  <a (click)="sortBy('originalPrice')" class="group inline-flex cursor-pointer">
+                    {{ 'ADMIN.MANAGE_PRODUCTS.TABLE_HEADERS.PRICE' | translate }}
+                    <span class="ml-2 flex rounded">
+                      <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20"
+                        [ngClass]="{'text-gray-900': sort.by === 'originalPrice' && sort.order === 'ASC', 'text-gray-400 group-hover:text-gray-500': sort.by !== 'originalPrice' || sort.order !== 'ASC'}">
+                        <path
+                          d="M10 17a.75.75 0 01-.75-.75V5.56l-2.22 2.22a.75.75 0 11-1.06-1.06l3.5-3.5a.75.75 0 011.06 0l3.5 3.5a.75.75 0 11-1.06 1.06L10.75 5.56v10.69A.75.75 0 0110 17z" />
+                      </svg>
+                      <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20"
+                        [ngClass]="{'text-gray-900': sort.by === 'originalPrice' && sort.order === 'DESC', 'text-gray-400 group-hover:text-gray-500': sort.by !== 'originalPrice' || sort.order !== 'DESC'}">
+                        <path
+                          d="M10 3a.75.75 0 01.75.75v10.69l2.22-2.22a.75.75 0 111.06 1.06l-3.5 3.5a.75.75 0 01-1.06 0l-3.5-3.5a.75.75 0 111.06-1.06l2.22 2.22V3.75A.75.75 0 0110 3z" />
+                      </svg>
+                    </span>
+                  </a>
+                </th>
+                <th scope="col" class="px-2 py-3.5 text-left text-sm font-semibold text-gray-900">
+                  <a (click)="sortBy('stock')" class="group inline-flex cursor-pointer">
+                    {{ 'ADMIN.MANAGE_PRODUCTS.TABLE_HEADERS.STOCK' | translate }}
+                    <span class="ml-2 flex rounded">
+                      <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20"
+                        [ngClass]="{'text-gray-900': sort.by === 'stock' && sort.order === 'ASC', 'text-gray-400 group-hover:text-gray-500': sort.by !== 'productName' || sort.order !== 'ASC'}">
+                        <path
+                          d="M10 17a.75.75 0 01-.75-.75V5.56l-2.22 2.22a.75.75 0 11-1.06-1.06l3.5-3.5a.75.75 0 011.06 0l3.5 3.5a.75.75 0 11-1.06 1.06L10.75 5.56v10.69A.75.75 0 0110 17z" />
+                      </svg>
+                      <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20"
+                        [ngClass]="{'text-gray-900': sort.by === 'stock' && sort.order === 'DESC', 'text-gray-400 group-hover:text-gray-500': sort.by !== 'productName' || sort.order !== 'DESC'}">
+                        <path
+                          d="M10 3a.75.75 0 01.75.75v10.69l2.22-2.22a.75.75 0 111.06 1.06l-3.5 3.5a.75.75 0 01-1.06 0l-3.5-3.5a.75.75 0 111.06-1.06l2.22 2.22V3.75A.75.75 0 0110 3z" />
+                      </svg>
+                    </span>
+                  </a>
+                </th>
+                <th scope="col" class="px-2 py-3.5 text-left text-sm font-semibold text-gray-900">{{
+                  'ADMIN.MANAGE_PRODUCTS.TABLE_HEADERS.STATUS' | translate }}</th>
+                <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-6"><span class="sr-only">{{
+                    'ADMIN.MANAGE_PRODUCTS.EDIT_PRODUCT' | translate }}</span></th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-200 bg-white">
+              @for (product of products; track product.variantSku) {
+              <tr class="hover:bg-gray-50">
+                <td class="py-4 pl-4 pr-3 text-sm sm:pl-6">
+                  <div class="flex items-center">
+                    <div class="h-10 w-10 flex-shrink-0">
+                      <img class="h-10 w-10 rounded-full object-contain bg-gray-100"
+                        [src]="product.imageUrl || 'https://placehold.co/40x40'" alt="">
+                    </div>
+                    <div class="ml-4">
+                      <div class="font-medium text-gray-900">{{ product.productName }}</div>
+                    </div>
+                  </div>
+                </td>
+                <td class="px-2 py-4 text-sm text-gray-500">{{ product.brandName }}</td>
+                <td class="px-2 py-4 text-sm text-gray-500">{{ product.variantSku }}</td>
+                <td class="whitespace-nowrap px-2 py-4 text-sm text-gray-500">{{ product.originalPrice | currency:'EUR'
+                  }}</td>
+                <td class="whitespace-nowrap px-2 py-4 text-sm text-gray-500">{{ product.stock }}</td>
+                <td class="whitespace-nowrap px-2 py-4">
+                  <!-- Toggle Switch -->
+                  <button type="button" (click)="toggleVariantStatus(product, $event)"
+                    [ngClass]="product.isActive ? 'bg-green-600' : 'bg-red-600'"
+                    class="relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                    role="switch">
+                    <span [ngClass]="product.isActive ? 'translate-x-5' : 'translate-x-0'"
+                      class="pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"></span>
+                  </button>
+                </td>
+                <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
+                  <a [routerLink]="['/admin/products/edit', product.productId]"
+                    class="text-blue-600 hover:text-blue-900">
+                    {{ 'ADMIN.MANAGE_PRODUCTS.EDIT_PRODUCT' | translate }}
+                  </a>
+                </td>
+              </tr>
+              }
+            </tbody>
+          </table>
         </div>
       </div>
     </div>
+  </div>
   }
 </div>
 
 @if (isAddProductModalOpen) {
-  <!--
-    CORREZIONE: Abbiamo sostituito il vecchio sfondo con uno più leggero e un effetto blur più pronunciato.
-  -->
-  <div class="fixed inset-0 bg-white/10 backdrop-blur-md flex items-center justify-center z-50" (click)="closeAddProductModal()">
-    <div class="bg-white rounded-lg shadow-xl p-6 sm:p-8 max-w-md w-full mx-4" (click)="$event.stopPropagation()">
-      
-      <!-- Intestazione Modale -->
-      <div class="flex justify-between items-center">
+<div class="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center z-50"
+  (click)="closeAddProductModal()">
+  <div class="bg-white rounded-lg shadow-xl p-6 sm:p-8 max-w-md w-full mx-4" (click)="$event.stopPropagation()">
+    <div class="flex justify-between items-center">
         <h2 class="text-xl font-bold text-gray-900">{{ 'ADMIN.MANAGE_PRODUCTS.ADD_MODAL.TITLE' | translate}}</h2>
         <button (click)="closeAddProductModal()" class="cursor-pointer text-gray-400 hover:text-gray-600">
           <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
         </button>
-      </div>
-      
-      <p class="text-gray-600 mt-2 mb-6">{{ 'ADMIN.MANAGE_PRODUCTS.ADD_MODAL.SUBTITLE' | translate}}</p>
-      
-      <!-- Opzioni -->
-      <div class="flex flex-col space-y-4">
-        <button (click)="handleImportFromFile()" class="cursor-pointer w-full text-left p-4 rounded-lg border hover:border-blue-500 hover:bg-blue-50 transition-all">
-          <p class="font-semibold text-gray-800">{{ 'ADMIN.MANAGE_PRODUCTS.ADD_MODAL.IMPORT_FROM_FILE' | translate}}</p>
-          <p class="text-sm text-gray-500">{{ 'ADMIN.MANAGE_PRODUCTS.ADD_MODAL.IMPORT_FROM_FILE_DESCRIPTION' | translate}}</p>
-        </button>
-        <button (click)="navigateToAddManually()" class="cursor-pointer w-full text-left p-4 rounded-lg border hover:border-blue-500 hover:bg-blue-50 transition-all">
+    </div>
+
+    <p class="text-gray-600 mt-2 mb-6">{{ 'ADMIN.MANAGE_PRODUCTS.ADD_MODAL.SUBTITLE' | translate}}</p>
+
+    <div class="flex flex-col space-y-4">
+      <!-- Pulsante per l'importazione che apre il file dialog -->
+      <!-- Etichetta per l'importazione da file, ora con tooltip informativo -->
+      <label
+        class="w-full text-left p-4 rounded-lg border hover:border-blue-500 hover:bg-blue-50 transition-all cursor-pointer">
+        <!-- Input file nascosto -->
+        <input type="file" (change)="onFileSelected($event)" accept=".csv" class="hidden">
+
+        <!-- Contenitore per titolo e icona -->
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <p class="font-semibold text-gray-800">{{ 'ADMIN.MANAGE_PRODUCTS.ADD_MODAL.IMPORT_FROM_FILE' | translate}}
+            </p>
+
+            <!-- Icona "i" con contenitore relativo per il tooltip -->
+            <div class="relative group flex items-center">
+              <svg class="w-3 h-3 text-gray-400" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 32 32" xml:space="preserve"><g id="info"><g><path style="fill:currentColor;" d="M10,16c1.105,0,2,0.895,2,2v8c0,1.105-0.895,2-2,2H8v4h16v-4h-1.992c-1.102,0-2-0.895-2-2L20,12H8 v4H10z"/><circle style="fill:currentColor;" cx="16" cy="4" r="4"/></g></g></svg>        
+
+
+              <!-- Pannello del Tooltip -->
+              <div
+                class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-80 p-3 bg-gray-800 text-white text-xs rounded-lg shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none z-10">
+                <h4 class="font-bold mb-3">Struttura CSV richiesta:</h4>
+                <p class="mb-2">Ogni riga rappresenta una variante. Colonne obbligatorie:</p>
+                <ul class="list-disc list-inside space-y-1">
+                  <li><span class="font-mono">product_group_id</span> (per raggruppare varianti)</li>
+                  <li><span class="font-mono">productName_&#123;language_code&#125;</span></li>
+                  <li><span class="font-mono">description_&#123;language_code&#125;</span></li>
+                  <li><span class="font-mono">brandName_&#123;language_code&#125;</span></li>
+                  <li><span class="font-mono">categoryNames_&#123;language_code&#125;</span> (separate da ',')</li>
+                  <li><span class="font-mono">features_&#123;language_code&#125;</span> (key:value,key:value)</li>
+                  <li><span class="font-mono">sku</span> (unico per variante)</li>
+                  <li><span class="font-mono">price</span></li>
+                  <li><span class="font-mono">stock</span></li>
+                  <li><span class="font-mono">is_featured</span> (TRUE/FALSE)</li>
+                  <li><span class="font-mono">attribute_&#123;name&#125;_&#123;language_code&#125;</span></li>
+                </ul>
+                <p class="mt-6">Separatore delle colonne ';'.</p>
+                <p class="mt-2">Con <span class="font-mono">&#123;language_code&#125;</span> si intende il codice ISO della lingua da inserire.</p>
+                <p class="mt-2">Con <span class="font-mono">&#123;name&#125;</span> si intende il nome dell'attributo nella lingua <span class="font-mono">&#123;language_code&#125;</span></p>
+                <div
+                  class="absolute top-full left-1/2 -translate-x-1/2 w-0 h-0 border-x-8 border-x-transparent border-t-8 border-t-gray-800">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <p class="text-sm text-gray-500 mt-1">{{ 'ADMIN.MANAGE_PRODUCTS.ADD_MODAL.IMPORT_FROM_FILE_DESCRIPTION' |
+          translate}}</p>
+      </label>
+
+      <button (click)="navigateToAddManually()" class="cursor-pointer w-full text-left p-4 rounded-lg border hover:border-blue-500 hover:bg-blue-50 transition-all">
           <p class="font-semibold text-gray-800">{{ 'ADMIN.MANAGE_PRODUCTS.ADD_MODAL.MANUAL_ENTRY' | translate}}</p>
           <p class="text-sm text-gray-500">{{ 'ADMIN.MANAGE_PRODUCTS.ADD_MODAL.MANUAL_ENTRY_DESCRIPTION' | translate}}</p>
-        </button>
-      </div>
+      </button>
     </div>
   </div>
+</div>
+}
+
+<!-- Indicatore di caricamento per l'importazione -->
+@if (isImporting) {
+<div class="fixed inset-0 bg-white/80 flex flex-col items-center justify-center z-50">
+  <p class="text-lg font-medium text-gray-800">Importazione in corso, non chiudere la pagina...</p>
+</div>
 }

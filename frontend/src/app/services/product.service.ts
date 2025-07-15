@@ -245,4 +245,15 @@ export class ProductService {
     return this.http.get<any>(`${this.apiUrl}/products/newest-layout`, { params });
   }
 
+  /**
+   * Imports products from a CSV file.
+   * @param file The CSV file to import.
+   * @returns An observable of the import response.
+   */
+  importCsv(file: File): Observable<any> {
+    const formData = new FormData();
+    formData.append('csvfile', file, file.name);
+    return this.http.post(`${this.apiUrl}/admin/import/products`, formData);
+  }
+
 }

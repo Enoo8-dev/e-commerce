@@ -19,6 +19,8 @@ export class ProductManagementComponent implements OnInit, OnDestroy {
   isLoading = true;
   error: string | null = null;
   isAddProductModalOpen = false;
+  isImporting = false;
+
 
   // Controlli per i filtri e la ricerca
   searchControl = new FormControl('');
@@ -60,7 +62,7 @@ export class ProductManagementComponent implements OnInit, OnDestroy {
       status: this.statusFilterControl.value === 'all' ? '' : this.statusFilterControl.value,
       sortBy: this.sort.by,
       sortOrder: this.sort.order,
-      lang: 'it-IT' // o dinamico
+      lang: 'en-US' // o dinamico
     };
 
     this.productService.getAdminProductList(options).subscribe({
@@ -120,8 +122,25 @@ export class ProductManagementComponent implements OnInit, OnDestroy {
     this.router.navigate(['/admin/products/new']);
   }
 
-  handleImportFromFile(): void {
-    alert('Funzionalità di importazione non ancora implementata.');
+  onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      const file = input.files[0];
+      this.isImporting = true;
+      this.closeAddProductModal();
+      
+      this.productService.importCsv(file).subscribe({
+        next: (response) => {
+          alert(`Successo: ${response.message}`);
+          this.isImporting = false;
+          this.fetchProducts(); // Ricarica la lista
+        },
+        error: (err) => {
+          alert(`Errore: ${err.error.message}`);
+          this.isImporting = false;
+        }
+      });
+    }
   }
 
   ngOnDestroy(): void {

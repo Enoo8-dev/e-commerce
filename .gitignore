@@ -38,3 +38,4 @@ yarn-error.log*
 
 # Private assets
 /backend/public/images/
+/backend/uploads/

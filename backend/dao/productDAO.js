@@ -122,11 +122,11 @@ const productDAO = {
         LIMIT ?;
         `;
         try {
-        const [rows] = await dbPool.query(sql, [languageCode, languageCode, limit]);
-        return rows;
+            const [rows] = await dbPool.query(sql, [languageCode, languageCode, limit]);
+            return rows;
         } catch (error) {
-        console.error('Error in getLatestOffers DAO:', error);
-        throw error;
+            console.error('Error in getLatestOffers DAO:', error);
+            throw error;
         }
     },
 
@@ -192,7 +192,7 @@ const productDAO = {
             const variantIds = variants.map(v => v.id);
             const imagesSql = 'SELECT id, variant_id, image_url, alt_text FROM Product_Images WHERE variant_id IN (?) ORDER BY display_order ASC';
             const [images] = await dbPool.query(imagesSql, [variantIds]);
-        
+
             const attributesSql = `
                 SELECT
                     va.variant_id, 
@@ -221,7 +221,7 @@ const productDAO = {
     },
 
     async getAdminProductList({ lang = 'en-US', search = '', sortBy = 'productId', sortOrder = 'DESC', status = '' }) {
-    let sql = `
+        let sql = `
       SELECT
         p.id AS productId,
         pt.name AS productName,
@@ -239,46 +239,46 @@ const productDAO = {
       JOIN Brand_Translations AS bt ON b.id = bt.brand_id
     `;
 
-    const params = [lang, lang];
-    let whereClauses = ['pt.language_code = ?', 'bt.language_code = ?'];
+        const params = [lang, lang];
+        let whereClauses = ['pt.language_code = ?', 'bt.language_code = ?'];
 
-    if (search) {
-      whereClauses.push('(pt.name LIKE ? OR pv.sku LIKE ? OR bt.name LIKE ?)');
-      const searchTerm = `%${search}%`;
-      params.push(searchTerm, searchTerm, searchTerm);
-    }
+        if (search) {
+            whereClauses.push('(pt.name LIKE ? OR pv.sku LIKE ? OR bt.name LIKE ?)');
+            const searchTerm = `%${search}%`;
+            params.push(searchTerm, searchTerm, searchTerm);
+        }
 
-    if (status === 'active') {
-      whereClauses.push('pv.is_active = TRUE');
-    } else if (status === 'inactive') {
-      whereClauses.push('pv.is_active = FALSE');
-    }
+        if (status === 'active') {
+            whereClauses.push('pv.is_active = TRUE');
+        } else if (status === 'inactive') {
+            whereClauses.push('pv.is_active = FALSE');
+        }
 
-    if (whereClauses.length > 0) {
-       sql += ` WHERE ${whereClauses.join(' AND ')}`;
-    }
+        if (whereClauses.length > 0) {
+            sql += ` WHERE ${whereClauses.join(' AND ')}`;
+        }
 
-    const validSortBy = {
-      productId: 'p.id',
-      productName: 'pt.name',
-      brandName: 'bt.name',
-      variantSku: 'pv.sku',
-      originalPrice: 'pv.price',
-      stock: 'pv.stock_quantity'
-    };
-    
-    const sortColumn = validSortBy[sortBy] || 'p.id';
-    const orderDirection = sortOrder.toUpperCase() === 'ASC' ? 'ASC' : 'DESC';
-    sql += ` ORDER BY ${sortColumn} ${orderDirection}`;
+        const validSortBy = {
+            productId: 'p.id',
+            productName: 'pt.name',
+            brandName: 'bt.name',
+            variantSku: 'pv.sku',
+            originalPrice: 'pv.price',
+            stock: 'pv.stock_quantity'
+        };
 
-    try {
-      const [rows] = await dbPool.query(sql, params);
-      return rows;
-    } catch (error) {
-      console.error('Error in getAdminProductList DAO:', error);
-      throw error;
-    }
-  },
+        const sortColumn = validSortBy[sortBy] || 'p.id';
+        const orderDirection = sortOrder.toUpperCase() === 'ASC' ? 'ASC' : 'DESC';
+        sql += ` ORDER BY ${sortColumn} ${orderDirection}`;
+
+        try {
+            const [rows] = await dbPool.query(sql, params);
+            return rows;
+        } catch (error) {
+            console.error('Error in getAdminProductList DAO:', error);
+            throw error;
+        }
+    },
 
     /**
      * Updates the active status of a single product variant.
@@ -319,7 +319,7 @@ const productDAO = {
             const [images] = await dbPool.query(imagesSql, [variantIds]);
 
             variants.forEach(variant => {
-            variant.images = images.filter(img => img.variant_id === variant.id);
+                variant.images = images.filter(img => img.variant_id === variant.id);
             });
         }
         product.variants = variants;
@@ -371,18 +371,18 @@ const productDAO = {
      * @returns {Promise<boolean>} A promise that resolves to true if the reorder operation was successful, false otherwise.
      */
     async reorderImages(imageIds) {
-        if (!imageIds || imageIds.length === 0) return true; 
+        if (!imageIds || imageIds.length === 0) return true;
         const connection = await dbPool.getConnection();
         try {
             await connection.beginTransaction();
             for (let i = 0; i < imageIds.length; i++) {
-            const imageId = imageIds[i];
-            await connection.query('UPDATE Product_Images SET display_order = ? WHERE id = ?', [i, imageId]);
+                const imageId = imageIds[i];
+                await connection.query('UPDATE Product_Images SET display_order = ? WHERE id = ?', [i, imageId]);
             }
             await connection.commit();
             return true;
         } catch (error) {
-            await connection.rollback(); 
+            await connection.rollback();
             console.error('Error in reorderImages DAO transaction:', error);
             throw error;
         } finally {
@@ -410,20 +410,20 @@ const productDAO = {
             );
 
             for (const variant of data.variants) {
-            await connection.query(
-                'UPDATE Product_Variants SET sku = ?, price = ?, sale_price = ?, sale_start_date = ?, sale_end_date = ?, stock_quantity = ?, is_active = ? WHERE id = ? AND product_id = ?',
-                [
-                    variant.sku, 
-                    variant.price, 
-                    variant.sale_price || null, 
-                    variant.sale_start_date || null,
-                    variant.sale_end_date || null,
-                    variant.stock, 
-                    variant.is_active, 
-                    variant.id, 
-                    productId
-                ]
-            );
+                await connection.query(
+                    'UPDATE Product_Variants SET sku = ?, price = ?, sale_price = ?, sale_start_date = ?, sale_end_date = ?, stock_quantity = ?, is_active = ? WHERE id = ? AND product_id = ?',
+                    [
+                        variant.sku,
+                        variant.price,
+                        variant.sale_price || null,
+                        variant.sale_start_date || null,
+                        variant.sale_end_date || null,
+                        variant.stock,
+                        variant.is_active,
+                        variant.id,
+                        productId
+                    ]
+                );
             }
 
             await connection.commit();
@@ -436,7 +436,7 @@ const productDAO = {
             connection.release();
         }
     },
-    
+
     /**
      * Fetches all brands with their translations for a specific language.
      * This function is used to retrieve a list of brands for product management.
@@ -490,8 +490,8 @@ const productDAO = {
             await connection.beginTransaction();
 
             const [productResult] = await connection.query(
-            'INSERT INTO Products (brand_id, is_active, is_featured) VALUES (?, ?, ?)',
-            [productData.brand_id, true, productData.is_featured]
+                'INSERT INTO Products (brand_id, is_active, is_featured) VALUES (?, ?, ?)',
+                [productData.brand_id, true, productData.is_featured]
             );
             const productId = productResult.insertId;
 
@@ -506,30 +506,30 @@ const productDAO = {
                     await connection.query('INSERT INTO Product_Categories (product_id, category_id) VALUES (?, ?)', [productId, categoryId]);
                 }
             }
-            
+
             const createdVariantIds = [];
             if (productData.variants && productData.variants.length > 0) {
-            for (let i = 0; i < productData.variants.length; i++) {
-                const variant = productData.variants[i];
-                const isDefault = (i === 0);
+                for (let i = 0; i < productData.variants.length; i++) {
+                    const variant = productData.variants[i];
+                    const isDefault = (i === 0);
 
-                const [variantResult] = await connection.query(
-                'INSERT INTO Product_Variants (product_id, sku, price, stock_quantity, is_default, is_active) VALUES (?, ?, ?, ?, ?, ?)',
-                [productId, variant.sku, variant.price, variant.stock, isDefault, true]
-                );
-                const variantId = variantResult.insertId;
-                createdVariantIds.push(variantId);
-                
-                if (variant.attributes && variant.attributes.length > 0) {
-                    for (const attributeValueId of variant.attributes) {
-                        if(attributeValueId) {
-                            await connection.query('INSERT INTO Variant_Attributes (variant_id, attribute_value_id) VALUES (?, ?)', [variantId, attributeValueId]);
+                    const [variantResult] = await connection.query(
+                        'INSERT INTO Product_Variants (product_id, sku, price, stock_quantity, is_default, is_active) VALUES (?, ?, ?, ?, ?, ?)',
+                        [productId, variant.sku, variant.price, variant.stock, isDefault, true]
+                    );
+                    const variantId = variantResult.insertId;
+                    createdVariantIds.push(variantId);
+
+                    if (variant.attributes && variant.attributes.length > 0) {
+                        for (const attributeValueId of variant.attributes) {
+                            if (attributeValueId) {
+                                await connection.query('INSERT INTO Variant_Attributes (variant_id, attribute_value_id) VALUES (?, ?)', [variantId, attributeValueId]);
+                            }
                         }
                     }
                 }
             }
-            }
-            
+
             await connection.commit();
             return { productId, variantIds: createdVariantIds };
 
@@ -568,11 +568,11 @@ const productDAO = {
             console.error('Error in getAttributesForForm DAO:', error);
             throw error;
         }
-        },
+    },
 
-        async getVariantDetailsByIds(variantIds, languageCode = 'en-US') {
+    async getVariantDetailsByIds(variantIds, languageCode = 'en-US') {
         if (!variantIds || variantIds.length === 0) {
-        return [];
+            return [];
         }
 
         const variantsSql = `
@@ -616,7 +616,7 @@ const productDAO = {
         const [attributes] = await dbPool.query(attributesSql, [languageCode, languageCode, variantIds]);
 
         variants.forEach(variant => {
-        variant.attributes = attributes.filter(attr => attr.variant_id === variant.variantId);
+            variant.attributes = attributes.filter(attr => attr.variant_id === variant.variantId);
         });
 
         return variants;
@@ -725,9 +725,81 @@ const productDAO = {
         `;
         const [rows] = await dbPool.query(sql, [languageCode, languageCode]);
         return rows;
+    },
+
+    findBrandIdByNames(name_it, name_en) {
+    const sql = `
+      SELECT b.id FROM Brands b
+      JOIN Brand_Translations it ON b.id = it.brand_id AND it.language_code = 'it-IT' AND it.name = ?
+      JOIN Brand_Translations en ON b.id = en.brand_id AND en.language_code = 'en-US' AND en.name = ?
+      LIMIT 1;
+    `;
+    return dbPool.query(sql, [name_it, name_en]).then(([rows]) => rows[0] ? rows[0].id : null);
+  },
+
+  findCategoryIdsByNames(names, languageCode) {
+    if (!names || names.length === 0) return [];
+    const sql = 'SELECT category_id FROM Category_Translations WHERE name IN (?) AND language_code = ?';
+    return dbPool.query(sql, [names, languageCode]).then(([rows]) => rows.map(r => r.category_id));
+  },
+
+  findAttributeIdByName(name, languageCode) {
+    const sql = `SELECT attribute_id FROM Attribute_Translations WHERE name = ? AND language_code = ? LIMIT 1`;
+    return dbPool.query(sql, [name, languageCode]).then(([rows]) => rows[0] ? rows[0].attribute_id : null);
+  },
+  
+  findAttributeValueIdByName(attributeId, value, languageCode) {
+    const sql = `
+      SELECT av.id FROM Attribute_Values av
+      JOIN Attribute_Value_Translations avt ON av.id = avt.attribute_value_id
+      WHERE av.attribute_id = ? AND avt.value = ? AND avt.language_code = ?
+      LIMIT 1;
+    `;
+    return dbPool.query(sql, [attributeId, value, languageCode]).then(([rows]) => rows[0] ? rows[0].id : null);
+  },
+
+  async createProduct(productData) {
+    const connection = await dbPool.getConnection();
+    try {
+      await connection.beginTransaction();
+      const [productResult] = await connection.query('INSERT INTO Products (brand_id, is_active, is_featured) VALUES (?, ?, ?)', [productData.brand_id, true, productData.is_featured]);
+      const productId = productResult.insertId;
+
+      const itData = productData.translations['it-IT'];
+      const enData = productData.translations['en-US'];
+      const translationSql = 'INSERT INTO Product_Translations (product_id, language_code, name, description, features) VALUES (?, ?, ?, ?, ?)';
+      await connection.query(translationSql, [productId, 'it-IT', itData.name, itData.description, JSON.stringify(itData.features)]);
+      await connection.query(translationSql, [productId, 'en-US', enData.name, enData.description, JSON.stringify(enData.features)]);
+
+      if (productData.category_ids && productData.category_ids.length > 0) {
+        for (const categoryId of productData.category_ids) {
+          await connection.query('INSERT INTO Product_Categories (product_id, category_id) VALUES (?, ?)', [productId, categoryId]);
+        }
+      }
+      
+      for (const [index, variant] of productData.variants.entries()) {
+        const isDefault = (index === 0);
+        const [variantResult] = await connection.query('INSERT INTO Product_Variants (product_id, sku, price, stock_quantity, is_default, is_active) VALUES (?, ?, ?, ?, ?, ?)', [productId, variant.sku, variant.price, variant.stock, isDefault, true]);
+        const variantId = variantResult.insertId;
+        
+        if (variant.attributes && variant.attributes.length > 0) {
+          for (const attributeValueId of variant.attributes) {
+            if(attributeValueId) {
+              await connection.query('INSERT INTO Variant_Attributes (variant_id, attribute_value_id) VALUES (?, ?)', [variantId, attributeValueId]);
+            }
+          }
+        }
+      }
+      
+      await connection.commit();
+      return { productId };
+    } catch (error) {
+      await connection.rollback();
+      throw error;
+    } finally {
+      connection.release();
     }
-
-
+  }
 };
 
 // Export the DAO object so it can be used in other files (in our case, in the Service)
