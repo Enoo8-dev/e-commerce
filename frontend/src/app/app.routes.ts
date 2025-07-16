@@ -3,7 +3,6 @@ import { Routes } from '@angular/router';
 import { ProductListComponent } from './features/product-list/product-list';
 import { LoginComponent } from './features/login/login';
 import { RegisterComponent } from './features/register/register';
-import { HomeComponent } from './features/home/home';
 import { ProductDetailComponent } from './features/product-detail/product-detail';
 
 import { DashboardComponent } from './features/admin/dashboard/dashboard';
@@ -26,10 +25,11 @@ import { WishlistComponent } from './features/wishlist/wishlist';
 import { OffersPageComponent } from './features/offers-page/offers-page';
 import { NewPageComponent } from './features/new-page/new-page';
 import { CategoryPageComponent } from './features/category-page/category-page';
+import { RootComponent } from './features/root/root'; 
 
 export const routes: Routes = [
   
-  { path: '', component: HomeComponent }, // Default route to HomeComponent
+  { path: '', component: RootComponent }, // Default route to HomeComponent
   { path: 'products', component: ProductListComponent },
   { path: 'product/:id', component: ProductDetailComponent }, // Dynamic route for product details
   { path: 'login', component: LoginComponent },

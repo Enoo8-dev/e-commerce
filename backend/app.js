@@ -24,6 +24,7 @@ const addressRoutes = require('./routes/address.routes');
 const paymentRoutes = require('./routes/payment.routes');
 const wishlistRoutes = require('./routes/wishlist.routes'); 
 const importRoutes = require('./routes/import.routes');
+const dashboardRoutes = require('./routes/dashboard.routes');
 
 
 const app = express();
@@ -62,6 +63,10 @@ app.use('/api/addresses', autenticateToken, addressRoutes); // Mount the address
 // Mount the user routes on the /api/users path.
 // All routes defined in user.routes.js will now be prefixed with /api/users.
 app.use('/api/users', autenticateToken, userRoutes);
+
+// Mount the dashboard routes on the /api/admin/dashboard/stats path.
+// These routes are protected by the autenticateToken middleware, meaning they require a valid JWT token to access.
+app.use('/api/admin/dashboard', autenticateToken, dashboardRoutes);
 
 // Mount the attribute routes on the /api/admin/attributes path.
 // These routes are protected by the authenticateToken middleware, meaning they require a valid JWT token to access.

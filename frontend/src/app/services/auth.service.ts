@@ -19,6 +19,10 @@ export class AuthService {
     map(user => !!user)
   );
 
+  public isAdmin$: Observable<boolean> = this.currentUser$.pipe(
+    map(user => !!user && user.role === 'admin')
+  );
+
   // Per rompere la dipendenza circolare, dichiariamo le variabili qui
   private http!: HttpClient;
   private router!: Router;

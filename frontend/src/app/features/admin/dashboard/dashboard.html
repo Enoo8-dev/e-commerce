@@ -1,1 +1,74 @@
-<p>dashboard works!</p>
+<div class="p-4 sm:p-6 lg:p-8">
+  <h1 class="text-2xl font-bold text-gray-900">Dashboard</h1>
+  
+  @if(isLoading) { <p class="mt-4">Caricamento statistiche...</p> }
+
+  @if(!isLoading && stats) {
+    <!-- KPI Cards -->
+    <div class="mt-8 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+      <div class="overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:p-6">
+        <dt class="truncate text-sm font-medium text-gray-500">Incasso Totale</dt>
+        <dd class="mt-1 text-3xl font-semibold tracking-tight text-gray-900">{{ (stats.kpiStats.totalRevenue || 0) | currency:'EUR' }}</dd>
+      </div>
+      <div class="overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:p-6">
+        <dt class="truncate text-sm font-medium text-gray-500">Ordini Ricevuti</dt>
+        <dd class="mt-1 text-3xl font-semibold tracking-tight text-gray-900">{{ stats.kpiStats.totalOrders || 0 }}</dd>
+      </div>
+      <div class="overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:p-6">
+        <dt class="truncate text-sm font-medium text-gray-500">Nuovi Utenti (30gg)</dt>
+        <dd class="mt-1 text-3xl font-semibold tracking-tight text-gray-900">{{ stats.kpiStats.newUsers || 0 }}</dd>
+      </div>
+      <div class="overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:p-6">
+        <dt class="truncate text-sm font-medium text-gray-500">Prodotti Attivi</dt>
+        <dd class="mt-1 text-3xl font-semibold tracking-tight text-gray-900">{{ stats.kpiStats.activeProducts || 0 }}</dd>
+      </div>
+    </div>
+
+    <!-- Sales Chart -->
+    <div class="mt-8 rounded-lg bg-white p-4 shadow">
+      <h2 class="text-lg font-medium text-gray-900">Vendite Ultimi 30 Giorni</h2>
+      <div class="mt-4 h-96">
+        <canvas #salesChart></canvas>
+      </div>
+    </div>
+
+    <!-- Recent Orders & Low Stock -->
+    <div class="mt-8 grid grid-cols-1 gap-8 lg:grid-cols-2">
+      <!-- Recent Orders -->
+      <div>
+        <h2 class="text-lg font-medium text-gray-900">Ultimi Ordini</h2>
+        <ul class="mt-4 space-y-3">
+          @for(order of stats.recentOrders; track order.id) {
+            <li class="rounded-md bg-white px-6 py-4 shadow">
+              <div class="flex items-center justify-between">
+                <p class="text-sm font-medium text-blue-600">Ordine #{{ order.id }}</p>
+                <p class="text-sm text-gray-500">{{ order.order_date | date:'dd/MM/yyyy' }}</p>
+              </div>
+              <div class="mt-2 flex items-center justify-between">
+                <p class="text-sm text-gray-600">{{ order.first_name }} {{ order.last_name }}</p>
+                <p class="text-sm font-semibold text-gray-900">{{ order.total_amount | currency:'EUR' }}</p>
+              </div>
+            </li>
+          }
+          @if(stats.recentOrders.length === 0) { <p class="text-sm text-gray-500">Nessun ordine recente.</p> }
+        </ul>
+      </div>
+      <!-- Low Stock Products -->
+      <div>
+        <h2 class="text-lg font-medium text-gray-900">Prodotti in Esaurimento</h2>
+        <ul class="mt-4 space-y-3">
+          @for(product of stats.lowStockProducts; track product.sku) {
+            <li class="rounded-md bg-white px-6 py-4 shadow">
+              <div class="flex items-center justify-between">
+                <p class="text-sm font-medium text-gray-900">{{ product.name }}</p>
+                <p class="text-sm text-red-600">Solo {{ product.stock_quantity }} rimasti</p>
+              </div>
+              <p class="text-xs text-gray-500">SKU: {{ product.sku }}</p>
+            </li>
+          }
+          @if(stats.lowStockProducts.length === 0) { <p class="text-sm text-gray-500">Nessun prodotto in esaurimento.</p> }
+        </ul>
+      </div>
+    </div>
+  }
+</div>
