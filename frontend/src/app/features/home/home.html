@@ -22,10 +22,10 @@
     <h2 class="text-[#181111] text-2xl font-bold tracking-tight px-4 pb-3 pt-5 mt-10">{{ 'HOME.FEATURED_PRODUCTS' | translate }}</h2>
     @if(!isLoadingFeatured && featuredProducts.length > 0) {
       <div class="relative px-4">
-        <div #carouselContainer class="flex overflow-x-auto gap-4 py-4 snap-x snap-mandatory [-ms-scrollbar-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+        <div #featuredCarousel class="flex overflow-x-auto gap-4 py-4 snap-x snap-mandatory [-ms-scrollbar-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
 
           @for (product of featuredProducts; track product.productId; let i = $index) {
-            <a routerLink="/product/{{ product.productId }}" class="product-card-link flex-shrink-0 w-60 snap-start" [attr.data-index]="i">
+            <a routerLink="/product/{{ product.productId }}" class="carousel-item flex-shrink-0 w-60 snap-start" [attr.data-index]="i">
               <div class="flex flex-col gap-3 group h-full">
                 <div class="w-full bg-gray-200 aspect-square rounded-lg flex flex-col overflow-hidden">
                   <img 
@@ -58,7 +58,7 @@
         <!-- nav dots -->
         @if (featuredTotalPages > 1) {
           <div class="flex justify-center gap-2 mt-4">
-            @for(page of [].constructor(featuredTotalPages); track page; let i = $index) {
+            @for(page of [].constructor(featuredTotalPages); track i; let i = $index) {
               <button (click)="goToPage('featured', i)" 
                       class="h-2 w-2 rounded-full transition-colors"
                       [ngClass]="{'bg-gray-800': currentFeaturedPage === i, 'bg-gray-300': currentFeaturedPage !== i}"></button>
@@ -100,7 +100,7 @@
         </div>
          @if (offersTotalPages > 1) {
           <div class="flex justify-center gap-2 mt-4">
-            @for(page of [].constructor(offersTotalPages); track page; let i = $index) {
+            @for(page of [].constructor(offersTotalPages); track i; let i = $index) {
               <button (click)="goToPage('offers', i)" class="h-2 w-2 rounded-full transition-colors"
                       [ngClass]="{'bg-gray-800': currentOffersPage === i, 'bg-gray-300': currentOffersPage !== i}"></button>
             }
@@ -135,19 +135,19 @@
             </a>
           }
           @if (showDiscoverMoreNewest) {
-            <a routerLink="/products" class="carousel-item flex-shrink-0 w-60 snap-start" [attr.data-index]="newestProducts.length">
+            <a routerLink="/new" class="carousel-item flex-shrink-0 w-60 snap-start" [attr.data-index]="newestProducts.length">
               <div class="flex flex-col gap-3 h-full items-center justify-center bg-gray-100 rounded-lg p-4 text-center hover:bg-gray-200 transition-colors">
                  <div class="text-[#181111]">
                    <svg xmlns="http://www.w3.org/2000/svg" width="48px" height="48px" fill="currentColor" viewBox="0 0 256 256"><path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm40,112H136v32a8,8,0,0,1-16,0V136H88a8,8,0,0,1,0-16h32V88a8,8,0,0,1,16,0v32h32a8,8,0,0,1,0,16Z"></path></svg>
                  </div>
-                 <p class="text-[#181111] text-base font-medium leading-normal">Scopri di più</p>
+                 <p class="text-[#181111] text-base font-medium leading-normal">{{ 'PRODUCTS.HOME.DISCOVER_MORE' | translate }}</p>
               </div>
             </a>
           }
         </div>
         @if (newestTotalPages > 1) {
           <div class="flex justify-center gap-2 mt-4">
-            @for(page of [].constructor(newestTotalPages); track page; let i = $index) {
+            @for(page of [].constructor(newestTotalPages); track i; let i = $index) {
               <button (click)="goToPage('newest', i)" class="h-2 w-2 rounded-full transition-colors"
                       [ngClass]="{'bg-gray-800': currentNewestPage === i, 'bg-gray-300': currentNewestPage !== i}"></button>
             }
@@ -159,8 +159,5 @@
       } @else {
         <p class="px-4">{{ 'PRODUCTS.HOME.NEW_ARRIVALS' | translate }}</p>
       }
-
-
-
   </div>
 </div>

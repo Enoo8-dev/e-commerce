@@ -135,12 +135,15 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
     if (carousel === 'featured') {
       container = this.featuredCarousel.nativeElement;
       itemsPerPage = this.featuredItemsPerPage;
+      this.currentFeaturedPage = pageIndex;
     } else if (carousel === 'offers') {
       container = this.offersCarousel.nativeElement;
       itemsPerPage = this.offersItemsPerPage;
+      this.currentOffersPage = pageIndex;
     } else {
       container = this.newestCarousel.nativeElement;
       itemsPerPage = this.newestItemsPerPage;
+      this.currentNewestPage = pageIndex;
     }
     
     const card = container.querySelector('.carousel-item') as HTMLElement;
