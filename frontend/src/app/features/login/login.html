@@ -8,12 +8,12 @@
         <svg class="h-12 w-auto text-[#181111]" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><g clip-path="url(#clip0_6_319)"><path d="M8.57829 8.57829C5.52816 11.6284 3.451 15.5145 2.60947 19.7452C1.76794 23.9758 2.19984 28.361 3.85056 32.3462C5.50128 36.3314 8.29667 39.7376 11.8832 42.134C15.4698 44.5305 19.6865 45.8096 24 45.8096C28.3135 45.8096 32.5302 44.5305 36.1168 42.134C39.7033 39.7375 42.4987 36.3314 44.1494 32.3462C45.8002 28.361 46.2321 23.9758 45.3905 19.7452C44.549 15.5145 42.4718 11.6284 39.4217 8.57829L24 24L8.57829 8.57829Z" fill="currentColor"></path></g><defs><clipPath id="clip0_6_319"><rect width="48" height="48" fill="white"></rect></clipPath></defs></svg>
       </a>
       <h2 class="mt-6 text-center text-3xl font-bold tracking-tight text-gray-900">
-        Accedi al tuo account
+        {{ 'LOGIN.LOGIN_ACCOUNT' | translate }}
       </h2>
       <p class="mt-2 text-center text-sm text-gray-600">
-        Oppure
+        {{ 'LOGIN.OR' | translate }}
         <a routerLink="/register" class="font-medium text-blue-600 hover:text-blue-500">
-          crea un nuovo account
+          {{ 'LOGIN.CREATE_ACCOUNT' | translate }}
         </a>
       </p>
     </div>
@@ -31,7 +31,7 @@
       <div class="rounded-md shadow-sm">
         <!-- Email Input Field -->
         <div class="mb-4">
-          <label for="email-address" class="sr-only">Indirizzo Email</label>
+          <label for="email-address" class="sr-only">{{ 'LOGIN.EMAIL_ADDRESS' | translate }}</label>
           <!-- 
             Tutto lo stile è ora qui. Nota i prefissi 'focus:' e le classi per gli angoli.
             'rounded-t-md' arrotonda solo gli angoli superiori.
@@ -39,28 +39,28 @@
           -->
           <input id="email-address" formControlName="email" name="email" type="email" autocomplete="email" required
                  class="appearance-none relative block w-full px-3 py-2 border border-gray-300 bg-gray-50 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-red-500 focus:border-red-500 focus:z-10 sm:text-sm"
-                 placeholder="Indirizzo Email">
+                 [placeholder]="'LOGIN.EMAIL_ADDRESS' | translate">
           
           @if (email && email.invalid && (email.dirty || email.touched)) {
             <div class="px-1 py-2 text-sm text-red-600">
-              @if (email.errors?.['required']) { <p>L'indirizzo email è obbligatorio.</p> }
-              @if (email.errors?.['email']) { <p>Per favore, inserisci un indirizzo email valido.</p> }
+              @if (email.errors?.['required']) { <p>{{ 'LOGIN.EMAIL_REQUIRED' | translate }}</p> }
+              @if (email.errors?.['email']) { <p>{{ 'LOGIN.VALID_EMAIL' | translate }}</p> }
             </div>
           }
         </div>
 
         <!-- Password Input Field -->
         <div>
-          <label for="password" class="sr-only">Password</label>
+          <label for="password" class="sr-only">{{ 'LOGIN.PASSWORD' | translate }}</label>
           <!-- 'rounded-b-md' arrotonda solo gli angoli inferiori. -->
           <input id="password" formControlName="password" name="password" type="password" autocomplete="current-password" required
                  class="appearance-none relative block w-full px-3 py-2 border border-gray-300 bg-gray-50 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-red-500 focus:border-red-500 focus:z-10 sm:text-sm"
-                 placeholder="Password">
+                 [placeholder]="'LOGIN.PASSWORD' | translate">
 
           @if (password && password.invalid && (password.dirty || password.touched)) {
             <div class="px-1 py-2 text-sm text-red-600">
-              @if (password.errors?.['required']) { <p>La password è obbligatoria.</p> }
-              @if (password.errors?.['minlength']) { <p>La password deve essere di almeno 8 caratteri.</p> }
+              @if (password.errors?.['required']) { <p>{{ 'LOGIN.PASSWORD_REQUIRED' | translate }}</p> }
+              @if (password.errors?.['minlength']) { <p>{{ 'LOGIN.MIN_PASSWORD_LENGTH' | translate }}</p> }
             </div>
           }
         </div>
@@ -82,9 +82,9 @@
                 <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
               </svg>
             </span>
-            In corso...
+            {{ 'LOGIN.IN_PROGRESS' | translate }}
           } @else {
-            Accedi
+            {{ 'LOGIN.LOGIN_BUTTON' | translate }}
           }
         </button>
       </div>

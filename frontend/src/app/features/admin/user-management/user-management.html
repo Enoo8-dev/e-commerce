@@ -26,7 +26,7 @@
 
     @if(activeTab === 'admins') {
       <form [formGroup]="addAdminForm" (ngSubmit)="onAddAdmin()" class="mt-8 p-4 border rounded-lg bg-gray-50 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4 items-end">
-        <h2 class="text-lg font-medium text-gray-900 md:col-span-3 lg:col-span-5">Aggiungi Nuovo Admin</h2>
+        <h2 class="text-lg font-medium text-gray-900 md:col-span-3 lg:col-span-5">{{'ADMIN.MANAGE_USERS.ADD_MODAL.TITLE' | translate}}</h2>
         <input type="text" formControlName="firstName" [placeholder]=" 'ADMIN.MANAGE_USERS.ADD_MODAL.FIRST_NAME' | translate " class="focus:outline-none block w-full rounded-lg border-0 bg-white py-2 px-3 text-gray-900 placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm">
         <input type="text" formControlName="lastName" [placeholder]=" 'ADMIN.MANAGE_USERS.ADD_MODAL.LAST_NAME' | translate " class="focus:outline-none block w-full rounded-lg border-0 bg-white py-2 px-3 text-gray-900 placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm">
         <input type="email" formControlName="email" [placeholder]=" 'ADMIN.MANAGE_USERS.ADD_MODAL.EMAIL' | translate " class="focus:outline-none block w-full rounded-lg border-0 bg-white py-2 px-3 text-gray-900 placeholder:text-gray-500 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm">

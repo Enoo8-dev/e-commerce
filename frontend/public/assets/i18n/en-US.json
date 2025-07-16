@@ -49,6 +49,8 @@
             "AVAILABILITY": "Availability",
             "PIECES": "pieces",
             "SOLD_OUT": "Sold Out",
+            "QUANTITY": "Quantity",
+            "ADD_TO_WISHLIST": "Add to Wishlist",
             "MIN_PRODUCT_TOAST": "Select a positive quantity to add to the cart.",
             "LOGIN_REQUIRED_TOAST": "You must <span class='underline font-bold'>login</span> to add products to the cart.",
             "STOCK_UNAVAILABLE_TOAST": "Quantity not available in stock.",
@@ -88,7 +90,19 @@
                 "IMPORT_FROM_FILE": "Import from File",
                 "MANUAL_ENTRY": "Manual Entry",
                 "IMPORT_FROM_FILE_DESCRIPTION": "Upload a CSV file to add multiple products at once.",
-                "MANUAL_ENTRY_DESCRIPTION": "Fill out a form to enter the details of a single product."
+                "MANUAL_ENTRY_DESCRIPTION": "Fill out a form to enter the details of a single product.",
+                "TOOLTIP": {
+                    "CSV_STRUCTURE_REQUIRED": "The CSV file must have the following structure: ",
+                    "ROW_RAPRESENTATION": "Each row represents a variant",
+                    "TO_GROUP_VARIANTS": "to group variants",
+                    "SEPARATED_BY_COMMA": "separated by commas",
+                    "UNIQUE_FOR_VARIANT": "each variant must have a unique SKU",
+                    "COLUMN_SEPARATOR": "Column separated by semicolon",
+                    "BY": "By",
+                    "LANGUAGE_CODE_MEANING": "we mean the ISO code of the language to be entered.",
+                    "NAME_MEANING": "we mean the name of the attribute in the <span class='font-mono'>&#123;language_code&#125;</span> language."
+                },
+                "IMPORT_IN_PROGRESS": "Importing products, please wait and don't close the page..."
             }
         },
         "EDIT": {
@@ -253,6 +267,22 @@
                 "PASSWORD": "Password",
                 "ADD_BUTTON": "Add Admin"
             }
+        },
+        "DASHBOARD": {
+            "TITLE": "Dashboard",
+            "LOADING_STATISTICS": "Loading statistics, please wait...",
+            "TOTAL_TAKING": "Total Earnings",
+            "ORDERS_RECEIVED": "Orders Received",
+            "NEW_USERS_30GG": "New Users (Last 30 Days)",
+            "ACTIVE_PRODUCTS": "Active Products",
+            "SELL_30GG": "Sales (Last 30 Days)",
+            "LATEST_ORDERS": "Latest Orders",
+            "ORDER": "Order",
+            "NO_RECENT_ORDERS": "No recent orders found.",
+            "PRODUCT_RUNNING_OOS": "Products Running Out of Stock",
+            "ONLY": "Only",
+            "LEFT": "left",
+            "ANY_RUNNING_OOS": "No products running out of stock at the moment."
         }
     },
     "CART": {
@@ -260,6 +290,7 @@
         "GOT": "You have",
         "ITEMS": "items in your cart.",
         "REMOVE": "Remove",
+        "QUANTITY": "Quantity",
         "EMPTY": "Your cart is empty.",
         "KEEP_SHOPPING": "Keep Shopping",
         "ORDER_SUMMARY": "Order Summary",
@@ -285,7 +316,8 @@
         "CITY_PLACEHOLDER": "City",
         "PROVINCE_PLACEHOLDER": "Province",
         "COUNTRY_PLACEHOLDER": "Country",
-        "ZIP_PLACEHOLDER": "ZIP Code"
+        "ZIP_PLACEHOLDER": "ZIP Code",
+        "REMOVE": "Remove"
     },
     "PAYMENT": {
         "BACK_TO_ADDRESSES": "Back to Addresses",
@@ -330,7 +362,8 @@
         "ORDER_SHIPPED": "Shipped",
         "NOTE_SHIPPED": "Your order is on its way. Tracking number: {{trackingNumber}}.",
         "DELIVRED": "Delivred",
-        "NOTE_DELIVERED": "Your order was delivered on {{deliveryDate}}."
+        "NOTE_DELIVERED": "Your order was delivered on {{deliveryDate}}.",
+        "LOADING_ORDER_DETAILS": "Loading order details, please wait..."
     },
     "PROFILE": {
         "TITLE": "Profile",
@@ -357,5 +390,55 @@
         "EMPTY_MESSAGE": "Your wishlist is empty.",
         "EMPTY_SUBMESSAGE": "Browse our products and add your favorites to the wishlist.",
         "CONTINUE_SHOPPING": "Continue Shopping"
+    },
+    "NEW": {
+        "JUST_ARRIVED": "Just Arrived",
+        "DISCOVER_MORE": "Discover More",
+        "LATEST_NEWS": "Latest News",
+        "LOADING_NEWS": "Loading news, please wait..."
+    },
+    "OFFERS": {
+        "DAILY_OFFER": "Daily Offer",
+        "DISCOVER_MORE": "Discover More",
+        "MOST_POPULAR": "Most Popular",
+        "OFFERS_ON": "Offers on",
+        "LOADING_OFFERS": "Loading offers, please wait..."
+    },
+    "CATEGORIES": {
+        "ALL_CATEGORIES": "All Categories",
+        "LOADING_CATEGORIES": "Loading categories, please wait..."
+    },
+    "LOGIN": {
+        "LOGIN_ACCOUNT": "Login to your account",
+        "OR": "or",
+        "CREATE_ACCOUNT": "create a new account",
+        "EMAIL_ADDRESS": "Email Address",
+        "PASSWORD": "Password",
+        "EMAIL_REQUIRED": "Email address is required.",
+        "VALID_EMAIL": "Please enter a valid email address.",
+        "PASSWORD_REQUIRED": "Password is required.",
+        "MIN_PASSWORD_LENGTH": "Password must be at least 8 characters long.",
+        "LOGIN_BUTTON": "Login",
+        "IN_PROGRESS": "Logging in..."
+    },
+    "SIGNUP": {
+        "CREATE_ACCOUNT": "Create your account",
+        "OR": "or",
+        "LOGIN_ACCOUNT": "login to your account",
+        "FIRST_NAME": "First Name",
+        "FIRST_NAME_REQUIRED": "First name is required.",
+        "LAST_NAME": "Last Name",
+        "LAST_NAME_REQUIRED": "Last name is required.",
+        "EMAIL_ADDRESS": "Email Address",
+        "EMAIL_REQUIRED": "Email address is required.",
+        "VALID_EMAIL": "Please enter a valid email address.",
+        "PASSWORD": "Password (at least 8 characters)",
+        "PASSWORD_REQUIRED": "Password is required.",
+        "MIN_PASSWORD_LENGTH": "Password must be at least 8 characters long.",
+        "CONFIRM_PASSWORD": "Confirm Password",
+        "CONFIRM_PASSWORD_REQUIRED": "Confirm password is required.",
+        "PASSWORDS_MISMATCH": "Passwords do not match.",
+        "SIGNUP_BUTTON": "Sign Up",
+        "IN_PROGRESS": "Creating account..."
     }
 }

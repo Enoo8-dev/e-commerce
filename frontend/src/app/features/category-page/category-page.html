@@ -1,9 +1,9 @@
 <div class="bg-white">
     <main class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16">
-        <h1 class="text-3xl font-bold tracking-tight text-gray-900">Tutte le Categorie</h1>
+        <h1 class="text-3xl font-bold tracking-tight text-gray-900">{{ 'CATEGORIES.ALL_CATEGORIES' | translate }}</h1>
 
         @if(isLoading) {
-        <p class="text-center py-16 text-gray-500">Caricamento categorie...</p>
+        <p class="text-center py-16 text-gray-500">{{ 'CATEGORIES.LOADING_CATEGORIES' | translate }}</p>
         } @else {
         <div class="mt-10 space-y-16">
             @for(mainCategory of layoutData; track mainCategory.id) {

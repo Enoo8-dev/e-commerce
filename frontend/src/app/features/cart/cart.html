@@ -5,7 +5,7 @@
 
     <div class="mt-12">
       <section aria-labelledby="cart-heading">
-        <h2 id="cart-heading" class="sr-only">Items in your shopping cart</h2>
+        <h2 id="cart-heading" class="sr-only">{{ 'CART.ITEMS' | translate }}</h2>
 
         @if (cartItems.length > 0) {
           <ul role="list" class="divide-y divide-gray-200 border-b border-t border-gray-200">
@@ -36,7 +36,7 @@
                   </div>
                   <div class="mt-4 flex items-center justify-between">
                     <div class="w-24">
-                      <label for="quantity-{{item.variantId}}" class="sr-only">Quantità</label>
+                      <label for="quantity-{{item.variantId}}" class="sr-only">{{ 'CART.QUANTITY' | translate }}</label>
                       <input type="number" id="quantity-{{item.variantId}}" name="quantity-{{item.variantId}}" [ngModel]="item.quantity" (input)="updateQuantity(item.variantId, $event)" min="1" [max]="item.stock" class="block w-full rounded-lg border-0 bg-[#f4f0f0] py-1.5 text-center text-base font-medium leading-5 text-gray-700 shadow-sm focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm focus:outline-none">
                     </div>
                      <button type="button" (click)="removeItem(item.variantId)" class="text-sm font-medium text-red-600 hover:text-red-500 cursor-pointer"><span>{{ 'CART.REMOVE' | translate }}</span></button>

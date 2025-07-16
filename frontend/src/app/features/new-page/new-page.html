@@ -6,15 +6,15 @@
         <div class="relative my-8 rounded-lg overflow-hidden">
           <img [src]="'http://localhost:3000' + layoutData.heroProduct.imageUrl" class="w-full h-96 object-cover">
           <div class="absolute inset-0 bg-gray-900/80 hover:bg-gray-900/95 transition-colors duration-300 flex flex-col items-center justify-center text-center p-4">
-            <h2 class="text-4xl font-bold text-white">Appena Arrivato</h2>
+            <h2 class="text-4xl font-bold text-white">{{ 'NEW.JUST_ARRIVED' | translate }}</h2>
             <p class="mt-2 text-xl text-white">{{ layoutData.heroProduct.productName }}</p>
-            <a [routerLink]="['/product', layoutData.heroProduct.productId]" class="mt-4 inline-block bg-white text-gray-900 font-bold py-2 px-6 rounded-lg">Scopri di più</a>
+            <a [routerLink]="['/product', layoutData.heroProduct.productId]" class="mt-4 inline-block bg-white text-gray-900 font-bold py-2 px-6 rounded-lg">{{ 'NEW.DISCOVER_MORE' | translate }}</a>
           </div>
         </div>
       }
 
       <!-- New Products Grid -->
-      <h2 class="text-2xl font-bold tracking-tight text-gray-900">Ultime Novità</h2>
+      <h2 class="text-2xl font-bold tracking-tight text-gray-900">{{ 'NEW.LATEST_NEWS' | translate }}</h2>
       <div class="mt-6 grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
         @for(product of layoutData.newProducts; track product.productId) {
           <div class="group relative">
@@ -40,7 +40,7 @@
       </div>
 
     } @else if(isLoading) {
-      <p class="text-center py-16">Caricamento novità...</p>
+      <p class="text-center py-16">{{ 'NEW.LOADING_NEWS' | translate }}</p>
     }
   </main>
 </div>

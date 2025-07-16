@@ -49,6 +49,8 @@
             "AVAILABILITY": "Disponibilità",
             "PIECES": "pezzi",
             "SOLD_OUT": "Esaurito",
+            "QUANTITY": "Quantità",
+            "ADD_TO_WISHLIST": "Aggiungi alla wishlist",
             "MIN_PRODUCT_TOAST": "Selezionare una quantità positiva per aggiungere al carrello.",
             "LOGIN_REQUIRED_TOAST": "Devi effettuare il <span class='underline font-bold'>login</span> per aggiungere prodotti al carrello.",
             "STOCK_UNAVAILABLE_TOAST": "Quantità non disponibile in magazzino.",
@@ -88,7 +90,19 @@
                 "IMPORT_FROM_FILE": "Importa da file",
                 "MANUAL_ENTRY": "Aggiungi manualmente",
                 "IMPORT_FROM_FILE_DESCRIPTION": "Carica un file CSV per aggiungere più prodotti in una volta.",
-                "MANUAL_ENTRY_DESCRIPTION": "Comila un form per inserire i dettagli di un singolo prodotto."
+                "MANUAL_ENTRY_DESCRIPTION": "Comila un form per inserire i dettagli di un singolo prodotto.",
+                "TOOLTIP": {
+                    "CSV_STRUCTURE_REQUIRED": "Struttura del file CSV richiesta: ",
+                    "ROW_RAPRESENTATION": "Ogni riga rappresenta una variante.",
+                    "TO_GROUP_VARIANTS": "per raggruppare varianti",
+                    "SEPARATED_BY_COMMA": "separate da ','",
+                    "UNIQUE_FOR_VARIANT": "unico per variante",
+                    "COLUMN_SEPARATOR": "Separatore delle colonne ';'",
+                    "BY": "Con",
+                    "LANGUAGE_CODE_MEANING": "si intende il codice ISO della lingua da inserire.",
+                    "NAME_MEANING": "si intende il nome dell'attributo nella lingua <span class='font-mono'>&#123;language_code&#125;</span>"
+                },
+                "IMPORT_IN_PROGRESS": "Importazione in corso, non chiudere la pagina..."
             }
         },
         "EDIT": {
@@ -253,6 +267,21 @@
                 "PASSWORD": "Password",
                 "ADD_BUTTON": "Aggiungi Admin"
             }
+        },
+        "DASHBOARD": {
+            "TITLE": "Dashboard",
+            "LOADING_STATISTICS": "Caricamento statistiche in corso, attendere prego...",
+            "TOTAL_TAKING": "Incasso Totale",
+            "ORDERS_RECEIVED": "Ordini Ricevuti",
+            "NEW_USERS_30GG": "Nuovi Utenti (Ultimi 30 giorni)",
+            "ACTIVE_PRODUCTS": "Prodotti Attivi",
+            "SELL_30GG": "Vendite (Ultimi 30 giorni)",
+            "LATEST_ORDERS": "Ultimi Ordini",
+            "ORDER": "Ordine",
+            "NO_RECENT_ORDERS": "Nessun ordine recente.",
+            "PRODUCT_RUNNING_OOS": "Prodotto in esaurimento",
+            "ONLY_LEFT": "Solo {{ product.stock_quantity }} rimasti",
+            "ANY_RUNNING_OOS": "Nessun prodotto in esaurimento al momento."
         }
     },
     "CART": {
@@ -260,6 +289,7 @@
         "GOT": "Hai",
         "ITEMS": "articoli nel carrello",
         "REMOVE": "Rimuovi",
+        "QUANTITY": "Quantità",
         "EMPTY": "Il tuo carrello è vuoto.",
         "KEEP_SHOPPING": "Continua a fare acquisti",
         "ORDER_SUMMARY": "Riepilogo Ordine",
@@ -285,7 +315,8 @@
         "CITY_PLACEHOLDER": "Città",
         "PROVINCE_PLACEHOLDER": "Provincia",
         "COUNTRY_PLACEHOLDER": "Paese",
-        "ZIP_PLACEHOLDER": "CAP"
+        "ZIP_PLACEHOLDER": "CAP",
+        "REMOVE": "Rimuovi"
     },
     "PAYMENT": {
         "BACK_TO_ADDRESSES": "Torna agli Indirizzi",
@@ -330,7 +361,8 @@
         "ORDER_SHIPPED": "Spedito",
         "NOTE_SHIPPED": "Il tuo pacco è in viaggio. Numero di tracciamento: {{trackingNumber}}",
         "DELIVRED": "Consegnato",
-        "NOTE_DELIVERED": "Il tuo ordine è stato consegnato il {{deliveryDate}}."
+        "NOTE_DELIVERED": "Il tuo ordine è stato consegnato il {{deliveryDate}}.",
+        "LOADING_ORDER_DETAILS": "Caricamento dettagli ordine in corso, attendere prego..."
     },
     "PROFILE": {
         "TITLE": "Il mio Profilo",
@@ -357,5 +389,55 @@
         "EMPTY_MESSAGE": "La tua wishlist è vuota.",
         "EMPTY_SUBMESSAGE": "Sfoglia i nostri prodotti e aggiungi i tuoi preferiti alla wishlist.",
         "CONTINUE_SHOPPING": "Continua a fare acquisti"
+    },
+    "NEW": {
+        "JUST_ARRIVED": "Appena Arrivato",
+        "DISCOVER_MORE": "Scopri di più",
+        "LATEST_NEWS": "Ultime Novità",
+        "LOADING_NEWS": "Caricamento novità in corso, attendere prego..."
+    },
+    "OFFERS": {
+        "DAILY_OFFER": "Offerta del Giorno",
+        "DISCOVER_MORE": "Scopri di più",
+        "MOST_POPULAR": "Le Più Popolari",
+        "OFFERS_ON": "Offerte su",
+        "LOADING_OFFERS": "Caricamento offerte in corso, attendere prego..."
+    },
+    "CATEGORIES": {
+        "ALL_CATEGORIES": "Tutte le Categorie",
+        "LOADING_CATEGORIES": "Caricamento categorie in corso, attendere prego..."
+    },
+    "LOGIN": {
+        "LOGIN_ACCOUNT": "Accedi al tuo account",
+        "OR": "Oppure",
+        "CREATE_ACCOUNT": "crea un nuovo account",
+        "EMAIL_ADDRESS": "Indirizzo Email",
+        "PASSWORD": "Password",
+        "EMAIL_REQUIRED": "L'indirizzo email è obbligatorio.",
+        "VALID_EMAIL": "Inserisci un indirizzo email valido.",
+        "PASSWORD_REQUIRED": "La password è obbligatoria.",
+        "MIN_PASSWORD_LENGTH": "La password deve avere almeno 8 caratteri.",
+        "LOGIN_BUTTON": "Accedi",
+        "IN_PROGRESS": "Accesso in corso..."
+    },
+    "SIGNUP": {
+        "CREATE_ACCOUNT": "Crea un il tuo account",
+        "OR": "oppure",
+        "LOGIN_ACCOUNT": "accedi se sei già registrato",
+        "FIRST_NAME": "Nome",
+        "FIRST_NAME_REQUIRED": "Il nome è obbligatorio.",
+        "LAST_NAME": "Cognome",
+        "LAST_NAME_REQUIRED": "Il cognome è obbligatorio.",
+        "EMAIL_ADDRESS": "Indirizzo Email",
+        "EMAIL_REQUIRED": "L'indirizzo email è obbligatorio.",
+        "VALID_EMAIL": "Inserisci un indirizzo email valido.",
+        "PASSWORD": "Password (almeno 8 caratteri)",
+        "PASSWORD_REQUIRED": "La password è obbligatoria.",
+        "MIN_PASSWORD_LENGTH": "La password deve avere almeno 8 caratteri.",
+        "CONFIRM_PASSWORD": "Conferma Password",
+        "CONFIRM_PASSWORD_REQUIRED": "La conferma della password è obbligatoria.",
+        "PASSWORDS_MISMATCH": "Le password non corrispondono.",
+        "SIGNUP_BUTTON": "Registrati",
+        "IN_PROGRESS": "Registrazione in corso..."
     }
 }

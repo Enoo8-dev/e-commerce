@@ -34,7 +34,6 @@ const orderDAO = {
       const [paymentResult] = await connection.query(paymentSql, [orderId, totalAmount, paymentMethod, 'pending']);
       
       await connection.commit();
-      // *** CORREZIONE QUI: Restituisce un oggetto con entrambi gli ID ***
       return { orderId: orderId, paymentId: paymentResult.insertId };
 
     } catch (error) {

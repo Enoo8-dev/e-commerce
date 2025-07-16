@@ -46,8 +46,6 @@ export class PaymentComponent implements OnInit, OnDestroy {
       this.calculateTotal();
     });
 
-    // *** CORREZIONE: Si mette in ascolto dei cambi di lingua ***
-    // e ri-valida il carrello per ottenere le traduzioni aggiornate.
     this.langChangeSub = this.translate.onLangChange.subscribe(() => {
       this.cartService.validateCart().subscribe();
     });

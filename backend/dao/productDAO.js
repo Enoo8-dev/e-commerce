@@ -113,8 +113,6 @@ const productDAO = {
             p.is_active = TRUE         -- Il prodotto deve essere attivo
             AND pv.is_active = TRUE    -- La variante deve essere attiva
             AND pv.sale_price IS NOT NULL -- Deve esserci un prezzo scontato
-            -- *** LA CORREZIONE CHIAVE È QUI ***
-            -- Lo sconto deve essere valido ORA.
             AND (pv.sale_start_date IS NULL OR pv.sale_start_date <= NOW())
             AND (pv.sale_end_date IS NULL OR pv.sale_end_date >= NOW())
         ORDER BY 

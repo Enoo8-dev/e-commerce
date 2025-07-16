@@ -235,25 +235,24 @@
               <!-- Pannello del Tooltip -->
               <div
                 class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-80 p-3 bg-gray-800 text-white text-xs rounded-lg shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none z-10">
-                <h4 class="font-bold mb-3">Struttura CSV richiesta:</h4>
-                <p class="mb-2">Ogni riga rappresenta una variante. Colonne obbligatorie:</p>
+                <h4 class="font-bold mb-3">{{ 'ADMIN.MANAGE_PRODUCTS.ADD_MODAL.TOOLTIP.CSV_STRUCTURE_REQUIRED' | translate }}</h4>
+                <p class="mb-2">{{ 'ADMIN.MANAGE_PRODUCTS.ADD_MODAL.TOOLTIP.ROW_RAPRESENTATION' | translate }}</p>
                 <ul class="list-disc list-inside space-y-1">
-                  <li><span class="font-mono">product_group_id</span> (per raggruppare varianti)</li>
+                  <li><span class="font-mono">product_group_id</span> ({{ 'ADMIN.MANAGE_PRODUCTS.ADD_MODAL.TOOLTIP.TO_GROUP_VARIANTS' | translate }})</li>
                   <li><span class="font-mono">productName_&#123;language_code&#125;</span></li>
                   <li><span class="font-mono">description_&#123;language_code&#125;</span></li>
                   <li><span class="font-mono">brandName_&#123;language_code&#125;</span></li>
-                  <li><span class="font-mono">categoryNames_&#123;language_code&#125;</span> (separate da ',')</li>
+                  <li><span class="font-mono">categoryNames_&#123;language_code&#125;</span> ({{ 'ADMIN.MANAGE_PRODUCTS.ADD_MODAL.TOOLTIP.SEPARATED_BY_COMMA' | translate }})</li>
                   <li><span class="font-mono">features_&#123;language_code&#125;</span> (key:value,key:value)</li>
-                  <li><span class="font-mono">sku</span> (unico per variante)</li>
+                  <li><span class="font-mono">sku</span> ({{ 'ADMIN.MANAGE_PRODUCTS.ADD_MODAL.TOOLTIP.UNIQUE_FOR_VARIANT' | translate }})</li>
                   <li><span class="font-mono">price</span></li>
                   <li><span class="font-mono">stock</span></li>
                   <li><span class="font-mono">is_featured</span> (TRUE/FALSE)</li>
                   <li><span class="font-mono">attribute_&#123;name&#125;_&#123;language_code&#125;</span></li>
                 </ul>
-                <p class="mt-6">Separatore delle colonne ';'.</p>
-                <p class="mt-2">Con <span class="font-mono">&#123;language_code&#125;</span> si intende il codice ISO della lingua da inserire.</p>
-                <p class="mt-2">Con <span class="font-mono">&#123;name&#125;</span> si intende il nome dell'attributo nella lingua <span class="font-mono">&#123;language_code&#125;</span></p>
-                <div
+                <p class="mt-6">{{ 'ADMIN.MANAGE_PRODUCTS.ADD_MODAL.TOOLTIP.COLUMN_SEPARATOR' | translate }}</p>
+                <p class="mt-2">{{ 'ADMIN.MANAGE_PRODUCTS.ADD_MODAL.TOOLTIP.BY' | translate }} <span class="font-mono">&#123;language_code&#125;</span> {{ 'ADMIN.MANAGE_PRODUCTS.ADD_MODAL.TOOLTIP.LANGUAGE_CODE_MEANING' | translate }}</p>
+                <p class="mt-2"><span>{{ 'ADMIN.MANAGE_PRODUCTS.ADD_MODAL.TOOLTIP.BY' | translate }}</span><span class="font-mono"> &#123;name&#125; </span><span [innerHTML]="'ADMIN.MANAGE_PRODUCTS.ADD_MODAL.TOOLTIP.NAME_MEANING' | translate"></span></p>                <div
                   class="absolute top-full left-1/2 -translate-x-1/2 w-0 h-0 border-x-8 border-x-transparent border-t-8 border-t-gray-800">
                 </div>
               </div>
@@ -277,6 +276,6 @@
 <!-- Indicatore di caricamento per l'importazione -->
 @if (isImporting) {
 <div class="fixed inset-0 bg-white/80 flex flex-col items-center justify-center z-50">
-  <p class="text-lg font-medium text-gray-800">Importazione in corso, non chiudere la pagina...</p>
+  <p class="text-lg font-medium text-gray-800">{{ 'ADMIN.MANAGE_PRODUCTS.ADD_MODAL.IMPORT_IN_PROGRESS' | translate }}</p>
 </div>
 }

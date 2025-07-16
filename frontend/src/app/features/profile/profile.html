@@ -1,11 +1,6 @@
 <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
   <h1 class="text-3xl font-bold text-gray-900">{{ 'PROFILE.TITLE' | translate }}</h1>
   
-  <!-- 
-    *** CORREZIONE LAYOUT ***
-    Se l'utente NON è admin, usiamo una griglia a 3 colonne.
-    Se l'utente È admin, usiamo flexbox per centrare la singola colonna.
-  -->
   @if(!isAdmin) {
     <div class="mt-8 grid grid-cols-1 lg:grid-cols-3 gap-8">
       <!-- Colonna Storico Ordini -->
