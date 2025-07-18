@@ -439,5 +439,10 @@
         "PASSWORDS_MISMATCH": "Le password non corrispondono.",
         "SIGNUP_BUTTON": "Registrati",
         "IN_PROGRESS": "Registrazione in corso..."
+    },
+    "ERROR_PAGE": {
+        "PAGE_NOT_FOUND": "Pagina non trovata",
+        "SORRY": "Spiacenti, non siamo riusciti a trovare la pagina che stai cercando.",
+        "GO_HOME": "Torna alla Home"
     }
 }

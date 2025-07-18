@@ -26,6 +26,7 @@ import { OffersPageComponent } from './features/offers-page/offers-page';
 import { NewPageComponent } from './features/new-page/new-page';
 import { CategoryPageComponent } from './features/category-page/category-page';
 import { RootComponent } from './features/root/root'; 
+import { ErrorPageComponent } from './features/error-page/error-page';
 
 export const routes: Routes = [
   
@@ -52,8 +53,7 @@ export const routes: Routes = [
   { path: 'admin/products/edit/:productId', component: ProductEditComponent, canActivate: [adminGuard] },
   { path: 'admin/brands', component: BrandManagementComponent, canActivate: [adminGuard] },
   { path: 'admin/categories', component: CategoryManagementComponent, canActivate: [adminGuard] },
-  { path: 'admin/attributes', component: AttributeManagementComponent, canActivate: [adminGuard] }
+  { path: 'admin/attributes', component: AttributeManagementComponent, canActivate: [adminGuard] },
   
-  // You can add a wildcard route for handling 404 Not Found pages later
-  // { path: '**', component: PageNotFoundComponent }
+  { path: '**', component: ErrorPageComponent }
 ];

@@ -440,5 +440,10 @@
         "PASSWORDS_MISMATCH": "Passwords do not match.",
         "SIGNUP_BUTTON": "Sign Up",
         "IN_PROGRESS": "Creating account..."
+    },
+    "ERROR_PAGE": {
+        "PAGE_NOT_FOUND": "Page Not Found",
+        "SORRY": "Sorry, we couldn't find the page you were looking for.",
+        "GO_HOME": "Go to Home"
     }
 }
