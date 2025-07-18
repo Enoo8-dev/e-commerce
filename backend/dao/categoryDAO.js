@@ -1,6 +1,15 @@
 const dbPool = require('../config/database');
 
 const categoryDAO = {
+  /**
+   * Recupera tutte le categorie con traduzioni e opzioni di ricerca e ordinamento
+   * @param {Object} options - Opzioni di ricerca e ordinamento
+   * @param {string} options.languageCode - Codice della lingua per le traduzioni
+   * @param {string} [options.search] - Termini di ricerca per nome categoria
+   * @param {string} [options.sortBy] - Colonna per ordinamento (name, parent_name)
+   * @param {string} [options.sortOrder] - Direzione di ordinamento (ASC, DESC)
+   * @returns {Promise<Array>} - Lista di categorie
+   */
   async getAll({ languageCode = 'en-US', search = '', sortBy = 'name', sortOrder = 'ASC' }) {
     let sql = `
       SELECT 
@@ -32,6 +41,11 @@ const categoryDAO = {
     return rows;
   },
 
+  /**
+   * Recupera una categoria per ID con traduzioni
+   * @param {number} id - ID della categoria
+   * @returns {Promise<Object>} - Dettagli della categoria
+   */
   async getById(id) {
     const sql = `
       SELECT 
@@ -47,6 +61,14 @@ const categoryDAO = {
     return rows[0];
   },
 
+  /**
+   * Crea una nuova categoria con traduzioni
+   * @param {Object} categoryData - Dati della categoria
+   * @param {string} categoryData.name_it - Nome in italiano
+   * @param {string} categoryData.name_en - Nome in inglese
+   * @param {number} [categoryData.parent_category_id] - ID della categoria padre
+   * @returns {Promise<Object>} - Dettagli della categoria creata
+   */
   async create({ name_it, name_en, parent_category_id }) {
     const connection = await dbPool.getConnection();
     try {
@@ -71,6 +93,15 @@ const categoryDAO = {
     }
   },
 
+  /** 
+   * Aggiorna una categoria esistente con traduzioni
+   * @param {number} id - ID della categoria da aggiornare
+   * @param {Object} categoryData - Dati della categoria  
+   * @param {string} categoryData.name_it - Nome in italiano
+   * @param {string} categoryData.name_en - Nome in inglese
+   * @param {number} [categoryData.parent_category_id] - ID della categoria padre
+   * @returns {Promise<boolean>} - True se l'aggiornamento è riuscito
+   */
   async update(id, { name_it, name_en, parent_category_id }) {
     const connection = await dbPool.getConnection();
     try {
@@ -88,6 +119,11 @@ const categoryDAO = {
     }
   },
 
+  /**
+   * Elimina una categoria per ID
+   * @param {number} id - ID della categoria da eliminare
+   * @returns {Promise<boolean>} - True se l'eliminazione è riuscita
+   */
   async delete(id) {
     const [result] = await dbPool.query('DELETE FROM Categories WHERE id = ?', [id]);
     return result.affectedRows > 0;

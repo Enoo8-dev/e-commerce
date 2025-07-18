@@ -45,12 +45,23 @@ const orderDAO = {
     }
   },
 
+  /**
+   * Retrieves an order by its ID.
+   * @param {number} orderId - The ID of the order to retrieve.
+   * @returns {Promise<object>} The order details.
+   */
   async getOrderById(orderId) {
     const sql = 'SELECT * FROM Orders WHERE id = ?';
     const [rows] = await dbPool.query(sql, [orderId]);
     return rows[0] || null;
   },
 
+  /**
+   * Retrieves items for a specific order.
+   * @param {number} orderId - The ID of the order.
+   * @param {string} languageCode - The language code for product translations.
+   * @returns {Promise<Array>} Array of order items.
+   */
   async getOrderItems(orderId, languageCode) {
     const sql = `
       SELECT oi.quantity, oi.price_per_unit, pt.name as productName, 
@@ -65,24 +76,53 @@ const orderDAO = {
     return rows;
   },
 
+  /** 
+   * Retrieves the tracking history for a specific order.
+   * @param {number} orderId - The ID of the order.
+   * @returns {Promise<Array>} Array of tracking history events.
+   */
   async getOrderTrackingHistory(orderId) {
     const sql = 'SELECT * FROM Order_Tracking_History WHERE order_id = ? ORDER BY changed_at ASC';
     const [rows] = await dbPool.query(sql, [orderId]);
     return rows;
   },
 
+  /**
+   * Updates the payment status for a specific payment.
+   * @param {number} paymentId - The ID of the payment to update.
+   * @param {string} status - The new status of the payment (e.g., 'completed', 'failed').
+   * @param {string|null} transactionId - Optional transaction ID from the payment gateway.
+   */
   async updatePaymentStatus(paymentId, status, transactionId = null) {
     await dbPool.query('UPDATE Payments SET status = ?, transaction_id = ? WHERE id = ?', [status, transactionId, paymentId]);
   },
 
+  /**
+   * Updates the status of an order and optionally adds a tracking number.
+   * @param {number} orderId - The ID of the order to update.
+   * @param {string} status - The new status of the order (e.g., 'shipped', 'delivered').
+   * @param {string|null} trackingNumber - Optional tracking number for the order.
+   */
   async updateOrderStatus(orderId, status, trackingNumber = null) {
     await dbPool.query('UPDATE Orders SET status = ?, tracking_number = ? WHERE id = ?', [status, trackingNumber, orderId]);
   },
 
+  /**
+   * Adds a tracking event to the order's tracking history.
+   * @param {number} orderId - The ID of the order.
+   * @param {string} status - The status of the order at this tracking event.
+   * @param {string} [notes] - Optional notes for the tracking event.
+   */ 
   async addTrackingEvent(orderId, status, notes = '') {
     await dbPool.query('INSERT INTO Order_Tracking_History (order_id, status, notes) VALUES (?, ?, ?)', [orderId, status, notes]);
   },
 
+  /**
+   * Fetches all orders for a specific user.
+   * @param {number} userId - The ID of the user.
+   * @param {string} languageCode - The language code for product translations.
+   * @returns {Promise<Array>} Array of orders.
+   */
   async getOrdersByUserId(userId, languageCode) {
     const sql = `
       SELECT 
@@ -100,6 +140,8 @@ const orderDAO = {
 
   /**
    * Fetches all addresses for a specific user.
+   * @param {number} userId - The ID of the user.
+   * @returns {Promise<Array>} Array of addresses.  
    */
   async getAddressesByUserId(userId) {
     const sql = 'SELECT * FROM Addresses WHERE user_id = ? ORDER BY is_default DESC, id DESC';
@@ -109,6 +151,15 @@ const orderDAO = {
 
   /**
    * Adds a new address for a user.
+   * @param {number} userId - The ID of the user.
+   * @param {object} addressData - Object containing address details.
+   * @param {string} addressData.street - The street address.
+   * @param {string} addressData.city - The city of the address.
+   * @param {string} addressData.postal_code - The postal code of the address.
+   * @param {string} addressData.province - The province of the address.
+   * @param {string} addressData.country - The country of the address.
+   * @param {boolean} [addressData.is_default=false] - Whether this address is the default address.
+   * @returns {Promise<number>} The ID of the newly created address.
    */
   async addAddress(userId, addressData) {
     const { street, city, postal_code, province, country, is_default } = addressData;

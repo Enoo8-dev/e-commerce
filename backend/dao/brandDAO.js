@@ -1,6 +1,15 @@
 const dbPool = require('../config/database');
 
 const brandDAO = {
+  /**
+   * Recupera tutti i brand con traduzioni e filtri opzionali
+   * @param {Object} options - Opzioni di ricerca e ordinamento
+   * @param {string} options.languageCode - Codice della lingua per le traduzioni     
+   * @param {string} options.search - Termini di ricerca per il nome del brand
+   * @param {string} options.sortBy - Colonna per l'ordinamento (name, created_at)
+   * @param {string} options.sortOrder - Direzione dell'ordinamento (ASC, DESC)
+   * @returns {Promise<Array>} Lista di brand con traduzioni
+   */
   async getAll({ languageCode = 'en-US', search = '', sortBy = 'name', sortOrder = 'ASC' }) {
     let sql = `
       SELECT b.id, bt.name, b.logo_url, b.created_at
@@ -41,6 +50,11 @@ const brandDAO = {
     }
   },
 
+  /**
+   * Recupera un brand specifico con traduzioni
+   * @param {number} brandId - ID del brand da recuperare
+   * @returns {Promise<Object>} Brand con traduzioni
+   */
   async getById(brandId) {
     const sql = `
       SELECT 
@@ -56,6 +70,12 @@ const brandDAO = {
     return rows[0];
   },
 
+  /**
+   * Crea un nuovo brand con traduzioni
+   * @param {Object} data - Dati del brand da creare
+   * @param {string} logoPath - Percorso del logo del brand
+   * @returns {Promise<Object>} Brand creato con ID e nome
+   */
   async create(data, logoPath) {
     const connection = await dbPool.getConnection();
     try {
@@ -74,6 +94,12 @@ const brandDAO = {
     }
   },
 
+  /**
+   * Aggiorna un brand esistente con nuove traduzioni
+   * @param {number} id - ID del brand da aggiornare
+   * @param {Object} data - Dati del brand da aggiornare
+   * @returns {Promise<boolean>} True se l'aggiornamento è riuscito, altrimenti false
+   */
   async update(id, data) {
     const connection = await dbPool.getConnection();
     try {
@@ -92,6 +118,11 @@ const brandDAO = {
     }
   },
 
+  /**
+   * Elimina un brand specifico
+   * @param {number} id - ID del brand da eliminare
+   * @returns {Promise<boolean>} True se l'eliminazione è riuscita, altrimenti false
+   */
   async delete(id) {
     const [result] = await dbPool.query('DELETE FROM Brands WHERE id = ?', [id]);
     return result.affectedRows > 0;

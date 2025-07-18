@@ -2,6 +2,13 @@ const dashboardDAO = require('../dao/dashboardDAO');
 const { subDays, format } = require('date-fns');
 
 const dashboardService = {
+  
+  /**
+   * Recupera i dati del dashboard, inclusi KPI, vendite degli ultimi 30 giorni,
+   * ordini recenti e prodotti a basso stock.
+   * @param {string} languageCode - Codice della lingua per i prodotti a basso stock
+   * @returns {Promise<Object>} - Dati del dashboard
+   */
   async getDashboardData(languageCode) {
     // key performance indicators (KPI) 
     const kpiStats = await dashboardDAO.getKpiStats();

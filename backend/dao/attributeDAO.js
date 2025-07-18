@@ -1,6 +1,15 @@
 const dbPool = require('../config/database');
 
 const attributeDAO = {
+  /**
+   * Recupera tutti gli attributi con le traduzioni e i valori associati.
+   * @param {Object} params - Parametri di ricerca e ordinamento.
+   * @param {string} params.languageCode - Codice della lingua per le traduzioni.
+   * @param {string} [params.search] - Termini di ricerca per il nome dell'attributo.
+   * @param {string} [params.sortBy] - Colonna per l'ordinamento (default: 'name').
+   * @param {string} [params.sortOrder] - Direzione dell'ordinamento ('ASC' o 'DESC', default: 'ASC').
+   * @returns {Promise<Array>} - Lista di attributi con traduzioni e valori.
+   */
   async getAll({ languageCode = 'en-US', search = '', sortBy = 'name', sortOrder = 'ASC' }) {
     let sql = `
       SELECT a.id, at.name 
@@ -50,7 +59,13 @@ const attributeDAO = {
         throw error;
     }
   },
-async getAttributeById(id) {
+
+  /**
+   * Recupera un attributo specifico con le traduzioni e i valori associati.
+   * @param {number} id - ID dell'attributo da recuperare.
+   * @returns {Promise<Object>} - Attributo con traduzioni e valori.
+   */
+  async getAttributeById(id) {
     const sql = `
       SELECT a.id, it.name as name_it, en.name as name_en
       FROM Attributes a
@@ -62,6 +77,11 @@ async getAttributeById(id) {
     return rows[0];
   },
 
+  /**
+   * Recupera un valore di attributo specifico con le traduzioni.
+   * @param {number} id - ID del valore di attributo da recuperare.
+   * @returns {Promise<Object>} - Valore di attributo con traduzioni.
+   */
   async getAttributeValueById(id) {
     const sql = `
       SELECT av.id, av.hex_code,
@@ -76,6 +96,11 @@ async getAttributeById(id) {
     return rows[0];
   },
 
+  /**
+   * Crea un nuovo attributo con le traduzioni.
+   * @param {string} name - Nome dell'attributo.
+   * @returns {Promise<Object>} - Attributo creato con ID e nome.
+   */
   async createAttribute(name) {
     const connection = await dbPool.getConnection();
     try {
@@ -92,6 +117,15 @@ async getAttributeById(id) {
     }
   },
 
+  /**
+   * Crea un nuovo valore di attributo con le traduzioni.
+   * @param {number} attribute_id - ID dell'attributo a cui associare il valore.
+   * @param {Object} valueData - Dati del valore da creare.
+   * @param {string} valueData.value_it - Valore in italiano.
+   * @param {string} valueData.value_en - Valore in inglese.
+   * @param {string} [valueData.hex_code] - Codice esadecimale opzionale.
+   * @returns {Promise<Object>} - Valore di attributo creato con ID e valore.
+   */
   async createAttributeValue(attribute_id, { value_it, value_en, hex_code }) {
     const connection = await dbPool.getConnection();
     try {
@@ -108,6 +142,14 @@ async getAttributeById(id) {
     }
   },
 
+  /**
+   * Aggiorna un attributo esistente con le traduzioni.
+   * @param {number} id - ID dell'attributo da aggiornare.
+   * @param {Object} translations - Traduzioni da aggiornare.
+   * @param {string} translations.name_it - Nome in italiano.
+   * @param {string} translations.name_en - Nome in inglese.
+   * @returns {Promise<boolean>} - True se l'aggiornamento è riuscito, altrimenti false.
+   */
   async updateAttribute(id, { name_it, name_en }) {
     const connection = await dbPool.getConnection();
     try {
@@ -123,6 +165,15 @@ async getAttributeById(id) {
     }
   },
 
+  /**
+   * Aggiorna un valore di attributo esistente con le traduzioni.
+   * @param {number} id - ID del valore di attributo da aggiornare.
+   * @param {Object} translations - Traduzioni da aggiornare.
+   * @param {string} translations.value_it - Valore in italiano.
+   * @param {string} translations.value_en - Valore in inglese.
+   * @param {string} translations.hex_code - Codice esadecimale opzionale.
+   * @returns {Promise<boolean>} - True se l'aggiornamento è riuscito, altrimenti false.
+   */
   async updateAttributeValue(id, { value_it, value_en, hex_code }) {
     const connection = await dbPool.getConnection();
     try {
@@ -139,11 +190,21 @@ async getAttributeById(id) {
     }
   },
 
+  /**
+   * Elimina un attributo specifico.
+   * @param {number} id - ID dell'attributo da eliminare.
+   * @returns {Promise<boolean>} - True se l'eliminazione è riuscita, altrimenti false.
+   */
   async deleteAttribute(id) {
     const [result] = await dbPool.query('DELETE FROM Attributes WHERE id = ?', [id]);
     return result.affectedRows > 0;
   },
 
+  /**
+   * Elimina un valore di attributo specifico.
+   * @param {number} id - ID del valore di attributo da eliminare.
+   * @returns {Promise<boolean>} - True se l'eliminazione è riuscita, altrimenti false.
+   */
   async deleteAttributeValue(id) {
     const [result] = await dbPool.query('DELETE FROM Attribute_Values WHERE id = ?', [id]);
     return result.affectedRows > 0;

@@ -37,6 +37,7 @@ const authService = {
      * @param {string} email - The user's email address.
      * @param {string} password - The user's password.
      * @returns {Promise<string>} The generated JWT token.
+     * @throws {Error} If the email or password is invalid, or if the user is not active.
      */
     async loginUser(email, password) {
         const user = await userDAO.getUserByEmail(email);

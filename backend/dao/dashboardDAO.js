@@ -1,6 +1,15 @@
 const dbPool = require('../config/database');
 
 const dashboardDAO = {
+
+  /**
+   * 
+   * @returns {Promise<Object>} Returns an object with KPI statistics:
+   * - totalRevenue: Total revenue from delivered orders
+   * - totalOrders: Total number of orders
+   * - newUsers: Number of new users in the last 30 days
+   * - activeProducts: Number of active products
+   */
   async getKpiStats() {
     const sql = `
       SELECT
@@ -13,6 +22,10 @@ const dashboardDAO = {
     return rows[0];
   },
 
+  /**
+   * Gets sales data for the last 30 days, grouped by date.
+   * @returns {Promise<Array>} Returns an array of objects with date and daily revenue.
+   */
   async getSalesLast30Days() {
     const sql = `
       SELECT 
@@ -27,6 +40,11 @@ const dashboardDAO = {
     return rows;
   },
 
+  /**
+   * Gets the most popular products based on order count.
+   * @param {number} limit - Maximum number of products to return.
+   * @returns {Promise<Array>} Returns an array of objects with product name, SKU, and order count.
+   */
   async getRecentOrders(limit = 5) {
     const sql = `
       SELECT o.id, o.total_amount, o.status, o.order_date, u.first_name, u.last_name
@@ -39,6 +57,12 @@ const dashboardDAO = {
     return rows;
   },
 
+  /**
+   * 
+   * @param {string} languageCode ISO language code for product names (default 'en-US')
+   * @param {number} limit Maximum number of low stock products to return (default 5)
+   * @return {Promise<Array>} Returns an array of objects with product name, SKU, and stock quantity for low stock products.
+   */
   async getLowStockProducts(languageCode = 'en-US', limit = 5) {
       const sql = `
         SELECT pt.name, pv.sku, pv.stock_quantity

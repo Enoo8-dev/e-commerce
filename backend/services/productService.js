@@ -20,6 +20,13 @@ const productService = {
             throw error;
         }
     },
+
+    /**
+     * Retrieves featured products for the homepage.
+     * @param {string} languageCode - The language code to fetch translations.
+     * @param {number} limit - The maximum number of featured products to retrieve.
+     * @returns {Promise<Array>} A promise that resolves to an array of featured product objects.
+     */
     async getFeaturedProducts(languageCode, limit) {
         try {
             return await productDAO.getFeaturedProducts(languageCode, limit);
@@ -28,6 +35,13 @@ const productService = {
             throw error;
         }
     },
+
+    /**
+     * Retrieves the latest offers for the offers page.
+     * @param {string} languageCode - The language code to fetch translations.
+     * @param {number} limit - The maximum number of offers to retrieve.
+     * @returns {Promise<Array>} A promise that resolves to an array of offer objects.
+     */
     async getLatestOffers(languageCode, limit) {
         try {
             return await productDAO.getLatestOffers(languageCode, limit);
@@ -36,6 +50,13 @@ const productService = {
             throw error;
         }
     },
+
+    /**
+     * Retrieves the newest products for the newest products page.
+     * @param {string} languageCode - The language code to fetch translations.
+     * @param {number} limit - The maximum number of newest products to retrieve.
+     * @returns {Promise<Array>} A promise that resolves to an array of newest product objects.
+     */
     async getNewestProducts(languageCode, limit) {
         try {
             return await productDAO.getNewestProducts(languageCode, limit);
@@ -44,6 +65,14 @@ const productService = {
             throw error;
         }
     },
+
+    /**
+     * Retrieves product details by product ID and language code.
+     * @param {string} productId - The ID of the product to retrieve.
+     * @param {string} languageCode - The language code to fetch translations.
+     * @returns {Promise<Object>} A promise that resolves to the product details object.
+     * @throws {Error} If the product is not found.
+     */
     async getProductById(productId, languageCode) {
         try {
             const product = await productDAO.getProductById(productId, languageCode);
@@ -58,6 +87,17 @@ const productService = {
             throw error;
         }
     },
+
+    /**
+     * Retrieves a list of products for the admin panel with pagination and sorting options.
+     * @param {Object} options - Options for pagination and sorting.
+     * @param {number} options.page - The page number to retrieve (default: 1).
+     * @param {number} options.limit - The number of items per page (default: 10).
+     * @param {string} options.sort - The field to sort by  (default: 'name').
+     * @param {string} options.order - The order of sorting ('asc' or 'desc', default: 'asc').
+     * @returns {Promise<Array>} A promise that resolves to an array of product objects.
+     * @throws {Error} If there is an error retrieving the product list.
+     */
     async getAdminProductList(options) {
         try {
             return await productDAO.getAdminProductList(options);
@@ -66,6 +106,14 @@ const productService = {
             throw error;
         }
     },
+
+    /**
+     * Updates the status of a product variant (active/inactive).
+     * @param {string} variantId - The ID of the product variant to update.
+     * @param {boolean} isActive - The new status of the variant (true for active, false for inactive).
+     * @returns {Promise<Object>} A promise that resolves to the updated variant object.
+     * @throws {Error} If there is an error updating the variant status.
+     */
     async updateVariantStatus(variantId, isActive) {
         try {
             return await productDAO.updateVariantStatus(variantId, isActive);
@@ -74,6 +122,14 @@ const productService = {
             throw error;
         }
     },
+
+    /**
+     * Retrieves detailed information about a product for the admin panel.
+     * @param {string} productId - The ID of the product to retrieve.
+     * @param {string} languageCode - The language code to fetch translations.
+     * @returns {Promise<Object>} A promise that resolves to the product details object.    
+     * @throws {Error} If the product is not found.
+     */
     async getAdminProductDetails(productId, languageCode) {
         const product = await productDAO.getAdminProductDetails(productId, languageCode);
         if (!product) {
@@ -84,83 +140,62 @@ const productService = {
         return product;
     },
 
+    /**
+     * Updates a product's details in the database.
+     * @param {string} productId - The ID of the product to update.
+     * @param {Object} productData - The data to update the product with.
+     * @param {string} productData.name - The name of the product.
+     * @param {string} productData.description - The description of the product.
+     * @param {number} productData.price - The price of the product.
+     * @param {string} productData.categoryId - The ID of the category the product belongs to.
+     * @param {Array} productData.variants - An array of variant objects, each containing:
+     * @param {string} productData.variants[].id - The ID of the variant.
+     * @param {string} productData.variants[].name - The name of the variant.
+     * @param {number} productData.variants[].price - The price of the variant.
+     * @param {boolean} productData.variants[].isActive - The status of the variant (active/inactive).
+     * @returns {Promise<Object>} A promise that resolves to the updated product object.
+     * @throws {Error} If there is an error updating the product.
+     */
     async updateProduct(productId, productData) {
         return await productDAO.updateProduct(productId, productData);
     },
 
+    /**
+     * Deletes a product from the database.
+     * @param {string} productId - The ID of the product to delete.
+     * @returns {Promise<void>} A promise that resolves when the product is deleted.
+     * @throws {Error} If there is an error deleting the product.
+     */ 
     async getAllBrands(languageCode) {
         return await productDAO.getAllBrands(languageCode);
     },
 
+    /**
+     * Deletes a product from the database.
+     * @param {string} productId - The ID of the product to delete.
+     * @returns {Promise<void>} A promise that resolves when the product is deleted.
+     * @throws {Error} If there is an error deleting the product.
+     */
     async getAllCategories(languageCode) {
         return await productDAO.getAllCategories(languageCode);
     },
 
+    /**
+     * Creates a new product in the database.
+     * @param {Object} productData - The data for the new product.
+     * @param {string} productData.name - The name of the product.
+     * @param {string} productData.description - The description of the product.
+     * @param {number} productData.price - The price of the product.
+     * @param {string} productData.categoryId - The ID of the category the product belongs to.
+     * @param {Array} productData.variants - An array of variant objects, each containing:
+     * @param {string} productData.variants[].name - The name of the variant.
+     * @param {number} productData.variants[].price - The price of the variant.
+     * @param {boolean} productData.variants[].isActive - The status of the variant (active/inactive).
+     * @returns {Promise<Object>} A promise that resolves to the created product object.
+     * @throws {Error} If there is an error creating the product.
+     */   
     async createProduct(productData) {
         return await productDAO.createProduct(productData);
-    },
-
-    async getAttributesForForm(languageCode) {
-        const flatList = await productDAO.getAttributesForForm(languageCode);
-
-        const structuredAttributes = {};
-        // raggruppa le righe in base all'ID dell'attributo
-        // e crea un array di valori per ogni attributo
-        // in modo da avere un oggetto strutturato per il form
-        // { attributeId: 1, attributeName: "Colore", values: [{ id: 10, value: "Rosso" }, { id: 11, value: "Blu" }] }
-        // per ogni riga, aggiunge il valore all'array dei valori dell'attributo
-        // se l'attributo non esiste, lo crea
-        // se il valore non esiste, lo aggiunge all'array dei valori dell'attributo
-        // restituisce un array di oggetti strutturati
-        // con gli attributi e i loro valori
-        // per il form di creazione/modifica prodotto
-        for (const row of flatList) {
-            if (!structuredAttributes[row.attributeId]) {
-                structuredAttributes[row.attributeId] = {
-                    id: row.attributeId,
-                    name: row.attributeName,
-                    values: []
-                };
-            }
-            if (row.valueId) { 
-                structuredAttributes[row.attributeId].values.push({
-                    id: row.valueId,
-                    value: row.valueName
-                });
-            }
-        }
-        return Object.values(structuredAttributes);
-    },
-    
-    async validateCartItems(variantIds, languageCode) {
-        return await productDAO.getVariantDetailsByIds(variantIds, languageCode);
-    },
-
-    async getOffersPageLayout(languageCode) {
-        const allOffers = await productDAO.getActiveOffers(languageCode);
-        
-        const popularOffers = allOffers.filter(offer => offer.is_featured);
-
-        // raggruppa le offerte per categoria e crea una mappa con l id come chiave
-        const offersByCategoryMap = allOffers.reduce((acc, offer) => {
-            if (offer.categoryId && offer.categoryName) {
-            if (!acc.has(offer.categoryId)) {
-                acc.set(offer.categoryId, {
-                categoryId: offer.categoryId,
-                categoryName: offer.categoryName,
-                products: []
-                });
-            }
-            acc.get(offer.categoryId).products.push(offer);
-            }
-            return acc;
-        }, new Map());
-
-        return {
-            heroOffer: popularOffers[0] || allOffers[0] || null,
-            popularOffers: popularOffers.slice(0, 4), // Prendiamo le prime 4 popolari
-            offersByCategory: Array.from(offersByCategoryMap.values()) // Convertiamo la mappa in un array
-        };
     },
 
     /**

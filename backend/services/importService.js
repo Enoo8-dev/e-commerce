@@ -3,6 +3,12 @@ const Papa = require('papaparse');
 const productDAO = require('../dao/productDAO');
 
 const importService = {
+  /**
+   * Processa un file CSV per importare prodotti e varianti
+   * @param {string} filePath - Percorso del file CSV da processare
+   * @returns {Promise<Object>} - Risultato dell'importazione
+   * @throws {Error} - Se si verifica un errore durante la validazione o l'inserimento
+   */
   async processProductCsv(filePath) {
     const fileContent = fs.readFileSync(filePath, 'utf8');
     // ogni riga del CSV viene interpretata come un oggetto con le chiavi corrispondenti alle intestazioni

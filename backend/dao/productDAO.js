@@ -218,6 +218,17 @@ const productDAO = {
         return product;
     },
 
+    /**
+     * Fetches a list of products for the admin panel with detailed information.
+     * This includes product details, variants, images, and translations.
+     * @param {Object} options - Options for filtering and sorting the product list.
+     * @param {string} options.lang - The language code for translations (default is 'en-US').
+     * @param {string} options.search - Search term for product name or SKU.
+     * @param {string} options.sortBy - Column to sort by (default is 'productId').
+     * @param {string} options.sortOrder - Sort order (ASC or DESC, default is 'DESC').
+     * @param {string} options.status - Filter by product status (active or inactive).
+     * @return {Promise<Array>} A promise that resolves to an array of product objects.
+     */
     async getAdminProductList({ lang = 'en-US', search = '', sortBy = 'productId', sortOrder = 'DESC', status = '' }) {
         let sql = `
       SELECT
@@ -568,6 +579,13 @@ const productDAO = {
         }
     },
 
+    /**
+     * Fetches detailed information about product variants by their IDs.
+     * This includes product names, brand names, prices, stock quantities, and attributes.
+     * @param {Array<number>} variantIds - An array of variant IDs to fetch details for.
+     * @param {string} languageCode - The language code for translations (default is 'en-US').
+     * @returns {Promise<Array>} A promise that resolves to an array of variant objects with their details.
+     */
     async getVariantDetailsByIds(variantIds, languageCode = 'en-US') {
         if (!variantIds || variantIds.length === 0) {
             return [];
@@ -725,6 +743,13 @@ const productDAO = {
         return rows;
     },
 
+    /**
+     * Finds a brand ID by its names in Italian and English.
+     * This function is used to ensure that the brand exists before creating a product.
+     * @param {string} name_it - The brand name in Italian. 
+     * @param {string} name_en - The brand name in English.
+     * @returns {Promise<number|null>} The ID of the brand if found, or null if not found.
+     */
     findBrandIdByNames(name_it, name_en) {
         const sql = `
       SELECT b.id FROM Brands b
@@ -735,17 +760,39 @@ const productDAO = {
         return dbPool.query(sql, [name_it, name_en]).then(([rows]) => rows[0] ? rows[0].id : null);
     },
 
+    /**
+     * Finds category IDs by their names in a specific language.
+     * This function is used to ensure that the categories exist before creating a product.
+     * @param {Array<string>} names - An array of category names to search for.
+     * @param {string} languageCode - The language code for the category names (default is 'en-US').
+     * @returns {Promise<Array<number>>} An array of category IDs that match the provided names.
+     */
     findCategoryIdsByNames(names, languageCode) {
         if (!names || names.length === 0) return [];
         const sql = 'SELECT category_id FROM Category_Translations WHERE name IN (?) AND language_code = ?';
         return dbPool.query(sql, [names, languageCode]).then(([rows]) => rows.map(r => r.category_id));
     },
 
+    /**
+     * Finds an attribute ID by its name in a specific language.
+     * This function is used to ensure that the attribute exists before creating a product.
+     * @param {string} name - The name of the attribute to search for.  
+     * @param {string} languageCode - The language code for the attribute name (default is 'en-US').
+     * @returns {Promise<number|null>} The ID of the attribute if found, or null if not found.
+     */
     findAttributeIdByName(name, languageCode) {
         const sql = `SELECT attribute_id FROM Attribute_Translations WHERE name = ? AND language_code = ? LIMIT 1`;
         return dbPool.query(sql, [name, languageCode]).then(([rows]) => rows[0] ? rows[0].attribute_id : null);
     },
 
+    /**
+     * Finds an attribute value ID by its name in a specific language.
+     * This function is used to ensure that the attribute value exists before creating a product.
+     * @param {number} attributeId - The ID of the attribute to which the value belongs.
+     * @param {string} value - The name of the attribute value to search for.
+     * @param {string} languageCode - The language code for the attribute value name (default is 'en-US').
+     * @returns {Promise<number|null>} The ID of the attribute value if found, or null if not found.
+     */
     findAttributeValueIdByName(attributeId, value, languageCode) {
         const sql = `
       SELECT av.id FROM Attribute_Values av
@@ -756,6 +803,12 @@ const productDAO = {
         return dbPool.query(sql, [attributeId, value, languageCode]).then(([rows]) => rows[0] ? rows[0].id : null);
     },
 
+    /**
+     * Creates a new product with its translations, categories, and variants.
+     * This function handles the creation of the main product, its translations, categories, and variants.
+     * @param {Object} productData - The complete data for the new product, including brand ID, translations, category IDs, and variants.
+     * @returns {Promise<Object>} An object containing the ID of the newly created product and its variants.
+     */
     async createProduct(productData) {
         const connection = await dbPool.getConnection();
         try {
@@ -805,42 +858,42 @@ const productDAO = {
      * @returns {Promise<Array>} A flat list of products with category details.
      */
     async getProductsGroupedByCategories(languageCode = 'en-US') {
-  const sql = `
-    SELECT
-      p.id AS productId,
-      pt.name AS productName,
-      pv.id as variantId,
-      pv.price AS originalPrice,
-      CASE
-        WHEN pv.sale_price IS NOT NULL AND (pv.sale_start_date IS NULL OR pv.sale_start_date <= NOW()) AND (pv.sale_end_date IS NULL OR pv.sale_end_date >= NOW())
-        THEN pv.sale_price
-        ELSE NULL
-      END AS currentSalePrice,
-      pv.sku AS variantSku,
-      pv.stock_quantity,
-      bt.name AS brandName,
-      (SELECT image_url FROM Product_Images WHERE variant_id = pv.id ORDER BY display_order ASC LIMIT 1) AS imageUrl,
-      p.is_featured,
-      sub_cat.id as categoryId,
-      sub_cat_trans.name as categoryName,
-      main_cat.id as mainCategoryId,
-      main_cat_trans.name as mainCategoryName
-    FROM Products p
-    JOIN Product_Translations pt ON p.id = pt.product_id AND pt.language_code = ?
-    JOIN Brands b ON p.brand_id = b.id
-    JOIN Brand_Translations bt ON b.id = bt.brand_id AND bt.language_code = ?
-    JOIN Product_Variants pv ON p.id = pv.product_id AND pv.is_default = TRUE AND pv.is_active = TRUE
-    JOIN Product_Categories pc ON p.id = pc.product_id
-    JOIN Categories sub_cat ON pc.category_id = sub_cat.id
-    JOIN Category_Translations sub_cat_trans ON sub_cat.id = sub_cat_trans.category_id AND sub_cat_trans.language_code = ?
-    LEFT JOIN Categories main_cat ON sub_cat.parent_category_id = main_cat.id
-    LEFT JOIN Category_Translations main_cat_trans ON main_cat.id = main_cat_trans.category_id AND main_cat_trans.language_code = ?
-    WHERE p.is_active = TRUE
-    ORDER BY mainCategoryName, categoryName, productName;
-  `;
-  const [rows] = await dbPool.query(sql, [languageCode, languageCode, languageCode, languageCode]);
-  return rows;
-}
+        const sql = `
+            SELECT
+            p.id AS productId,
+            pt.name AS productName,
+            pv.id as variantId,
+            pv.price AS originalPrice,
+            CASE
+                WHEN pv.sale_price IS NOT NULL AND (pv.sale_start_date IS NULL OR pv.sale_start_date <= NOW()) AND (pv.sale_end_date IS NULL OR pv.sale_end_date >= NOW())
+                THEN pv.sale_price
+                ELSE NULL
+            END AS currentSalePrice,
+            pv.sku AS variantSku,
+            pv.stock_quantity,
+            bt.name AS brandName,
+            (SELECT image_url FROM Product_Images WHERE variant_id = pv.id ORDER BY display_order ASC LIMIT 1) AS imageUrl,
+            p.is_featured,
+            sub_cat.id as categoryId,
+            sub_cat_trans.name as categoryName,
+            main_cat.id as mainCategoryId,
+            main_cat_trans.name as mainCategoryName
+            FROM Products p
+            JOIN Product_Translations pt ON p.id = pt.product_id AND pt.language_code = ?
+            JOIN Brands b ON p.brand_id = b.id
+            JOIN Brand_Translations bt ON b.id = bt.brand_id AND bt.language_code = ?
+            JOIN Product_Variants pv ON p.id = pv.product_id AND pv.is_default = TRUE AND pv.is_active = TRUE
+            JOIN Product_Categories pc ON p.id = pc.product_id
+            JOIN Categories sub_cat ON pc.category_id = sub_cat.id
+            JOIN Category_Translations sub_cat_trans ON sub_cat.id = sub_cat_trans.category_id AND sub_cat_trans.language_code = ?
+            LEFT JOIN Categories main_cat ON sub_cat.parent_category_id = main_cat.id
+            LEFT JOIN Category_Translations main_cat_trans ON main_cat.id = main_cat_trans.category_id AND main_cat_trans.language_code = ?
+            WHERE p.is_active = TRUE
+            ORDER BY mainCategoryName, categoryName, productName;
+        `;
+        const [rows] = await dbPool.query(sql, [languageCode, languageCode, languageCode, languageCode]);
+        return rows;
+    }
 
 
 };

@@ -3,6 +3,9 @@ const dbPool = require('../config/database');
 const wishlistDAO = {
   /**
    * Fetches all wishlist items for a given user, along with product details.
+   * @param {number} userId - The ID of the user whose wishlist is being fetched.
+   * @param {string} languageCode - The language code for product translations (default is 'en-US').
+   * @returns {Promise<Array>} - A promise that resolves to an array of wishlist items, each containing product details.
    */
   async getByUserId(userId, languageCode = 'en-US') {
     const sql = `
@@ -25,6 +28,9 @@ const wishlistDAO = {
 
   /**
    * Adds an item to a user's wishlist.
+   * @param {number} userId - The ID of the user.
+   * @param {number} variantId - The ID of the product variant to add to the wishlist.
+   * @returns {Promise<boolean>} - A promise that resolves to true if the item was added successfully, false otherwise.
    */
   async add(userId, variantId) {
     const sql = 'INSERT IGNORE INTO Wishlist_Items (user_id, variant_id) VALUES (?, ?)';
@@ -34,6 +40,9 @@ const wishlistDAO = {
 
   /**
    * Removes an item from a user's wishlist.
+   * @param {number} userId - The ID of the user.
+   * @param {number} variantId - The ID of the product variant to remove from the wishlist.
+   * @returns {Promise<boolean>} - A promise that resolves to true if the
    */
   async remove(userId, variantId) {
     const sql = 'DELETE FROM Wishlist_Items WHERE user_id = ? AND variant_id = ?';

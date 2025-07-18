@@ -2,7 +2,7 @@ const nodemailer = require('nodemailer');
 const path = require('path');
 const fs = require('fs');
 
-
+// Configura il trasportatore per l'invio delle email
 const transporter = nodemailer.createTransport({
   host: process.env.EMAIL_HOST,
   port: process.env.EMAIL_PORT,
@@ -14,6 +14,16 @@ const transporter = nodemailer.createTransport({
 });
 
 const emailService = {
+  /**
+   * Invia un'email di conferma dell'ordine all'utente
+   * @param {string} userEmail - L'email dell'utente a cui inviare la conferma
+   * @param {Object} orderDetails - Dettagli dell'ordine
+   * @param {Array} orderDetails.items - Lista degli articoli nell'ordine
+   * @param {string} orderDetails.orderId - ID dell'ordine
+   * @param {number} orderDetails.totalAmount - Importo totale dell'ordine
+   * @param {string} orderDetails.userName - Nome dell'utente per il saluto
+   * @returns {Promise<void>}
+   */
   async sendOrderConfirmation(userEmail, orderDetails) {
 
     const attachments = [];
