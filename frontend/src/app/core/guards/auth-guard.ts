@@ -3,6 +3,7 @@ import { CanActivateFn, Router, RouterStateSnapshot } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { map, filter, switchMap, take } from 'rxjs/operators';
 
+// state è di tipo RouterStateSnapshot per accedere all'URL corrente e permettere il salvataggio dell'URL di destinazione
 export const authGuard: CanActivateFn = (route, state: RouterStateSnapshot) => {
   const authService = inject(AuthService);
   const router = inject(Router);

@@ -31,7 +31,7 @@ const app = express();
 
 // =========== Middleware Configuration ===========
 // Enable Cross-Origin Resource Sharing (CORS)
-app.use(cors({ origin: ['http://localhost:4200', 'http://192.168.178.135:4200'] }));
+app.use(cors({ origin: ['http://localhost:4200'] }));
 // Enable the Express app to parse JSON-formatted request bodies
 app.use(express.json());
 
@@ -41,55 +41,42 @@ app.use(express.static(path.join(__dirname, 'public'))); // Serve static files f
 
 // =========== API Routes ===========
 // Mount the authentication routes on the /api/auth path.
-// All routes defined in auth.routes.js will now be prefixed with /api/auth.
 app.use('/api/auth', authRoutes);
 
 // Mount the order routes on the /api/orders path.
-// These routes are protected by the authenticateToken middleware, meaning they require a valid JWT token to access.
 app.use('/api/orders', autenticateToken, orderRoutes); // Mount the order routes on the /api/orders path.
 
 // Mount the payment routes on the /api/payment-methods path.
-// These routes are also protected by the authenticateToken middleware, meaning they require a valid JWT token to access.
 app.use('/api/payment-methods', autenticateToken, paymentRoutes);
 
 // Mount the wishlist routes on the /api/wishlist path.
-// These routes are protected by the autenticateToken middleware, meaning they require a valid JWT token to access.
 app.use('/api/wishlist', autenticateToken, wishlistRoutes);
 
 // Mount the address routes on the /api/addresses path.
-// These routes are also protected by the autenticateToken middleware, meaning they require a valid JWT token to access.
 app.use('/api/addresses', autenticateToken, addressRoutes); // Mount the address routes on the /api/addresses path.
 
 // Mount the user routes on the /api/users path.
-// All routes defined in user.routes.js will now be prefixed with /api/users.
 app.use('/api/users', autenticateToken, userRoutes);
 
 // Mount the dashboard routes on the /api/admin/dashboard/stats path.
-// These routes are protected by the autenticateToken middleware, meaning they require a valid JWT token to access.
 app.use('/api/admin/dashboard', autenticateToken, dashboardRoutes);
 
 // Mount the attribute routes on the /api/admin/attributes path.
-// These routes are protected by the authenticateToken middleware, meaning they require a valid JWT token to access.
 app.use('/api/admin/attributes', autenticateToken, attributeRoutes);
 
 // Mount the import routes on the /api/admin/import path.
-// These routes are also protected by the autenticateToken middleware, meaning they require a valid JWT token to access.
 app.use('/api/admin/import', autenticateToken, importRoutes);
 
 // Mount the brand routes on the /api/admin/brands path.
-// These routes are also protected by the autenticateToken middleware, meaning they require a valid JWT token to access.
 app.use('/api/admin/brands', autenticateToken, brandRoutes);
 
 // Mount the image routes on the /api/images path.
-// These routes are also protected by the autenticateToken middleware, meaning they require a valid JWT token to access.
 app.use('/api/admin/images', autenticateToken, imageRoutes);
 
 // Mount the category routes on the /api/admin/categories path.
-// These routes are also protected by the autenticateToken middleware, meaning they require a valid JWT token to access.
 app.use('/api/admin/categories', autenticateToken, categoryRoutes); // Mount the category routes on the /api/admin/categories path.
 
 // Mount the admin product routes on the /api/admin path.
-// These routes are protected by the autenticateToken middleware, meaning they require a valid JWT token to access.
 app.use('/api/admin', autenticateToken, adminRouter); 
 
 

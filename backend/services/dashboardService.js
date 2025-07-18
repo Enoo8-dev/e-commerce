@@ -3,6 +3,7 @@ const { subDays, format } = require('date-fns');
 
 const dashboardService = {
   async getDashboardData(languageCode) {
+    // key performance indicators (KPI) 
     const kpiStats = await dashboardDAO.getKpiStats();
     const salesData = await dashboardDAO.getSalesLast30Days();
     const recentOrders = await dashboardDAO.getRecentOrders();

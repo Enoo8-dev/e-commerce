@@ -5,11 +5,13 @@ const productDAO = require('../dao/productDAO');
 const importService = {
   async processProductCsv(filePath) {
     const fileContent = fs.readFileSync(filePath, 'utf8');
+    // ogni riga del CSV viene interpretata come un oggetto con le chiavi corrispondenti alle intestazioni
     const { data: rows } = Papa.parse(fileContent, { header: true, skipEmptyLines: true, delimiter: ';' });
 
     console.log(`--- INIZIO PROCESSO DI IMPORTAZIONE CSV ---`);
     console.log(`Trovate ${rows.length} righe nel file.`);
 
+    // raggruppo le varianti di ogi prodotto in base al product_group_id
     const productGroups = new Map();
     for (const [index, row] of rows.entries()) {
       const rowNum = index + 2;
@@ -65,6 +67,7 @@ const importService = {
           variants: []
         });
       }
+      // aggiunge ogni riga come variante del gruppo prodotto con dati specifici
       productGroups.get(groupId).variants.push({
         sku: row.sku,
         price: parseFloat(row.price),
@@ -83,6 +86,7 @@ const importService = {
     return { message: `${productGroups.size} gruppi di prodotti importati con successo.` };
   },
 
+  // utilities -> "CPU:Intel i7;RAM:16GB;Storage:512GB SSD" TO { "CPU": "Intel i7", "RAM": "16GB", "Storage": "512GB SSD" }
   parseFeatures(featureString) {
     if (!featureString) return {};
     return featureString.split(';').reduce((acc, pair) => {

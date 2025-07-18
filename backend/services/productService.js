@@ -12,15 +12,10 @@ const productService = {
      */
     async getAllProducts(languageCode) {
         try {
-            // Call the DAO function to get the data
             const products = await productDAO.getAllProducts(languageCode);
-            
-            // For now, we just return the data as is.
-            // In the future, we could transform or enrich the data here.
+    
             return products;
         } catch (error) {
-            // If an error occurs in the DAO, it will be caught here.
-            // We log it and rethrow it to be handled by the controller/route.
             console.error('Error in productService.getAllProducts:', error);
             throw error;
         }
@@ -109,6 +104,16 @@ const productService = {
         const flatList = await productDAO.getAttributesForForm(languageCode);
 
         const structuredAttributes = {};
+        // raggruppa le righe in base all'ID dell'attributo
+        // e crea un array di valori per ogni attributo
+        // in modo da avere un oggetto strutturato per il form
+        // { attributeId: 1, attributeName: "Colore", values: [{ id: 10, value: "Rosso" }, { id: 11, value: "Blu" }] }
+        // per ogni riga, aggiunge il valore all'array dei valori dell'attributo
+        // se l'attributo non esiste, lo crea
+        // se il valore non esiste, lo aggiunge all'array dei valori dell'attributo
+        // restituisce un array di oggetti strutturati
+        // con gli attributi e i loro valori
+        // per il form di creazione/modifica prodotto
         for (const row of flatList) {
             if (!structuredAttributes[row.attributeId]) {
                 structuredAttributes[row.attributeId] = {
@@ -136,6 +141,7 @@ const productService = {
         
         const popularOffers = allOffers.filter(offer => offer.is_featured);
 
+        // raggruppa le offerte per categoria e crea una mappa con l id come chiave
         const offersByCategoryMap = allOffers.reduce((acc, offer) => {
             if (offer.categoryId && offer.categoryName) {
             if (!acc.has(offer.categoryId)) {
@@ -177,53 +183,55 @@ const productService = {
      * @returns {Promise<Array>} An array of main categories, each containing sub-categories and their products.
      */
     async getCategoryPageLayout(languageCode) {
-  const flatProductList = await productDAO.getProductsGroupedByCategories(languageCode);
-  
-  const mainCategoriesMap = new Map();
+        const flatProductList = await productDAO.getProductsGroupedByCategories(languageCode);
+        
+        const mainCategoriesMap = new Map();
 
-  for (const product of flatProductList) {
-    // Se un prodotto appartiene a una categoria senza genitore, quella è la sua categoria principale.
-    const mainCatId = product.mainCategoryId || product.categoryId;
-    const mainCatName = product.mainCategoryName || product.categoryName;
+        for (const product of flatProductList) {
+            // Se un prodotto appartiene a una categoria senza genitore, quella è la sua categoria principale.
+            const mainCatId = product.mainCategoryId || product.categoryId;
+            const mainCatName = product.mainCategoryName || product.categoryName;
 
-    if (!mainCategoriesMap.has(mainCatId)) {
-      mainCategoriesMap.set(mainCatId, {
-        id: mainCatId,
-        name: mainCatName,
-        // La chiave 'products' conterrà i prodotti direttamente sotto la categoria principale.
-        // La chiave 'subCategories' conterrà i gruppi di sotto-categorie.
-        products: [],
-        subCategories: new Map()
-      });
+            // crep categoria principale se non esiste nella mappa
+            if (!mainCategoriesMap.has(mainCatId)) {
+            mainCategoriesMap.set(mainCatId, {
+                id: mainCatId,
+                name: mainCatName,
+                // La chiave 'products' conterrà i prodotti direttamente sotto la categoria principale.
+                // La chiave 'subCategories' conterrà i gruppi di sotto-categorie.
+                products: [],
+                // e ci inizializzo un altra mappa dentro per le sotto-categorie
+                subCategories: new Map()
+            });
+            }
+
+            const mainCategory = mainCategoriesMap.get(mainCatId);
+
+            // Se la categoria del prodotto è diversa dalla categoria principale, è una sotto-categoria.
+            if (product.categoryId !== mainCatId) {
+            const subCategoriesMap = mainCategory.subCategories;
+            if (!subCategoriesMap.has(product.categoryId)) {
+                subCategoriesMap.set(product.categoryId, {
+                id: product.categoryId,
+                name: product.categoryName,
+                products: []
+                });
+            }
+            subCategoriesMap.get(product.categoryId).products.push(product);
+            } else {
+            // Altrimenti, il prodotto appartiene direttamente alla categoria principale.
+            mainCategory.products.push(product);
+            }
+        }
+
+        // Converte le mappe in array per il JSON di risposta
+        const result = Array.from(mainCategoriesMap.values()).map(mainCat => ({
+            ...mainCat,
+            subCategories: Array.from(mainCat.subCategories.values())
+        }));
+
+        return result;
     }
-
-    const mainCategory = mainCategoriesMap.get(mainCatId);
-
-    // Se la categoria del prodotto è diversa dalla categoria principale, è una sotto-categoria.
-    if (product.categoryId !== mainCatId) {
-      const subCategoriesMap = mainCategory.subCategories;
-      if (!subCategoriesMap.has(product.categoryId)) {
-        subCategoriesMap.set(product.categoryId, {
-          id: product.categoryId,
-          name: product.categoryName,
-          products: []
-        });
-      }
-      subCategoriesMap.get(product.categoryId).products.push(product);
-    } else {
-      // Altrimenti, il prodotto appartiene direttamente alla categoria principale.
-      mainCategory.products.push(product);
-    }
-  }
-
-  // Converte le mappe in array per il JSON di risposta
-  const result = Array.from(mainCategoriesMap.values()).map(mainCat => ({
-    ...mainCat,
-    subCategories: Array.from(mainCat.subCategories.values())
-  }));
-
-  return result;
-}
 
 };
 

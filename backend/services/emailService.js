@@ -19,11 +19,14 @@ const emailService = {
     const attachments = [];
 
     const itemsHtml = orderDetails.items.map((item, index) => {
+      // Content ID univoco per ogni immagine
       const cid = `image_${index}@techemporium.com`;
       const imagePath = item.imageUrl ? path.join(__dirname, '../public', item.imageUrl) : null;
 
       console.log(`[Email Debug] Processing image for ${item.productName}. imageUrl: ${item.imageUrl} Calculated path: ${imagePath}`);
 
+      // Controlla se il file esiste prima di aggiungerlo agli allegati
+      // usa cid per differenziare le immagini nell allegato html
       let imageTag = '';
       if (imagePath && fs.existsSync(imagePath)) {
         attachments.push({

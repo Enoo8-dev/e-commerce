@@ -59,6 +59,7 @@ const authService = {
             throw error;
         }
 
+        // dati "importanti" per il riconoscimento dell'utente
         const payload = {
             userId: user.id,
             role: user.role

@@ -10,6 +10,7 @@ const router = express.Router();
 const storage = multer.diskStorage({
   destination: './public/images/products',
   filename: (req, file, cb) => {
+    // timestamp e un numero casuale per garantire nomi unici anche con caricamenti in simultanea
     const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
     cb(null, req.body.sku + '_' + uniqueSuffix + path.extname(file.originalname));
   }
