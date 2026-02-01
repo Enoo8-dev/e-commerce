@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { OrderService } from '../../services/order.service';
 import { TranslateService, TranslateModule } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-order-tracking',
@@ -17,6 +18,8 @@ export class OrderTrackingComponent implements OnInit, OnDestroy {
   error: string | null = null;
   currentLang: string;
   private langChangeSub!: Subscription;
+
+  public imageBaseUrl = environment.imageBaseUrl;
 
   constructor(
     private route: ActivatedRoute,

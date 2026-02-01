@@ -2,21 +2,21 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, map } from 'rxjs';
 import { Product } from '../models/product.model'; // We use the model we just created
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProductService {
-  private backendUrl = 'http://localhost:3000'; 
-  // The base URL of our backend API
-  private apiUrl = `${this.backendUrl}/api`;
+  private apiUrl = environment.apiUrl;
+  private imageBaseUrl = environment.imageBaseUrl;
 
   constructor(private http: HttpClient) { }
 
   private transformProductData(products: Product[]): Product[] {
     return products.map(product => ({
       ...product,
-      imageUrl: product.imageUrl ? `${this.backendUrl}${product.imageUrl}` : undefined
+      imageUrl: product.imageUrl ? `${this.imageBaseUrl}${product.imageUrl}` : undefined
     }));
   }
 
@@ -91,7 +91,7 @@ export class ProductService {
             if (variant.images) {
               variant.images = variant.images.map((image: any) => ({
                 ...image,
-                image_url: `${this.backendUrl}${image.image_url}`
+                image_url: `${this.imageBaseUrl}${image.image_url}`
               }));
             }
           });
@@ -116,7 +116,7 @@ export class ProductService {
     return this.http.get<any[]>(`${this.apiUrl}/admin/products`, { params }).pipe(
       map(products => products.map(product => ({
         ...product,
-        imageUrl: product.imageUrl ? `${this.backendUrl}${product.imageUrl}` : null
+        imageUrl: product.imageUrl ? `${this.imageBaseUrl}${product.imageUrl}` : null
       })))
     );
   }

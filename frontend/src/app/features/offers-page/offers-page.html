@@ -4,7 +4,7 @@
       <!-- Hero Section -->
       @if(layoutData.heroOffer) {
         <div class="relative my-8 rounded-lg overflow-hidden">
-            <img [src]="'http://localhost:3000' + layoutData.heroOffer.imageUrl" class="w-full h-96 object-cover">
+            <img [src]="imageBaseUrl + layoutData.heroOffer.imageUrl" class="w-full h-96 object-cover">
             <div class="absolute inset-0 bg-gray-900/80 hover:bg-gray-900/95 transition-colors duration-300 flex flex-col items-center justify-center text-center p-4">
                 <h2 class="text-4xl font-bold text-white">{{ 'OFFERS.DAILY_OFFER' | translate }}</h2>
                 <p class="mt-2 text-xl text-white">{{ layoutData.heroOffer.productName }}</p>
@@ -19,7 +19,7 @@
         @for(product of layoutData.popularOffers; track product.productId) {
           <div class="group relative">
             <div class="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none transition-opacity duration-75 group-hover:opacity-75 lg:h-80">
-              <img [src]="'http://localhost:3000' + product.imageUrl" [alt]="product.productName" class="h-full w-full object-contain object-center lg:h-full lg:w-full">
+              <img [src]="imageBaseUrl + product.imageUrl" [alt]="product.productName" class="h-full w-full object-contain object-center lg:h-full lg:w-full">
             </div>
             <div class="mt-4 flex justify-between">
               <div>
@@ -43,7 +43,7 @@
             @for(product of category.products; track product.productId) {
               <div class="group relative">
                 <div class="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 transition-opacity duration-75 lg:aspect-none group-hover:opacity-75 lg:h-80">
-                <img [src]="'http://localhost:3000' + product.imageUrl" [alt]="product.productName" class="h-full w-full object-contain object-center lg:h-full lg:w-full">
+                <img [src]="imageBaseUrl + product.imageUrl" [alt]="product.productName" class="h-full w-full object-contain object-center lg:h-full lg:w-full">
                 </div>
                 <div class="mt-4 flex justify-between">
                 <div>

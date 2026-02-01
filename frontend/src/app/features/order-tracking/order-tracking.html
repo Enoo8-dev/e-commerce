@@ -18,7 +18,7 @@
             <div class="mt-6 space-y-6">
               @for(item of order.items; track item.variantId) {
                 <div class="flex items-start">
-                  <img [src]="'http://localhost:3000' + item.imageUrl" [alt]="item.productName" class="h-20 w-20 flex-none rounded-lg border border-gray-200 bg-gray-100 object-contain object-center">
+                  <img [src]="imageBaseUrl + item.imageUrl" [alt]="item.productName" class="h-20 w-20 flex-none rounded-lg border border-gray-200 bg-gray-100 object-contain object-center">
                   <div class="ml-4 flex-auto">
                     <h3 class="font-medium text-gray-900">{{ item.productName }}</h3>
                     <p class="text-sm text-gray-500">{{'ORDER_TRACKING.QUANTITY' | translate }}: {{ item.quantity }}</p>

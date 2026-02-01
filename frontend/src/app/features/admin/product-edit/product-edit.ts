@@ -5,6 +5,7 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormArray } fr
 import { ProductService } from '../../../services/product.service';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { CdkDragDrop, moveItemInArray, DragDropModule } from '@angular/cdk/drag-drop';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-product-edit',
@@ -14,6 +15,7 @@ import { CdkDragDrop, moveItemInArray, DragDropModule } from '@angular/cdk/drag-
   styleUrls: ['./product-edit.css']
 })
 export class ProductEditComponent implements OnInit {
+  public imageBaseUrl = environment.imageBaseUrl;
   editForm!: FormGroup;
   productId: string | null = null;
   isLoading = true;

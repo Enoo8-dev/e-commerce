@@ -4,12 +4,11 @@ import { Chart } from 'chart.js/auto';
 import { DashboardService } from '../../../services/dashboard.service';
 import { TranslateService, TranslateModule } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
-import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, DatePipe, TranslateModule, RouterLink],
+  imports: [CommonModule, DatePipe, TranslateModule],
   templateUrl: './dashboard.html',
 })
 export class DashboardComponent implements OnInit, OnDestroy {

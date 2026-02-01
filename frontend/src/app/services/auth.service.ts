@@ -5,12 +5,13 @@ import { switchMap, catchError, finalize } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { CartService } from './cart.service';
 import { User } from '../models/user.model'; 
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = 'http://localhost:3000/api';
+  private apiUrl = environment.apiUrl;
   
   private currentUserSubject = new BehaviorSubject<User | null>(null);
   public currentUser$ = this.currentUserSubject.asObservable();

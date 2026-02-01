@@ -5,6 +5,7 @@ import { BrandService } from '../../../services/brand.service';
 import { TranslateService, TranslateModule } from '@ngx-translate/core';
 import { Subject, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-brand-management',
@@ -27,6 +28,8 @@ export class BrandManagementComponent implements OnInit, OnDestroy {
   
   private destroy$ = new Subject<void>();
   private langChangeSub!: Subscription; 
+
+  public imageBaseUrl = environment.imageBaseUrl;
 
   constructor(
     private brandService: BrandService,

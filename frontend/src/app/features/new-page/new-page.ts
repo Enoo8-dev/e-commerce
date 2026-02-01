@@ -8,6 +8,7 @@ import { Product } from '../../models/product.model';
 import { CartService } from '../../services/cart.service';
 import { AuthService } from '../../services/auth.service';
 import { WishlistService } from '../../services/wishlist.service';
+import { environment } from '../../../environments/environment';
 
 declare var Toastify: any;
 
@@ -27,6 +28,8 @@ export class NewPageComponent implements OnInit, OnDestroy {
   private authSub!: Subscription;
   private wishlistSub!: Subscription;
   private langChangeSub!: Subscription;
+
+  public imageBaseUrl = environment.imageBaseUrl;
 
   constructor(
     private productService: ProductService,

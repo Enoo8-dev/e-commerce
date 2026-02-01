@@ -109,7 +109,7 @@
                   
                   @for(imageControl of getImages(i).controls; track imageControl.value.id; let imgIndex = $index) {
                       <div cdkDrag class="relative group cursor-move">
-                      <img [src]="'http://localhost:3000' + imageControl.value.image_url" class="h-24 w-24 rounded-md object-contain border-2" [ngClass]="imgIndex === 0 ? 'border-blue-500' : 'border-transparent'">
+                      <img [src]="imageBaseUrl + imageControl.value.image_url" class="h-24 w-24 rounded-md object-contain border-2" [ngClass]="imgIndex === 0 ? 'border-blue-500' : 'border-transparent'">
                       @if(imgIndex === 0) {
                           <span class="absolute top-1 left-1 bg-blue-500 text-white text-xs font-bold px-2 py-0.5 rounded-full">{{ 'ADMIN.EDIT.MAIN' | translate }}</span>
                       }

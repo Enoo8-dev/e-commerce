@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class CheckoutService {
-  private addressUrl = 'http://localhost:3000/api/addresses';
-  private paymentApiUrl = 'http://localhost:3000/api/payment-methods';
+  private addressUrl = environment.apiUrl + '/addresses';
+  private paymentApiUrl = environment.apiUrl + '/payment-methods';
 
   constructor(private http: HttpClient) {}
 

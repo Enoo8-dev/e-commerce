@@ -5,6 +5,7 @@ import { WishlistService } from '../../services/wishlist.service';
 import { TranslateService, TranslateModule } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
 import { CartItem } from '../../models/cart-item.model';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-wishlist',
@@ -19,6 +20,8 @@ export class WishlistComponent implements OnInit, OnDestroy {
   
   private wishlistSub!: Subscription;
   private langChangeSub!: Subscription;
+
+  public imageBaseUrl = environment.imageBaseUrl
 
   constructor(
     private wishlistService: WishlistService,

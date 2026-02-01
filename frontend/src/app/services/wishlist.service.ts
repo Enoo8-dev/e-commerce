@@ -4,10 +4,11 @@ import { BehaviorSubject, Observable, Subscription, tap } from 'rxjs';
 import { AuthService } from './auth.service';
 import { TranslateService } from '@ngx-translate/core';
 import { CartItem } from '../models/cart-item.model'; // Corretto il nome del file
+import { environment } from '../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class WishlistService implements OnDestroy {
-  private apiUrl = 'http://localhost:3000/api/wishlist';
+  private apiUrl = environment.apiUrl + '/wishlist';
   private wishlistSubject = new BehaviorSubject<CartItem[]>([]);
   public wishlist$ = this.wishlistSubject.asObservable();
   

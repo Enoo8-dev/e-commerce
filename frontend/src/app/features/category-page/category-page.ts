@@ -6,6 +6,7 @@ import { TranslateService, TranslateModule } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
 import { CartService } from '../../services/cart.service';
 import { AuthService } from '../../services/auth.service';
+import { environment } from '../../../environments/environment';
 
 declare var Toastify: any;
 
@@ -23,6 +24,8 @@ export class CategoryPageComponent implements OnInit, OnDestroy {
 
   private authSub!: Subscription;
   private langChangeSub!: Subscription;
+
+  public imageBaseUrl = environment.imageBaseUrl;
 
   constructor(
     private productService: ProductService,
