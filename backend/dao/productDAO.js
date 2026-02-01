@@ -60,7 +60,6 @@ const productDAO = {
             AND pv.is_active = TRUE
             AND pt.language_code = ?
             AND bt.language_code = ?
-            GROUP BY p.id;
         `;
         try {
             const [rows] = await dbPool.query(sql, [languageCode, languageCode]);
@@ -78,7 +77,10 @@ const productDAO = {
      * @returns {Promise<Array>} A promise that resolves to an array of featured product objects.
      */
     async getFeaturedProducts(languageCode = 'en-US', limit = 8) {
-        const sql = `${this._getBaseProductQuery()} AND p.is_featured = TRUE GROUP BY p.id LIMIT ?`;
+        const sql = `${this._getBaseProductQuery()} 
+            AND p.is_featured = TRUE 
+            GROUP BY p.id, pt.name, pv.price, pv.sku, bt.name, pv.sale_price, pv.sale_start_date, pv.sale_end_date, pv.id 
+            LIMIT ?`;
         try {
             const [rows] = await dbPool.query(sql, [languageCode, languageCode, limit]);
             return rows;
@@ -135,7 +137,10 @@ const productDAO = {
      * @returns {Promise<Array>} A promise that resolves to an array of product objects.
      */
     async getNewestProducts(languageCode = 'en-US', limit = 8) {
-        const sql = `${this._getBaseProductQuery()} GROUP BY p.id ORDER BY p.created_at DESC LIMIT ?`;
+        const sql = `${this._getBaseProductQuery()} 
+            GROUP BY p.id, pt.name, pv.price, pv.sku, bt.name, pv.sale_price, pv.sale_start_date, pv.sale_end_date, pv.id 
+            ORDER BY p.created_at DESC 
+            LIMIT ?`;
         try {
             const [rows] = await dbPool.query(sql, [languageCode, languageCode, limit]);
             return rows;
