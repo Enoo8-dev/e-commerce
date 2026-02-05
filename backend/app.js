@@ -32,7 +32,7 @@ const app = express();
 
 // =========== Middleware Configuration ===========
 // Enable Cross-Origin Resource Sharing (CORS)
-app.use(cors({ origin: ['http://localhost:4200', 'http://192.168.178.135:4200'] }));
+app.use(cors({ origin: ['http://localhost:4200', 'http://192.168.178.135:4200', 'https://demo.beninifederico.it'] }));
 // Enable the Express app to parse JSON-formatted request bodies
 app.use(express.json());
 
