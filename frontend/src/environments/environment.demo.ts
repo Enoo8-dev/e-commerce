@@ -1,6 +1,6 @@
 export const environment = {
     production: true,
-    demo: false,
+    demo: true,
     apiUrl: '/api/ecommerce',
     imageBaseUrl: ''
 };

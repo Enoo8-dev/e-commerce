@@ -1,9 +1,12 @@
 const express = require('express');
 const productService = require('../services/productService');
+const demoGuard = require('../middleware/demoGuard.middleware');
 
 // Creiamo due router separati con nomi descrittivi
 const publicRouter = express.Router();
 const adminRouter = express.Router();
+
+adminRouter.use(demoGuard); // Applichiamo il middleware demoGuard solo al router admin
 
 // --- ROTTE PUBBLICHE (associate a publicRouter) ---
 

@@ -1,6 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const categoryService = require('../services/categoryService');
+const demoGuard = require('../middleware/demoGuard.middleware');
+
+router.use(demoGuard); // Applichiamo il middleware demoGuard a tutte le rotte di questo router
 
 router.get('/', async (req, res) => {
   try {

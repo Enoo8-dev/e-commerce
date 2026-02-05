@@ -1,6 +1,5 @@
 <header
   class="relative flex items-center justify-between whitespace-nowrap border-b border-solid border-b-[#f4f0f0] px-4 lg:px-10 py-3">
-  <!-- Logo and nav desktop -->
   <div class="flex items-center gap-8">
     <a routerLink="/" class="flex items-center gap-4 text-[#181111]">
       <div class="size-4">
@@ -17,15 +16,11 @@
           </defs>
         </svg>
       </div>
-      <h2 class="text-[#181111] text-lg font-bold leading-tight tracking-[-0.015em]">Tech Emporium</h2>
+      <h2 class="text-[#181111] text-lg font-bold leading-tight tracking-[-0.015em] hidden sm:block">Tech Emporium</h2>
     </a>
 
-    <!-- MENU DESKTOP: hide on mobile -->
     @if(isAdmin) {
-    <!-- Menu per l'Admin con Dropdown -->
     <div class="hidden lg:flex items-center gap-9">
-
-      <!-- Dropdown Catalogo -->
       <div class="relative">
         <button (click)="toggleCatalogMenu()"
           class="flex items-center gap-1 text-[#181111] text-sm font-medium leading-normal cursor-pointer">
@@ -61,7 +56,6 @@
         translate }}</a>
     </div>
     } @else {
-    <!-- Menu per Clienti e Ospiti -->
     <div class="hidden lg:flex items-center gap-9">
       <a class="text-[#181111] text-sm font-medium leading-normal" routerLink="/new">{{ 'NAV.NEWS' | translate }}</a>
       <a class="text-[#181111] text-sm font-medium leading-normal" routerLink="/offers">{{ 'NAV.OFFERS' | translate
@@ -72,11 +66,8 @@
     }
   </div>
 
-  <!-- right elements box -->
   <div class="flex items-center gap-4">
-    <!-- DESKTOP elements -->
     <div class="hidden lg:flex items-center gap-4">
-      <!-- lang selector -->
       <div class="relative items-center">
         <button (click)="toggleLangMenu()"
           class="flex items-center gap-2 bg-[#f4f0f0] rounded-lg px-3 h-10 text-sm cursor-pointer">
@@ -95,14 +86,10 @@
         }
       </div>
 
-
-
-      <!-- user actions -->
       @if (isUserLoggedIn) {
       <div class="flex items-center gap-2">
         @if (!isAdmin) {
 
-        <!-- wishlist -->
         <button routerLink="/wishlist" [title]="'NAV.WISHLIST' | translate"
           class="relative flex items-center justify-center rounded-lg h-10 bg-[#f4f0f0] text-[#181111] px-2.5 cursor-pointer">
           <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" fill="currentColor" viewBox="0 0 256 256">
@@ -117,7 +104,6 @@
           </span>
           }
         </button>
-        <!-- cart -->
         <button routerLink="/cart" [title]="'NAV.CART' | translate"
           class="relative flex items-center justify-center rounded-lg h-10 bg-[#f4f0f0] text-[#181111] px-2.5 cursor-pointer">
           <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" fill="currentColor" viewBox="0 0 256 256">
@@ -133,12 +119,10 @@
           }
         </button>
         }
-        <!-- user -->
         <a routerLink="/profile"
           class="flex items-center justify-center size-10 rounded-full bg-gray-700 text-white font-bold text-sm hover:bg-gray-600 transition-colors ms-5">
           <span>{{ userInitials }}</span>
         </a>
-        <!-- logout -->
         <button (click)="logout()" [title]="'USERS.LOGOUT' | translate"
           class="flex items-center justify-center rounded-lg h-10 bg-[#f4f0f0] text-[#181111] px-2.5 cursor-pointer transition-colors duration-200 hover:bg-red-600/60 hover:text-white"><svg
             width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -151,22 +135,34 @@
           </svg></button>
       </div>
       } @else {
-      <button routerLink="/register"
-        class="flex items-center justify-center rounded-lg h-10 bg-[#f4f0f0] text-[#181111] text-sm font-bold px-4 cursor-pointer">{{
-        'USERS.REGISTER' | translate }}</button>
+        @if (!isDemoMode) {
+          <button routerLink="/register"
+            class="flex items-center justify-center rounded-lg h-10 bg-[#f4f0f0] text-[#181111] text-sm font-bold px-4 cursor-pointer">{{
+            'USERS.REGISTER' | translate }}</button>
+        }
       }
     </div>
 
-    <!-- login button, always visible -->
     @if (!isUserLoggedIn) {
-    <div class="flex items-center">
-      <button routerLink="/login"
-        class="flex items-center justify-center rounded-lg h-10 bg-gray-800 text-white text-sm font-bold px-4 cursor-pointer">{{
-        'USERS.LOGIN' | translate }}</button>
+    <div class="flex items-center gap-2">
+      @if (isDemoMode) {
+        <button (click)="onDemoLogin('customer')" [disabled]="isLoadingDemo"
+          class="flex items-center justify-center rounded-lg h-10 bg-green-600 hover:bg-green-700 text-white text-sm font-bold px-3 cursor-pointer disabled:opacity-50 transition-colors">
+          @if(isLoadingDemo) { ... } @else { {{  'USERS.CUSTOMER' | translate }} }
+        </button>
+        
+        <button (click)="onDemoLogin('admin')" [disabled]="isLoadingDemo"
+          class="flex items-center justify-center rounded-lg h-10 bg-gray-800 hover:bg-gray-900 text-white text-sm font-bold px-3 cursor-pointer disabled:opacity-50 transition-colors">
+          @if(isLoadingDemo) { ... } @else { {{  'USERS.ADMIN' | translate }} }
+        </button>
+      } @else {
+        <button routerLink="/login"
+          class="flex items-center justify-center rounded-lg h-10 bg-gray-800 text-white text-sm font-bold px-4 cursor-pointer">{{
+          'USERS.LOGIN' | translate }}</button>
+      }
     </div>
     }
 
-    <!-- hamburger button -->
     <div class="lg:hidden flex items-center">
       <button (click)="toggleMobileMenu()"
         class="p-2 rounded-md text-[#181111] focus:outline-none focus:ring-2 focus:ring-inset focus:ring-gray-500 cursor-pointer">
@@ -182,119 +178,127 @@
     </div>
   </div>
 
-  <!-- mobile menu -->
   @if (isMobileMenuOpen) {
   <div [@slideInOut] class="lg:hidden absolute top-full left-0 w-full bg-white shadow-lg p-4 z-20">
     <div class="flex flex-col gap-4">
 
       @if(isAdmin) {
-      <div>
-        <button (click)="toggleCatalogMenu()"
-          class="menu-link-mobile w-full flex justify-between items-center cursor-pointer">
-          <span>{{ 'NAV.CATALOG' | translate }}</span>
-          <svg class="w-5 h-5 transition-transform duration-200" [ngClass]="{'rotate-180': isCatalogMenuOpen}">
-            <path fill-rule="evenodd"
-              d="M5.22 8.22a.75.75 0 011.06 0L10 11.94l3.72-3.72a.75.75 0 111.06 1.06l-4.25 4.25a.75.75 0 01-1.06 0L5.22 9.28a.75.75 0 010-1.06z"
-              clip-rule="evenodd" />
-          </svg>
-        </button>
-        @if(isCatalogMenuOpen) {
-        <div class="pl-4 mt-2 space-y-1 border-l-2 border-gray-200">
-          <a (click)="closeAllMenus()" routerLink="/admin/products"
-            class="block text-gray-700 px-4 py-2 text-sm hover:bg-gray-100 rounded-md">{{ 'NAV.MANAGE_PRODUCTS' |
-            translate }}</a>
-          <a (click)="closeAllMenus()" routerLink="/admin/brands"
-            class="block text-gray-700 px-4 py-2 text-sm hover:bg-gray-100 rounded-md">{{ 'NAV.MANAGE_BRANDS' |
-            translate }}</a>
-          <a (click)="closeAllMenus()" routerLink="/admin/categories"
-            class="block text-gray-700 px-4 py-2 text-sm hover:bg-gray-100 rounded-md">{{ 'NAV.MANAGE_CATEGORIES' |
-            translate }}</a>
-          <a (click)="closeAllMenus()" routerLink="/admin/attributes"
-            class="block text-gray-700 px-4 py-2 text-sm hover:bg-gray-100 rounded-md">{{ 'NAV.MANAGE_ATTRIBUTES' |
-            translate }}</a>
-        </div>
-        }
-      </div>
-      <a (click)="closeAllMenus()" routerLink="/admin/users" class="menu-link-mobile">{{ 'NAV.MANAGE_USERS' | translate
-        }}</a>
+         <div>
+            <button (click)="toggleCatalogMenu()"
+              class="menu-link-mobile w-full flex justify-between items-center cursor-pointer">
+              <span>{{ 'NAV.CATALOG' | translate }}</span>
+              <svg class="w-5 h-5 transition-transform duration-200" [ngClass]="{'rotate-180': isCatalogMenuOpen}">
+                <path fill-rule="evenodd"
+                  d="M5.22 8.22a.75.75 0 011.06 0L10 11.94l3.72-3.72a.75.75 0 111.06 1.06l-4.25 4.25a.75.75 0 01-1.06 0L5.22 9.28a.75.75 0 010-1.06z"
+                  clip-rule="evenodd" />
+              </svg>
+            </button>
+            @if(isCatalogMenuOpen) {
+            <div class="pl-4 mt-2 space-y-1 border-l-2 border-gray-200">
+              <a (click)="closeAllMenus()" routerLink="/admin/products"
+                class="block text-gray-700 px-4 py-2 text-sm hover:bg-gray-100 rounded-md">{{ 'NAV.MANAGE_PRODUCTS' |
+                translate }}</a>
+              <a (click)="closeAllMenus()" routerLink="/admin/brands"
+                class="block text-gray-700 px-4 py-2 text-sm hover:bg-gray-100 rounded-md">{{ 'NAV.MANAGE_BRANDS' |
+                translate }}</a>
+              <a (click)="closeAllMenus()" routerLink="/admin/categories"
+                class="block text-gray-700 px-4 py-2 text-sm hover:bg-gray-100 rounded-md">{{ 'NAV.MANAGE_CATEGORIES' |
+                translate }}</a>
+              <a (click)="closeAllMenus()" routerLink="/admin/attributes"
+                class="block text-gray-700 px-4 py-2 text-sm hover:bg-gray-100 rounded-md">{{ 'NAV.MANAGE_ATTRIBUTES' |
+                translate }}</a>
+            </div>
+            }
+          </div>
+          <a (click)="closeAllMenus()" routerLink="/admin/users" class="menu-link-mobile">{{ 'NAV.MANAGE_USERS' | translate
+            }}</a>
+
       } @else {
-      <!-- Link per Clienti e Ospiti -->
-      <a (click)="closeAllMenus()"
-        class="text-[#181111] text-base font-medium leading-normal block px-2 py-2 rounded-md hover:bg-[#f4f0f0]"
-        routerLink="/new">{{ 'NAV.NEWS' | translate }}</a>
-      <a (click)="closeAllMenus()"
-        class="text-[#181111] text-base font-medium leading-normal block px-2 py-2 rounded-md hover:bg-[#f4f0f0]"
-        routerLink="/offers">{{ 'NAV.OFFERS' | translate }}</a>
-      <a (click)="closeAllMenus()"
-        class="text-[#181111] text-base font-medium leading-normal block px-2 py-2 rounded-md hover:bg-[#f4f0f0]"
-        routerLink="/categories">{{ 'NAV.CATEGORIES' | translate }}</a>
+        <a (click)="closeAllMenus()"
+          class="text-[#181111] text-base font-medium leading-normal block px-2 py-2 rounded-md hover:bg-[#f4f0f0]"
+          routerLink="/new">{{ 'NAV.NEWS' | translate }}</a>
+        <a (click)="closeAllMenus()"
+          class="text-[#181111] text-base font-medium leading-normal block px-2 py-2 rounded-md hover:bg-[#f4f0f0]"
+          routerLink="/offers">{{ 'NAV.OFFERS' | translate }}</a>
+        <a (click)="closeAllMenus()"
+          class="text-[#181111] text-base font-medium leading-normal block px-2 py-2 rounded-md hover:bg-[#f4f0f0]"
+          routerLink="/categories">{{ 'NAV.CATEGORIES' | translate }}</a>
       }
 
       <hr />
       @if (isUserLoggedIn) {
-      @if (!isAdmin) {
-      <a (click)="closeAllMenus()" routerLink="/wishlist"
-        class="relative flex items-center gap-3 text-[#181111] text-base font-medium leading-normal px-2 py-3 rounded-md hover:bg-[#f4f0f0]">
-        <svg class="text-[#181111]" xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" fill="currentColor"
-          viewBox="0 0 256 256">
-          <path
-            d="M178,32c-20.65,0-38.73,8.88-50,23.89C116.73,40.88,98.65,32,78,32A62.07,62.07,0,0,0,16,94c0,70,103.79,126.66,108.21,129a8,8,0,0,0,7.58,0C136.21,220.66,240,164,240,94A62.07,62.07,0,0,0,178,32ZM128,206.8C109.74,196.16,32,147.69,32,94A46.06,46.06,0,0,1,78,48c19.45,0,35.78,10.36,42.6,27a8,8,0,0,0,14.8,0c6.82-16.67,23.15-27,42.6-27a46.06,46.06,0,0,1,46,46C224,147.61,146.24,196.15,128,206.8Z">
-          </path>
-        </svg>
-        <span>{{ 'NAV.WISHLIST' | translate }}</span>
-        @if(wishlistItemCount > 0) {
-        <span
-          class="absolute top-2 right-2 flex h-5 w-5 items-center justify-center rounded-full bg-blue-600 text-xs font-bold text-white">
-          {{ wishlistItemCount }}
-        </span>
-        }
-      </a>
-      <a (click)="closeAllMenus()"
-        class="relative flex items-center gap-3 text-[#181111] text-base font-medium leading-normal px-2 py-3 rounded-md hover:bg-[#f4f0f0]"
-        routerLink="/cart">
-        <svg class="text-[#181111]" xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" fill="currentColor"
-          viewBox="0 0 256 256">
-          <path
-            d="M216,40H40A16,16,0,0,0,24,56V200a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V56A16,16,0,0,0,216,40Zm0,160H40V56H216V200ZM176,88a48,48,0,0,1-96,0,8,8,0,0,1,16,0,32,32,0,0,0,64,0,8,8,0,0,1,16,0Z">
-          </path>
-        </svg>
-        <span>{{ 'NAV.CART' | translate }}</span>
-        @if(cartItemCount > 0) {
-        <span
-          class="absolute top-2 right-2 flex h-5 w-5 items-center justify-center rounded-full bg-red-600 text-xs font-bold text-white">
-          {{ cartItemCount }}
-        </span>
-        }
-      </a>
-      }
-      <a (click)="closeAllMenus()" routerLink="/profile"
-        class="flex items-center gap-3 text-[#181111] text-base font-medium leading-normal px-2 py-3 rounded-md hover:bg-[#f4f0f0]">
-        <div class="flex items-center justify-center size-8 rounded-full bg-gray-700 text-white font-bold text-xs">
-          <span>{{ userInitials }}</span>
-        </div>
-        <span>{{ userFullName }}</span>
-      </a>
-      <hr class="my-2" />
-      <a (click)="logout()"
-        class="flex items-center gap-3 text-[#181111] text-base font-medium leading-normal px-2 py-3 rounded-md hover:bg-[#f4f0f0] cursor-pointer">
-        <svg class="text-red-600" width="20" height="20" viewBox="0 0 24 24" fill="none"
-          xmlns="http://www.w3.org/2000/svg">
-          <path d="M21 12L13 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-            stroke-linejoin="round" />
-          <path d="M18 15L20.913 12.087V12.087C20.961 12.039 20.961 11.961 20.913 11.913V11.913L18 9"
-            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-          <path
-            d="M16 5V4.5V4.5C16 3.67157 15.3284 3 14.5 3H5C3.89543 3 3 3.89543 3 5V19C3 20.1046 3.89543 21 5 21H14.5C15.3284 21 16 20.3284 16 19.5V19.5V19"
-            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-        </svg>
-        <span class="text-red-600">{{ 'USERS.LOGOUT' | translate }}</span>
-      </a>
+         @if (!isAdmin) {
+          <a (click)="closeAllMenus()" routerLink="/wishlist"
+            class="relative flex items-center gap-3 text-[#181111] text-base font-medium leading-normal px-2 py-3 rounded-md hover:bg-[#f4f0f0]">
+            <svg class="text-[#181111]" xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" fill="currentColor"
+              viewBox="0 0 256 256">
+              <path
+                d="M178,32c-20.65,0-38.73,8.88-50,23.89C116.73,40.88,98.65,32,78,32A62.07,62.07,0,0,0,16,94c0,70,103.79,126.66,108.21,129a8,8,0,0,0,7.58,0C136.21,220.66,240,164,240,94A62.07,62.07,0,0,0,178,32ZM128,206.8C109.74,196.16,32,147.69,32,94A46.06,46.06,0,0,1,78,48c19.45,0,35.78,10.36,42.6,27a8,8,0,0,0,14.8,0c6.82-16.67,23.15-27,42.6-27a46.06,46.06,0,0,1,46,46C224,147.61,146.24,196.15,128,206.8Z">
+              </path>
+            </svg>
+            <span>{{ 'NAV.WISHLIST' | translate }}</span>
+            @if(wishlistItemCount > 0) {
+            <span
+              class="absolute top-2 right-2 flex h-5 w-5 items-center justify-center rounded-full bg-blue-600 text-xs font-bold text-white">
+              {{ wishlistItemCount }}
+            </span>
+            }
+          </a>
+          <a (click)="closeAllMenus()"
+            class="relative flex items-center gap-3 text-[#181111] text-base font-medium leading-normal px-2 py-3 rounded-md hover:bg-[#f4f0f0]"
+            routerLink="/cart">
+            <svg class="text-[#181111]" xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" fill="currentColor"
+              viewBox="0 0 256 256">
+              <path
+                d="M216,40H40A16,16,0,0,0,24,56V200a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V56A16,16,0,0,0,216,40Zm0,160H40V56H216V200ZM176,88a48,48,0,0,1-96,0,8,8,0,0,1,16,0,32,32,0,0,0,64,0,8,8,0,0,1,16,0Z">
+              </path>
+            </svg>
+            <span>{{ 'NAV.CART' | translate }}</span>
+            @if(cartItemCount > 0) {
+            <span
+              class="absolute top-2 right-2 flex h-5 w-5 items-center justify-center rounded-full bg-red-600 text-xs font-bold text-white">
+              {{ cartItemCount }}
+            </span>
+            }
+          </a>
+          }
+          <a (click)="closeAllMenus()" routerLink="/profile"
+            class="flex items-center gap-3 text-[#181111] text-base font-medium leading-normal px-2 py-3 rounded-md hover:bg-[#f4f0f0]">
+            <div class="flex items-center justify-center size-8 rounded-full bg-gray-700 text-white font-bold text-xs">
+              <span>{{ userInitials }}</span>
+            </div>
+            <span>{{ userFullName }}</span>
+          </a>
+          <hr class="my-2" />
+          <a (click)="logout()"
+            class="flex items-center gap-3 text-[#181111] text-base font-medium leading-normal px-2 py-3 rounded-md hover:bg-[#f4f0f0] cursor-pointer">
+            <svg class="text-red-600" width="20" height="20" viewBox="0 0 24 24" fill="none"
+              xmlns="http://www.w3.org/2000/svg">
+              <path d="M21 12L13 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round" />
+              <path d="M18 15L20.913 12.087V12.087C20.961 12.039 20.961 11.961 20.913 11.913V11.913L18 9"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+              <path
+                d="M16 5V4.5V4.5C16 3.67157 15.3284 3 14.5 3H5C3.89543 3 3 3.89543 3 5V19C3 20.1046 3.89543 21 5 21H14.5C15.3284 21 16 20.3284 16 19.5V19.5V19"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+            <span class="text-red-600">{{ 'USERS.LOGOUT' | translate }}</span>
+          </a>
+
       } @else {
-      <a class="text-[#181111] text-base font-medium leading-normal block px-2 py-2 rounded-md hover:bg-[#f4f0f0]"
-        routerLink="/register">{{ 'USERS.REGISTER' | translate }}</a>
+        @if (!isDemoMode) {
+          <a class="text-[#181111] text-base font-medium leading-normal block px-2 py-2 rounded-md hover:bg-[#f4f0f0]"
+            routerLink="/register">{{ 'USERS.REGISTER' | translate }}</a>
+        } @else {
+           <a (click)="onDemoLogin('customer')" class="block text-green-700 font-bold px-2 py-2 rounded-md hover:bg-green-50 cursor-pointer">
+              👤 Login come Cliente
+           </a>
+           <a (click)="onDemoLogin('admin')" class="block text-gray-800 font-bold px-2 py-2 rounded-md hover:bg-gray-100 cursor-pointer">
+              🛡️ Login come Admin
+           </a>
+        }
       }
 
-      <!-- lang select -->
       <div class="mt-4 pt-4 border-t border-gray-200">
         <p class="text-sm font-semibold text-gray-500 px-2 mb-2">{{ 'NAV.LANGUAGE' | translate }}</p>
         <a (click)="switchAndCloseMenu('it-IT')"

@@ -16,6 +16,12 @@ const transporter = nodemailer.createTransport({
 const emailService = {
   async sendOrderConfirmation(userEmail, orderDetails) {
 
+    if (process.env.NODE_ENV === 'demo') {
+        console.log(`[DEMO MODE] Email di conferma simulata per: ${userEmail}`);
+        console.log(`[DEMO MODE] Contenuto Ordine ID: ${orderDetails.orderId}`);
+        return; // Esce dalla funzione, non invia nulla
+    }
+
     const attachments = [];
 
     const itemsHtml = orderDetails.items.map((item, index) => {

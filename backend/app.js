@@ -5,6 +5,7 @@ const express = require('express');
 const cors = require('cors');
 const path = require('path');
 const morgan = require('morgan');
+const cron = require('node-cron');
 // Import our database connection pool
 const dbPool = require('./config/database');
 const autenticateToken = require('./middleware/auth.middleware');
@@ -100,6 +101,28 @@ app.use('/api', publicRouter);
 
 
 const PORT = process.env.PORT || 3000;
+
+if (process.env.NODE_ENV === 'demo') {
+    console.log('🧹 DEMO MODE: Pulizia automatica utenti attivata (ogni 3 ore).');
+
+    // Esegue ogni 3 ore al minuto 0 (es. 00:00, 03:00, 06:00...)
+    cron.schedule('0 */3 * * *', async () => {
+        console.log('Running demo cleanup task...');
+        try {
+            // Cancella utenti effimeri creati più di 3 ore fa
+            // NOTA: Grazie al "ON DELETE CASCADE" nel DB, questo cancellerà anche Ordini e Indirizzi collegati.
+            const sql = `
+                DELETE FROM Users 
+                WHERE is_ephemeral = TRUE 
+                AND created_at < NOW() - INTERVAL 3 HOUR
+            `;
+            const [result] = await dbPool.query(sql);
+            console.log(`Cleanup complete. Deleted ${result.affectedRows} ephemeral users.`);
+        } catch (error) {
+            console.error('Error during demo cleanup:', error);
+        }
+    });
+}
 
 // Function to start the server
 const startServer = async () => {

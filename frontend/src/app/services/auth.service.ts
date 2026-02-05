@@ -112,6 +112,30 @@ export class AuthService {
     );
   }
 
+  demoLogin(role: 'customer' | 'admin'): Observable<User> {
+    this.getCartService().clearCart();
+    
+    // chiamiamo la rotta specifica /demo-login
+    return this.getHttpClient().post<any>(`${this.apiUrl}/auth/demo-login`, { role }).pipe(
+      tap(response => {
+        if (response && response.token) {
+          localStorage.setItem('authToken', response.token);
+        }
+      }),
+      // Dopo aver ottenuto il token, recuperiamo il profilo utente come in un login normale
+      switchMap(() => this.fetchUserProfile()),
+      tap(() => {
+        const url = this.redirectUrl || '/';
+        this.redirectUrl = null;
+        this.getRouter().navigateByUrl(url);
+      }),
+      catchError(error => {
+        this.logoutCleanup();
+        return throwError(() => error);
+      })
+    );
+  }
+
   private logoutCleanup(): void {
     localStorage.removeItem('authToken');
     this.currentUserSubject.next(null);
@@ -120,7 +144,7 @@ export class AuthService {
 
   logout(): void {
     this.logoutCleanup();
-    this.getRouter().navigate(['/login']);
+    this.getRouter().navigate(['/']);
   }
 
   getToken(): string | null {

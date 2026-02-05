@@ -1,3 +1,4 @@
+const crypto = require('crypto');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const userDAO = require('../dao/userDAO');
@@ -71,7 +72,38 @@ const authService = {
         );
 
         return token;
-    }
+    },
+
+    async loginAsDemoUser(role) {
+        // 1. Genera una mail casuale per evitare conflitti
+        const randomString = crypto.randomBytes(4).toString('hex');
+        const email = `demo_${role}_${randomString}@demo.local`;
+
+        // 2. Hash della password
+        const salt = await bcrypt.genSalt(10);
+        const dummyPassword = crypto.randomBytes(10).toString('hex');
+        const passwordHash = await bcrypt.hash(dummyPassword, salt);
+
+        // 3. Crea l'utente effimero
+        const userId = await userDAO.createUser({ 
+            email, 
+            passwordHash, 
+            firstName: 'Demo', 
+            lastName: role === 'admin' ? 'Admin' : 'User', 
+            role: role,
+            isEphemeral: true 
+        });
+
+        // 4. Genera il token classico
+        const payload = { userId: userId, role: role };
+        const token = jwt.sign(
+            payload,
+            process.env.JWT_SECRET,
+            { expiresIn: '3h' }
+        );
+
+        return token;
+    },
 }
 
 module.exports = authService;

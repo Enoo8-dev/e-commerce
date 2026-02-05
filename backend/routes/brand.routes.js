@@ -2,8 +2,11 @@ const express = require('express');
 const multer = require('multer');
 const path = require('path');
 const brandService = require('../services/brandService');
+const demoGuard = require('../middleware/demoGuard.middleware');
+
 
 const router = express.Router();
+router.use(demoGuard); // Applichiamo il middleware demoGuard a tutte le rotte di questo router
 
 const storage = multer.diskStorage({
   destination: './public/images/logos',

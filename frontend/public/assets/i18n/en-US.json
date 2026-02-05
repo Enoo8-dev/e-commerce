@@ -17,7 +17,9 @@
     "USERS": {
         "LOGIN": "Login",
         "LOGOUT": "Logout",
-        "REGISTER": "Sign Up"
+        "REGISTER": "Sign Up",
+        "CUSTOMER": "Login as Customer",
+        "ADMIN": "Login as Admin"
     },
     "HOME": {
         "TITLE": "Discover the latest news",

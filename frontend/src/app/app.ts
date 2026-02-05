@@ -1,32 +1,20 @@
 import { Component, OnInit, OnDestroy } from '@angular/core'; // Aggiungi OnDestroy
-import { RouterOutlet, RouterLink } from '@angular/router';
+import { RouterOutlet, RouterLink, Router } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
-import { trigger, state, style, transition, animate } from '@angular/animations';
 import { AuthService } from './services/auth.service';
 import { User } from './models/user.model'; 
 import { Subscription } from 'rxjs'; // Importa Subscription
 import { CommonModule } from '@angular/common';
 import { CartService } from './services/cart.service';
 import { WishlistService } from './services/wishlist.service';
+import { environment } from '../environments/environment';
 
 @Component({
   selector: 'app-root',
   standalone: true,
   imports: [RouterOutlet, RouterLink, TranslateModule, CommonModule],
   templateUrl: './app.html',
-  styleUrl: './app.css',
-  animations: [
-    trigger('slideInOut', [
-      state('in', style({ transform: 'translateY(0)', opacity: 1 })),
-      transition(':enter', [
-        style({ transform: 'translateY(-10%)', opacity: 0 }),
-        animate('200ms ease-in')
-      ]),
-      transition(':leave', [
-        animate('200ms ease-out', style({ transform: 'translateY(-10%)', opacity: 0 }))
-      ])
-    ])
-  ]
+  styleUrl: './app.css'
 })
 export class App implements OnInit, OnDestroy {
   isUserLoggedIn: boolean = false;
@@ -37,13 +25,17 @@ export class App implements OnInit, OnDestroy {
   cartItemCount: number = 0; 
   wishlistItemCount: number = 0; 
 
+  isDemoMode: boolean = environment.demo || false;
+  isLoadingDemo: boolean = false;
+
   private authSubscription!: Subscription;
 
   constructor(
     public translate: TranslateService, 
     private authService: AuthService,
     private cartService: CartService,
-    private wishlistService: WishlistService
+    private wishlistService: WishlistService,
+    private router: Router
   ) {
     translate.setDefaultLang('en-US');
     translate.use('en-US');
@@ -60,12 +52,33 @@ export class App implements OnInit, OnDestroy {
     
     this.cartService.cartItems$.subscribe(items => {
       this.cartItemCount = items.reduce((count, item) => count + item.quantity, 0);
-    })
+    });
 
     this.authSubscription = sub1;
     this.authSubscription.add(sub2);
     this.authSubscription.add(wishlistSub);
-    }
+  }
+
+  onDemoLogin(role: 'customer' | 'admin'): void {
+    if (this.isLoadingDemo) return;
+    
+    this.isLoadingDemo = true;
+    // Chiudi menu mobile se aperto
+    this.closeAllMenus();
+
+    this.authService.demoLogin(role).subscribe({
+      next: () => {
+        this.isLoadingDemo = false;
+        const target = role === 'admin' ? '/admin/dashboard' : '/';
+        this.router.navigate([target]);
+      },
+      error: (err) => {
+        console.error('Demo login error:', err);
+        this.isLoadingDemo = false;
+        alert('Errore login demo');
+      }
+    });
+  }
 
   get isAdmin(): boolean {
     return this.user?.role === 'admin';
@@ -98,6 +111,7 @@ export class App implements OnInit, OnDestroy {
   logout(): void {
     this.closeAllMenus();
     this.authService.logout();
+    this.router.navigate(['/']);
   }
 
   toggleLangMenu(): void {

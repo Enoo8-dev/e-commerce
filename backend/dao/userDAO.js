@@ -35,9 +35,9 @@ const userDAO = {
   return rows;
 },
 
-    async createUser({ email, passwordHash, firstName, lastName, role = 'customer' }) {
-        const sql = 'INSERT INTO Users (email, password_hash, first_name, last_name, role) VALUES (?, ?, ?, ?, ?)';
-        const [result] = await dbPool.query(sql, [email, passwordHash, firstName, lastName, role]);
+    async createUser({ email, passwordHash, firstName, lastName, role = 'customer', isEphemeral = false }) {
+        const sql = 'INSERT INTO Users (email, password_hash, first_name, last_name, role, is_ephemeral) VALUES (?, ?, ?, ?, ?, ?)';
+        const [result] = await dbPool.query(sql, [email, passwordHash, firstName, lastName, role, isEphemeral]);
         return result.insertId;
     },
 

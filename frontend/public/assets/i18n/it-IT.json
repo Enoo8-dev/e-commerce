@@ -17,7 +17,9 @@
     "USERS": {
         "LOGIN": "Accedi",
         "LOGOUT": "Esci",
-        "REGISTER": "Registrati"
+        "REGISTER": "Registrati",
+        "CUSTOMER": "Accedi come Cliente",
+        "ADMIN": "Accedi come Admin"
     },
     "HOME": {
         "TITLE": "Scopri le ultime novità",
