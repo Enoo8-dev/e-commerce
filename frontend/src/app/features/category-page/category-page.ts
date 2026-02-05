@@ -64,7 +64,9 @@ export class CategoryPageComponent implements OnInit, OnDestroy {
     Toastify({ text: "Prodotto aggiunto al carrello!", duration: 3000, style: { background: "#181111" } }).showToast();
   }
 
-  
+  encodeURIComponent(str: string): string {
+    return encodeURIComponent(str);
+  }
 
   ngOnDestroy(): void {
     if (this.authSub) this.authSub.unsubscribe();

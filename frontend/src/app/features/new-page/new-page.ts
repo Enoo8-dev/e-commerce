@@ -92,4 +92,8 @@ export class NewPageComponent implements OnInit, OnDestroy {
     if (this.wishlistSub) this.wishlistSub.unsubscribe();
     if (this.langChangeSub) this.langChangeSub.unsubscribe();
   }
+
+  encodeURIComponent(str: string): string {
+    return encodeURIComponent(str);
+  }
 }
