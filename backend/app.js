@@ -100,7 +100,7 @@ app.use('/api/admin', autenticateToken, adminRouter);
 app.use('/api', publicRouter);
 
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 4444;
 
 if (process.env.NODE_ENV === 'demo') {
     console.log('🧹 DEMO MODE: Pulizia automatica utenti attivata (ogni 3 ore).');

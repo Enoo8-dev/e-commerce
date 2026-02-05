@@ -14,7 +14,7 @@
       }
 
       <!-- Popular Offers -->
-      <h2 class="text-2xl font-bold tracking-tight text-gray-900">{{ 'OFFERS.MOST_POPULAR' | translate }}</h2>
+      <h2 class="text-2xl font-bold tracking-tight text-gray-900 mt-16">{{ 'OFFERS.MOST_POPULAR' | translate }}</h2>
       <div class="mt-6 grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
         @for(product of layoutData.popularOffers; track product.productId) {
           <div class="group relative">
